@@ -15,11 +15,8 @@ const Sidebar = () => {
       {/* Botões */}
       <div className="flex flex-col gap-2 p-2">
         <SidebarButton href="/">Dashboard</SidebarButton>
-        <SidebarButton href="/label">
-          <PackageIcon size={20} />
-          Etiquetas
-        </SidebarButton>
-        <SidebarButton href="/sector">Setores</SidebarButton>
+        <SidebarButton href="/labels">Etiquetas</SidebarButton>
+        <SidebarButton href="/sectors">Setores</SidebarButton>
       </div>
     </div>
   );
