@@ -1,6 +1,16 @@
-import { LayoutGrid, PackageIcon, ShoppingBasketIcon } from "lucide-react";
+import {
+  LayoutDashboard,
+  LayoutGrid,
+  PackageIcon,
+  Settings,
+  ShoppingBasketIcon,
+  Table,
+  Ticket,
+} from "lucide-react";
 import SidebarButton from "./sidebar-button";
 import { ModeToggle } from "./button-mode-togle";
+
+let icon_size = 20;
 
 const Sidebar = () => {
   return (
@@ -8,15 +18,29 @@ const Sidebar = () => {
       {/* IMAGEM */}
       <div className="px-8 py-6">
         <div className="flex gap-2 items-center">
-          <h1 className="text-2xl font-bold">STOCKLY</h1>
+          <h1 className="text-2xl font-bold">LABEL-GO</h1>
           <ModeToggle />
         </div>
       </div>
       {/* Botões */}
       <div className="flex flex-col gap-2 p-2">
-        <SidebarButton href="/">Dashboard</SidebarButton>
-        <SidebarButton href="/labels">Etiquetas</SidebarButton>
-        <SidebarButton href="/sectors">Setores</SidebarButton>
+        <SidebarButton href="/">
+          <LayoutDashboard size={icon_size} />
+          Dashboard
+        </SidebarButton>
+        <SidebarButton href="/labels">
+          <Ticket size={icon_size} />
+          Etiquetas
+        </SidebarButton>
+        <SidebarButton href="/sectors">
+          <Table size={icon_size} />
+          Setores
+        </SidebarButton>
+        <hr />
+        <SidebarButton href="/config">
+          <Settings size={icon_size} />
+          Configuração
+        </SidebarButton>
       </div>
     </div>
   );
