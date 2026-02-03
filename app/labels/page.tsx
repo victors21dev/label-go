@@ -6,8 +6,8 @@ import { useRef, useState } from "react";
 import TitleToPage from "../_components/title-page";
 
 const Label = () => {
-  const [larguraLabel, setLarguraLabel] = useState("6,2cm");
-  const [alturaLabel, setAlturaLabel] = useState("6,0cm");
+  const [larguraLabel, setLarguraLabel] = useState("6.2cm");
+  const [alturaLabel, setAlturaLabel] = useState("4.8cm");
 
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +35,7 @@ const Label = () => {
           Print
         </Button>
         <div
-          className={`w-[6.2cm] h-[4.8cm] border border-muted p-2 rounded-2xl`}
+          className={`w-[${larguraLabel}] h-[${alturaLabel}] border border-muted p-2 rounded-2xl`}
           ref={contentRef}
         >
           <h1>Content to print</h1>
