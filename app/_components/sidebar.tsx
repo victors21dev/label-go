@@ -1,11 +1,9 @@
 import {
   LayoutDashboard,
-  LayoutGrid,
-  PackageIcon,
   Settings,
-  ShoppingBasketIcon,
   Table,
   Ticket,
+  UserIcon,
 } from "lucide-react";
 import SidebarButton from "./sidebar-button";
 import { ModeToggle } from "./button-mode-togle";
@@ -35,6 +33,10 @@ const Sidebar = () => {
         <SidebarButton href="/sectors">
           <Table size={icon_size} />
           Setores
+        </SidebarButton>
+        <SidebarButton href="/users">
+          <UserIcon size={icon_size} />
+          Usuários
         </SidebarButton>
         <hr />
         <SidebarButton href="/config">
