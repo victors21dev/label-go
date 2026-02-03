@@ -9,7 +9,10 @@ const Config = () => {
           description="Faça suas configurações aqui"
         />
       </div>
-      <div></div>
+      <div className="flex flex-col mt-4">
+        <h1>Configuração da etiqueta</h1>
+        <div></div>
+      </div>
     </main>
   );
 };
