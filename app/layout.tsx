@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased bg-muted`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -30,7 +30,7 @@ export default function RootLayout({
         >
           <div className="flex h-full">
             <Sidebar />
-            {children}
+            <div className="bg-card w-full m-4 p-6">{children}</div>
           </div>
         </ThemeProvider>
       </body>

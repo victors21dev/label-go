@@ -1,8 +1,16 @@
+import TitleToPage from "../_components/title-page";
+
 const Config = () => {
   return (
-    <div>
-      <div>Page config</div>
-    </div>
+    <main>
+      <div>
+        <TitleToPage
+          title="Configuração"
+          description="Faça suas configurações aqui"
+        />
+      </div>
+      <div></div>
+    </main>
   );
 };
 

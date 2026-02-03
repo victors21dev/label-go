@@ -1,8 +1,16 @@
+import TitleToPage from "../_components/title-page";
+
 const Sector = () => {
   return (
-    <div>
-      <div>Setores</div>
-    </div>
+    <main>
+      <div>
+        <TitleToPage
+          title="Setores"
+          description="Registre seus setores nessa aba"
+        />
+      </div>
+      <div></div>
+    </main>
   );
 };
 

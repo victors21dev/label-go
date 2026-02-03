@@ -14,11 +14,11 @@ let icon_size = 20;
 
 const Sidebar = () => {
   return (
-    <div className="w-64 bg-secondary">
+    <div className="w-64 bg-card">
       {/* IMAGEM */}
       <div className="px-8 py-6">
         <div className="flex gap-2 items-center">
-          <h1 className="text-2xl font-bold">LABEL-GO</h1>
+          <h1 className="text-2xl font-bold text-nowrap">LABEL-GO</h1>
           <ModeToggle />
         </div>
       </div>
