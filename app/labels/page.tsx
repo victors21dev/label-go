@@ -26,7 +26,7 @@ const Label = () => {
   };
 
   return (
-    <main>
+    <main className="flex flex-col gap-8">
       <div>
         <TitleToPage title="Etiquetas" description="Gere aqui suas etiquetas" />
       </div>
@@ -35,11 +35,26 @@ const Label = () => {
           Print
         </Button>
         <div
-          className={`w-[${larguraLabel}] h-[${alturaLabel}] border border-muted p-2 rounded-2xl`}
           ref={contentRef}
+          style={{
+            width: larguraLabel,
+            height: alturaLabel,
+          }}
+          className="border p-2 rounded-2xl"
         >
-          <h1>Content to print</h1>
-          <p>This section will be printed.</p>
+          <div className="flex flex-col w-full h-full">
+            <div className="font-bold justify-center text-center">
+              Etiqueta de Refeição
+            </div>
+            <div className="flex items-center justify-between h-full">
+              <div className="flex flex-col h-full justify-center">QR</div>
+              <div className="flex flex-col h-full justify-center">
+                <div>Setor: </div>
+                <div>Val.: </div>
+                <div></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
