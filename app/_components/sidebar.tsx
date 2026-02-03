@@ -1,8 +1,10 @@
 import {
   LayoutDashboard,
+  Printer,
   Settings,
   Table,
   Ticket,
+  History,
   UserIcon,
 } from "lucide-react";
 import SidebarButton from "./sidebar-button";
@@ -28,17 +30,25 @@ const Sidebar = () => {
         </SidebarButton>
         <SidebarButton href="/labels">
           <Ticket size={icon_size} />
-          Etiquetas
+          Gerador de tiquetas
+        </SidebarButton>
+        <SidebarButton href="/history">
+          <History size={icon_size} />
+          Histórico
         </SidebarButton>
         <SidebarButton href="/sectors">
           <Table size={icon_size} />
           Setores
         </SidebarButton>
+        <hr />
+        <SidebarButton href="/printers">
+          <Printer size={icon_size} />
+          Impressoras
+        </SidebarButton>
         <SidebarButton href="/users">
           <UserIcon size={icon_size} />
           Usuários
         </SidebarButton>
-        <hr />
         <SidebarButton href="/config">
           <Settings size={icon_size} />
           Configuração
