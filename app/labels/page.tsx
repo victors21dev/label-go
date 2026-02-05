@@ -4,8 +4,6 @@ import { Button } from "../_components/ui/button";
 import { useReactToPrint } from "react-to-print";
 import { useRef, useState } from "react";
 import TitleToPage from "../_components/title-page";
-import Modal from "../_components/modal";
-import ModalContent from "../_components/modal-content";
 import LabelModel from "../_components/label-model";
 
 const Label = () => {
@@ -49,11 +47,6 @@ const Label = () => {
             <LabelModel />
           </div>
         </div>
-      </div>
-      <div>
-        <Modal title="Mostrar">
-          {(close: any) => <ModalContent onClose={close} />}
-        </Modal>
       </div>
     </main>
   );

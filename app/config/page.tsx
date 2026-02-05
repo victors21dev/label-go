@@ -3,8 +3,8 @@ import { DataTable } from "../_components/data-table";
 import TitleToPage from "../_components/title-page";
 import { db } from "../_lib/prisma";
 import { LabelModelTableColumns } from "./_components/table-columns";
-import { Button } from "../_components/ui/button";
 import Form from "./_components/form";
+import InitForm from "../_components/init-form";
 
 const Config = async () => {
   const dataConfig = await db.labelModel.findMany();
@@ -15,11 +15,18 @@ const Config = async () => {
           title="Configuração"
           description="Faça suas configurações aqui"
         />
-        <Form />
-        <Button>
-          <Plus />
-          Novo modelo de configuração
-        </Button>
+        {/* Button form */}
+        <InitForm
+          title="Adicionar configuração"
+          title_button={
+            <>
+              <Plus />
+              Novo modelo de configuração
+            </>
+          }
+        >
+          <Form />
+        </InitForm>
       </div>
       <div>
         <DataTable columns={LabelModelTableColumns} data={dataConfig} />

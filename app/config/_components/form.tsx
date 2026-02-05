@@ -1,4 +1,5 @@
 "use client";
+
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { configFormSchema, ConfigFormData } from "../schema/schemas";
@@ -31,7 +32,7 @@ const Form = () => {
       autoComplete="off"
       // @ts-expect-error – conflito conhecido entre RHF generics e SubmitHandler
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4 max-w-md border p-4 rounded-lg"
+      className="flex flex-col gap-4"
     >
       {/* Nome */}
       <div className="flex flex-col gap-1">
@@ -40,10 +41,12 @@ const Form = () => {
           placeholder="Ex: Teste"
           type="text"
           {...register("name")}
-          className="border p-2 rounded-md bg-slate-800 text-white"
+          className="border p-2 rounded-md bg-muted text-foreground"
         />
         {errors.name && (
-          <span className="text-red-500 text-xs">{errors.name.message}</span>
+          <span className="text-destructive text-xs">
+            {errors.name.message}
+          </span>
         )}
       </div>
 
@@ -55,10 +58,12 @@ const Form = () => {
           type="number"
           step="0.01"
           {...register("widthMm")}
-          className="border p-2 rounded-md bg-slate-800 text-white"
+          className="border p-2 rounded-md bg-muted text-foreground"
         />
         {errors.widthMm && (
-          <span className="text-red-500 text-xs">{errors.widthMm.message}</span>
+          <span className="text-destructive text-xs">
+            {errors.widthMm.message}
+          </span>
         )}
       </div>
 
@@ -70,10 +75,10 @@ const Form = () => {
           type="number"
           step="0.01"
           {...register("heightMm")}
-          className="border p-2 rounded-md bg-slate-800 text-white"
+          className="border p-2 rounded-md bg-muted text-foreground"
         />
         {errors.heightMm && (
-          <span className="text-red-500 text-xs">
+          <span className="text-destructive text-xs">
             {errors.heightMm.message}
           </span>
         )}
