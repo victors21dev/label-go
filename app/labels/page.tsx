@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import TitleToPage from "../_components/title-page";
 import Modal from "../_components/modal";
 import ModalContent from "../_components/modal-content";
+import QRCode from "react-qr-code";
 
 const Label = () => {
   const [larguraLabel, setLarguraLabel] = useState("6.2cm");
@@ -105,6 +106,9 @@ const Label = () => {
         <Modal title="Mostrar">
           {(close: any) => <ModalContent onClose={close} />}
         </Modal>
+      </div>
+      <div>
+        <QRCode value="hey" />
       </div>
     </main>
   );
