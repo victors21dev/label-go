@@ -15,7 +15,7 @@ export default function ModalContent({
   title,
 }: ModalContentProps) {
   return (
-    <div className="flex flex-col gap-4 p-4 border-2 rounded-2xl bg-card">
+    <div className="flex flex-col gap-4 p-4 border-2 rounded-2xl bg-card min-w-90">
       <h2 className="text-xl font-semibold text-foreground">{title}</h2>
       <hr />
       {children}
