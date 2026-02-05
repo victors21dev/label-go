@@ -6,7 +6,7 @@ interface ModalContentProps {
 
 export default function ModalContent({ onClose }: ModalContentProps) {
   return (
-    <div className="bg-slate-900 border border-slate-800 p-6 rounded-lg shadow-2xl max-w-md w-full mx-4">
+    <div>
       <h2 className="text-xl font-semibold mb-4 text-white">
         Configurações de Etiqueta
       </h2>

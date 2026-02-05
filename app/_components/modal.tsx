@@ -1,20 +1,24 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import ModalContent from "./modal-content";
 import { Button } from "./ui/button";
 
-const Modal = () => {
+type ModalProps = {
+  title: string;
+  children: any;
+};
+
+const Modal = ({ title, children }: ModalProps) => {
   const [showModal, setShowModal] = useState(false);
+
+  const handleClose = () => setShowModal(false);
 
   return (
     <>
-      <Button onClick={() => setShowModal(true)}>
-        Show modal using a portal
-      </Button>
+      <Button onClick={() => setShowModal(true)}>{title}</Button>
       {showModal &&
         createPortal(
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <ModalContent onClose={() => setShowModal(false)} />
+          <div className="fixed bottom-0 left-0 top-0 flex h-screen w-screen items-center justify-center backdrop-blur-sm">
+            {children(handleClose)}
           </div>,
           document.body
         )}
