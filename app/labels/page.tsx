@@ -33,6 +33,7 @@ const Label = () => {
       <div>
         <TitleToPage title="Etiquetas" description="Gere aqui suas etiquetas" />
       </div>
+
       <div className="flex gap-2 flex-col">
         <Button className="w-fit" onClick={() => handleLabelGenerator(62)}>
           Print

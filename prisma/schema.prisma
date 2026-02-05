@@ -46,8 +46,8 @@ model LabelModel {
   id String @id @default(uuid())
 
   name     String
-  widthMm  Int
-  heightMm Int
+  widthMm  Float
+  heightMm Float
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

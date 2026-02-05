@@ -4,6 +4,7 @@ import TitleToPage from "../_components/title-page";
 import { db } from "../_lib/prisma";
 import { LabelModelTableColumns } from "./_components/table-columns";
 import { Button } from "../_components/ui/button";
+import Form from "./_components/form";
 
 const Config = async () => {
   const dataConfig = await db.labelModel.findMany();
@@ -14,6 +15,7 @@ const Config = async () => {
           title="Configuração"
           description="Faça suas configurações aqui"
         />
+        <Form />
         <Button>
           <Plus />
           Novo modelo de configuração
