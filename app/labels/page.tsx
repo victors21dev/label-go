@@ -4,6 +4,7 @@ import { Button } from "../_components/ui/button";
 import { useReactToPrint } from "react-to-print";
 import { useRef, useState } from "react";
 import TitleToPage from "../_components/title-page";
+import Modal from "../_components/modal";
 
 const Label = () => {
   const [larguraLabel, setLarguraLabel] = useState("6.2cm");
@@ -34,28 +35,73 @@ const Label = () => {
         <Button className="w-fit" onClick={() => handleLabelGenerator(62)}>
           Print
         </Button>
-        <div
-          ref={contentRef}
-          style={{
-            width: larguraLabel,
-            height: alturaLabel,
-          }}
-          className="border p-2 rounded-2xl"
-        >
-          <div className="flex flex-col w-full h-full">
-            <div className="font-bold justify-center text-center">
-              Etiqueta de Refeição
+        <div ref={contentRef}>
+          <div
+            style={{
+              width: larguraLabel,
+              height: alturaLabel,
+            }}
+            className="border p-2 rounded-2xl"
+          >
+            <div className="flex flex-col w-full h-full gap-4">
+              <div className="font-bold justify-center text-center">
+                Etiqueta de Refeição
+              </div>
+              <div className="relative">
+                <div
+                  className="flex items-center justify-between w-full"
+                  style={{
+                    border: "none",
+                    borderTop: "3px dotted #333",
+                    height: "0",
+                  }}
+                ></div>
+                <div className="relative">
+                  <div className="flex flex-col h-full justify-center">QR</div>
+                  <div className="flex flex-col h-full justify-center">
+                    <div>Setor: </div>
+                    <div>Val.: </div>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center justify-between h-full">
-              <div className="flex flex-col h-full justify-center">QR</div>
-              <div className="flex flex-col h-full justify-center">
-                <div>Setor: </div>
-                <div>Val.: </div>
-                <div></div>
+          </div>
+          <div
+            style={{
+              width: larguraLabel,
+              height: alturaLabel,
+            }}
+            className="border p-2 rounded-2xl"
+          >
+            <div className="flex flex-col w-full h-full gap-4">
+              <div className="font-bold justify-center text-center">
+                Etiqueta de Refeição
+              </div>
+              <div className="relative">
+                <div
+                  className="flex items-center justify-between w-full"
+                  style={{
+                    border: "none",
+                    borderTop: "3px dotted #333",
+                    height: "0",
+                  }}
+                ></div>
+                <div className="relative">
+                  <div className="flex flex-col h-full justify-center">QR</div>
+                  <div className="flex flex-col h-full justify-center">
+                    <div>Setor: </div>
+                    <div>Val.: </div>
+                    <div></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div>
+        <Modal />
       </div>
     </main>
   );
