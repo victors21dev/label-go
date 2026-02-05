@@ -70,6 +70,9 @@ model LabelGeneration {
   printer   Printer @relation(fields: [printerId], references: [id])
   printerId String
 
+  quantity Int
+  date     DateTime
+
   justification String
 
   status LabelStatus @default(GENERATED)
