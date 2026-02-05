@@ -30,7 +30,9 @@ export default function RootLayout({
         >
           <div className="flex h-full">
             <Sidebar />
-            <div className="bg-card w-full m-4 p-6">{children}</div>
+            <div className="bg-card w-full m-4 p-6 overflow-y-scroll">
+              {children}
+            </div>
           </div>
         </ThemeProvider>
       </body>

@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 import TitleToPage from "../_components/title-page";
 import Modal from "../_components/modal";
 import ModalContent from "../_components/modal-content";
-import QRCode from "react-qr-code";
+import LabelModel from "../_components/label-model";
 
 const Label = () => {
   const [larguraLabel, setLarguraLabel] = useState("6.2cm");
@@ -45,60 +45,7 @@ const Label = () => {
             }}
             className="border p-2 rounded-2xl"
           >
-            <div className="flex flex-col w-full h-full gap-4">
-              <div className="font-bold justify-center text-center">
-                Etiqueta de Refeição
-              </div>
-              <div className="relative">
-                <div
-                  className="flex items-center justify-between w-full"
-                  style={{
-                    border: "none",
-                    borderTop: "3px dotted #333",
-                    height: "0",
-                  }}
-                ></div>
-                <div className="relative">
-                  <div className="flex flex-col h-full justify-center">QR</div>
-                  <div className="flex flex-col h-full justify-center">
-                    <div>Setor: </div>
-                    <div>Val.: </div>
-                    <div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              width: larguraLabel,
-              height: alturaLabel,
-            }}
-            className="border p-2 rounded-2xl"
-          >
-            <div className="flex flex-col w-full h-full gap-4">
-              <div className="font-bold justify-center text-center">
-                Etiqueta de Refeição
-              </div>
-              <div className="relative">
-                <div
-                  className="flex items-center justify-between w-full"
-                  style={{
-                    border: "none",
-                    borderTop: "3px dotted #333",
-                    height: "0",
-                  }}
-                ></div>
-                <div className="relative">
-                  <div className="flex flex-col h-full justify-center">QR</div>
-                  <div className="flex flex-col h-full justify-center">
-                    <div>Setor: </div>
-                    <div>Val.: </div>
-                    <div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <LabelModel />
           </div>
         </div>
       </div>
@@ -106,9 +53,6 @@ const Label = () => {
         <Modal title="Mostrar">
           {(close: any) => <ModalContent onClose={close} />}
         </Modal>
-      </div>
-      <div>
-        <QRCode value="hey" />
       </div>
     </main>
   );
