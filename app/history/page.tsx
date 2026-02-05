@@ -2,7 +2,7 @@ import TitleToPage from "../_components/title-page";
 
 const History = () => {
   return (
-    <main>
+    <main className="flex flex-col gap-8">
       <div>
         <TitleToPage
           title="Histórico"
