@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { configFormSchema, ConfigFormData } from "../schema/schemas";
 import { Button } from "@/app/_components/ui/button";
-import { createGenericAction } from "@/app/_controls/actions";
+import { createGenericAction } from "@/app/_components/actions";
 
 const Form = () => {
   const {
