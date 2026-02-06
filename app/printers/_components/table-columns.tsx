@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { Printer } from "@/generated/prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -23,5 +24,16 @@ export const printerTableColumns: ColumnDef<Printer>[] = [
         timeStyle: "short",
       }).format(date);
     },
+  },
+  {
+    header: "Ações",
+    id: "actions",
+    cell: ({ row }) => (
+      <DataTableRowActions
+        row={row}
+        onEdit={(item) => console.log("Editando", item.brand)}
+        onDelete={(item) => console.log("Deletando", item.id)}
+      />
+    ),
   },
 ];
