@@ -9,12 +9,12 @@ export const historyTableColumns: ColumnDef<LabelGeneration>[] = [
     header: "Usuário",
   },
   {
-    accessorKey: "sector",
-    header: "Setor",
+    accessorKey: "labelModel",
+    header: "Modelo",
   },
   {
-    accessorKey: "labelModel",
-    header: "Modelo da etiqueta",
+    accessorKey: "sector",
+    header: "Setor",
   },
   {
     accessorKey: "printer",
