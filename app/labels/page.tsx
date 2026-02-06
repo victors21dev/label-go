@@ -4,7 +4,7 @@ import { Button } from "../_components/ui/button";
 import { useReactToPrint } from "react-to-print";
 import { useRef, useState } from "react";
 import TitleToPage from "../_components/title-page";
-import LabelModel from "../_components/label-model";
+import LabelRefeicao from "../_label-models/refeicao";
 
 const Label = () => {
   const [larguraLabel, setLarguraLabel] = useState("6.2cm");
@@ -44,7 +44,7 @@ const Label = () => {
             }}
             className="border p-2 rounded-2xl"
           >
-            <LabelModel />
+            <LabelRefeicao />
           </div>
         </div>
       </div>

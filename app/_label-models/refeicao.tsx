@@ -1,11 +1,11 @@
 import QRCode from "react-qr-code";
 
-const LabelModel = () => {
+const LabelRefeicao = () => {
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <div className="flex flex-col h-full">
-        <div className="font-bold justify-center text-center">
-          <div>REFEIÇÃO</div>
+        <div className="justify-center text-center">
+          AUTORIZAÇÃO DE <span className="font-bold">REFEIÇÃO</span>
           {/* Linha */}
           <div
             className="flex items-center justify-between w-full"
@@ -37,15 +37,19 @@ const LabelModel = () => {
                   Val.:
                   <span className="font-bold ml-2">06/02/2026</span>
                 </div>
+                <div>
+                  Tipo:
+                  <span className="font-bold ml-2">Almoço</span>
+                </div>
                 <div></div>
               </div>
             </div>
           </div>
         </div>
-        <div>Imp.: Brother - QL-800</div>
+        {/* <div>Imp.: Brother - QL-800</div> */}
       </div>
     </div>
   );
 };
 
-export default LabelModel;
+export default LabelRefeicao;
