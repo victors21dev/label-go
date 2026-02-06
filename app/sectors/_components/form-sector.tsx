@@ -2,13 +2,13 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { printerSchema } from "../../_schema/schemas";
+import { sectorSchema } from "../../_schema/schemas";
 import { Button } from "@/app/_components/ui/button";
 import { createGenericAction } from "@/app/_components/actions";
 import { z } from "zod";
 
 // Criamos um tipo específico para este formulário de impressora
-type PrinterFormData = z.infer<typeof printerSchema>;
+type PrinterFormData = z.infer<typeof sectorSchema>;
 
 const Form = () => {
   const {
@@ -17,13 +17,13 @@ const Form = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<PrinterFormData>({
-    resolver: zodResolver(printerSchema),
+    resolver: zodResolver(sectorSchema),
   });
 
   const onSubmit: SubmitHandler<PrinterFormData> = async (data) => {
-    const result = await createGenericAction(data, "printer");
+    const result = await createGenericAction(data, "sector");
     if (result.success) {
-      alert("Impressora salva com sucesso!");
+      alert("Setor salvo com sucesso!");
       reset();
     } else {
       alert("Erro: " + result.error);
@@ -36,38 +36,37 @@ const Form = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      {/* Campo Nome */}
+      {/* Campo setor */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">Marca</label>
+        <label className="text-sm font-medium">Nome setor</label>
         <input
-          placeholder="Ex: Epson"
-          {...register("brand")}
+          placeholder="Ex: TI"
+          {...register("name")}
           className="border p-2 rounded-md bg-muted text-foreground"
         />
-        {errors.brand && (
+        {errors.name && (
           <span className="text-destructive text-xs">
-            {errors.brand.message}
+            {errors.name.message}
           </span>
         )}
       </div>
-
-      {/* Campo Modelo */}
+      {/* Campo coordenador */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">Modelo</label>
+        <label className="text-sm font-medium">Coordenador</label>
         <input
-          placeholder="Ex: L5290"
-          {...register("model")}
+          placeholder="Ex: Lira"
+          {...register("coordinatorName")}
           className="border p-2 rounded-md bg-muted text-foreground"
         />
-        {errors.model && (
+        {errors.coordinatorName && (
           <span className="text-destructive text-xs">
-            {errors.model.message}
+            {errors.coordinatorName.message}
           </span>
         )}
       </div>
 
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Salvando..." : "Salvar impressora"}
+        {isSubmitting ? "Salvando..." : "Salvar setor"}
       </Button>
     </form>
   );

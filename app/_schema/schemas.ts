@@ -11,6 +11,17 @@ export const labelSchema = z.object({
   heightMm: z.coerce.number().positive("A altura deve ser maior que zero"),
 });
 
-export const configFormSchema = z.union([printerSchema, labelSchema]);
+export const sectorSchema = z.object({
+  name: z.string().min(2, "O setor deve ter pelo menos 2 caracteres"),
+  coordinatorName: z
+    .string()
+    .min(3, "O coordenador deve ter pelo menos 3 caracteres"),
+});
+
+export const configFormSchema = z.union([
+  printerSchema,
+  labelSchema,
+  sectorSchema,
+]);
 
 export type ConfigFormData = z.infer<typeof configFormSchema>;

@@ -23,7 +23,7 @@ const Form = () => {
   const onSubmit: SubmitHandler<LabelFormData> = async (data) => {
     const result = await createGenericAction(data, "printer");
     if (result.success) {
-      alert("Impressora salva com sucesso!");
+      alert("Configuração salva com sucesso!");
       reset();
     } else {
       alert("Erro: " + result.error);
@@ -51,7 +51,7 @@ const Form = () => {
           </span>
         )}
       </div>
-
+      {/* Largura */}
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium">Largura (mm)</label>
         <input

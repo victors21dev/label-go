@@ -4,6 +4,8 @@ import TitleToPage from "../_components/title-page";
 import { Button } from "../_components/ui/button";
 import { db } from "../_lib/prisma";
 import { sectorTableColumns } from "./_components/table-columns";
+import InitForm from "../_components/init-form";
+import Form from "./_components/form-sector";
 
 const Sector = async () => {
   const dataSector = await db.sector.findMany();
@@ -14,10 +16,18 @@ const Sector = async () => {
           title="Setores"
           description="Registre seus setores nessa aba"
         />
-        <Button>
-          <Plus />
-          Adicionar novo setor
-        </Button>
+        {/* Button form */}
+        <InitForm
+          title="Adicionar configuração"
+          title_button={
+            <>
+              <Plus />
+              Novo modelo de configuração
+            </>
+          }
+        >
+          <Form />
+        </InitForm>
       </div>
       <div>
         <DataTable data={dataSector} columns={sectorTableColumns} />
