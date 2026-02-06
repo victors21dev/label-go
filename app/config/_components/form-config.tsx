@@ -2,9 +2,12 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { configFormSchema, ConfigFormData } from "../schema/schemas";
+import { labelSchema } from "../../_schema/schemas";
 import { Button } from "@/app/_components/ui/button";
 import { createGenericAction } from "@/app/_components/actions";
+import { z } from "zod";
+
+type LabelFormData = z.infer<typeof labelSchema>;
 
 const Form = () => {
   const {
@@ -12,21 +15,21 @@ const Form = () => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ConfigFormData>({
+  } = useForm<LabelFormData>({
     // @ts-expect-error – incompatibilidade conhecida entre RHF + Zod (coerce)
-    resolver: zodResolver<ConfigFormData>(configFormSchema),
+    resolver: zodResolver(labelSchema),
   });
 
-  const onSubmit: SubmitHandler<ConfigFormData> = async (data) => {
-    const result = await createGenericAction(data, "labelModel");
-
+  const onSubmit: SubmitHandler<LabelFormData> = async (data) => {
+    const result = await createGenericAction(data, "printer");
     if (result.success) {
-      alert("Configuração adicionada com sucesso!");
+      alert("Impressora salva com sucesso!");
       reset();
     } else {
       alert("Erro: " + result.error);
     }
   };
+
   return (
     <form
       autoComplete="off"
@@ -34,12 +37,11 @@ const Form = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      {/* Nome */}
+      {/* Campo Marca */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">Nome</label>
+        <label className="text-sm font-medium">Marca</label>
         <input
-          placeholder="Ex: Teste"
-          type="text"
+          placeholder="Ex: Epson"
           {...register("name")}
           className="border p-2 rounded-md bg-muted text-foreground"
         />
@@ -50,7 +52,6 @@ const Form = () => {
         )}
       </div>
 
-      {/* Largura */}
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium">Largura (mm)</label>
         <input

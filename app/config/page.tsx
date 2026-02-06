@@ -3,8 +3,8 @@ import { DataTable } from "../_components/data-table";
 import TitleToPage from "../_components/title-page";
 import { db } from "../_lib/prisma";
 import { LabelModelTableColumns } from "./_components/table-columns";
-import Form from "./_components/form";
-import InitForm from "./_components/init-form";
+import Form from "./_components/form-config";
+import InitForm from "../_components/init-form";
 
 const Config = async () => {
   const dataConfig = await db.labelModel.findMany();

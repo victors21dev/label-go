@@ -1,6 +1,6 @@
 "use server";
 import { db } from "../_lib/prisma";
-import { configFormSchema, ConfigFormData } from "../config/schema/schemas";
+import { configFormSchema, ConfigFormData } from "../_schema/schemas";
 import { revalidatePath } from "next/cache";
 
 type AllowedModels =
