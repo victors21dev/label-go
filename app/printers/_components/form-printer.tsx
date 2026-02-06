@@ -51,6 +51,21 @@ const Form = () => {
         )}
       </div>
 
+      {/* Campo Nome */}
+      <div className="flex flex-col gap-1">
+        <label className="text-sm font-medium">Modelo</label>
+        <input
+          placeholder="Ex: L5290"
+          {...register("model")}
+          className="border p-2 rounded-md bg-muted text-foreground"
+        />
+        {errors.model && (
+          <span className="text-destructive text-xs">
+            {errors.model.message}
+          </span>
+        )}
+      </div>
+
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Salvando..." : "Salvar impressora"}
       </Button>

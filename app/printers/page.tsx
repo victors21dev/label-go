@@ -4,6 +4,8 @@ import TitleToPage from "../_components/title-page";
 import { db } from "../_lib/prisma";
 import { printerTableColumns } from "./_components/table-columns";
 import { Button } from "../_components/ui/button";
+import InitForm from "../_components/init-form";
+import Form from "./_components/form-printer";
 
 const History = async () => {
   const dataSector = await db.printer.findMany();
@@ -14,10 +16,18 @@ const History = async () => {
           title="Impressoras"
           description="Configure sua impressora aqui"
         />
-        <Button>
-          <Plus />
-          Adicionar impressora
-        </Button>
+        {/* Button form */}
+        <InitForm
+          title="Adicionar impressora"
+          title_button={
+            <>
+              <Plus />
+              Adicionar impressora
+            </>
+          }
+        >
+          <Form />
+        </InitForm>
       </div>
       <div>
         <DataTable columns={printerTableColumns} data={dataSector} />
