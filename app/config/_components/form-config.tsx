@@ -21,7 +21,7 @@ const Form = () => {
   });
 
   const onSubmit: SubmitHandler<LabelFormData> = async (data) => {
-    const result = await createGenericAction(data, "printer");
+    const result = await createGenericAction(data, "labelModel");
     if (result.success) {
       alert("Configuração salva com sucesso!");
       reset();
@@ -37,11 +37,11 @@ const Form = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      {/* Campo Marca */}
+      {/* Campo Nome */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">Marca</label>
+        <label className="text-sm font-medium">Modelo da etiqueta</label>
         <input
-          placeholder="Ex: Epson"
+          placeholder="Ex: Nome etiqueta"
           {...register("name")}
           className="border p-2 rounded-md bg-muted text-foreground"
         />
