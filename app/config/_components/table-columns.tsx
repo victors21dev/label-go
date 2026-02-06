@@ -3,11 +3,23 @@
 import { LabelModel } from "@/generated/prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
+import { ArrowUpDown } from "lucide-react";
+import { Button } from "@/app/_components/ui/button";
 
 export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
   {
     accessorKey: "name",
-    header: "Nome da Etiqueta",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nome etiqueta
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "widthMm",
