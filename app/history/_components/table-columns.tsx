@@ -5,10 +5,6 @@ import { ColumnDef } from "@tanstack/react-table";
 
 export const historyTableColumns: ColumnDef<LabelGeneration>[] = [
   {
-    accessorKey: "user",
-    header: "Usuário",
-  },
-  {
     accessorKey: "labelModel",
     header: "Modelo",
   },
@@ -23,6 +19,10 @@ export const historyTableColumns: ColumnDef<LabelGeneration>[] = [
   {
     accessorKey: "quantity",
     header: "Quantidade",
+  },
+  {
+    accessorKey: "user",
+    header: "Usuário",
   },
   {
     accessorKey: "date",

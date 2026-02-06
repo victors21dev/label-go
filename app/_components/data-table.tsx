@@ -10,6 +10,8 @@ import {
   getPaginationRowModel,
   SortingState,
   getSortedRowModel,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -21,6 +23,8 @@ import {
   TableRow,
 } from "./table";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
+import { Input } from "./ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,6 +38,10 @@ export function DataTable<TData, TValue>({
   // sorting
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
   const table = useReactTable({
     data,
     columns,
@@ -41,13 +49,30 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   });
+  // @ts-ignore
+  const name0column = columns[0].accessorKey;
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder={`Filtrar por ${columns[0].header}`}
+          value={
+            (table.getColumn(name0column)?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn(name0column)?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>

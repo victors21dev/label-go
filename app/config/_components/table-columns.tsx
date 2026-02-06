@@ -9,17 +9,7 @@ import { Button } from "@/app/_components/ui/button";
 export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
   {
     accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Nome etiqueta
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Nome",
   },
   {
     accessorKey: "widthMm",
@@ -31,7 +21,17 @@ export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Data de Criação",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Data de Criação
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const date = new Date(row.getValue("createdAt"));
       return new Intl.DateTimeFormat("pt-BR", {
