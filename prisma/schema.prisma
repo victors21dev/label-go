@@ -13,6 +13,9 @@ model User {
   password String
   role     Role   @default(USER)
 
+  sector   Sector @relation(fields: [sectorId], references: [id])
+  sectorId String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -29,6 +32,7 @@ model Sector {
   updatedAt DateTime @updatedAt
 
   labelGenerations LabelGeneration[]
+  users            User[]
 }
 
 model Printer {
@@ -88,4 +92,10 @@ enum LabelStatus {
 enum Role {
   USER
   ADMIN
+}
+
+enum TypeOfMeal {
+  BREAKFAST
+  LUNCH
+  DINNER
 }
