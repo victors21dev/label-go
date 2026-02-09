@@ -6,7 +6,7 @@ import LabelRefeicao from "../_label-models/refeicao";
 import ContentPrinter from "./content-printer";
 import CalendarComponent from "./calendar-component";
 import InputComponet from "./input";
-import { Info, TicketPlus, View } from "lucide-react";
+import { Info, Plus, PrinterCheck, TicketPlus, View } from "lucide-react";
 import { Button } from "./ui/button";
 
 type OptionLabelDetails = {
@@ -61,7 +61,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
   return (
     <div className="grid grid-cols-[auto_auto_2fr] gap-2">
       {/* INFORMAÇÕES */}
-      <div className="bg-card p-4 rounded-2xl border-2 grid grid-cols-[248px_auto] gap-2 h-140">
+      <div className="bg-card p-4 rounded-2xl border-2 grid grid-cols-[248px_auto] gap-4 h-140">
         {/* Card */}
         <div className="flex flex-col gap-4 w-62">
           <div>
@@ -96,7 +96,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
         </div>
       </div>
       {/* VISUALIZADOR */}
-      <div className="flex gap-4 min-w-79.5 h-140 justify-between p-4 border-2 rounded-2xl overflow-hidden">
+      <div className="flex gap-4 min-w-83.25 h-140 justify-between p-4 border-2 rounded-2xl overflow-hidden">
         <div className="flex flex-col gap-4">
           <div className="flex-1 overflow-y-auto w-full">
             <div className="flex min-w-max">
@@ -108,24 +108,34 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
                       larguraLabelProps={String(selectedModelConfig.widthMm)}
                       alturaLabelProps={String(selectedModelConfig.heightMm)}
                     >
-                      {renderLabelComponent()}
+                      <div>{renderLabelComponent()}</div>
                     </ContentPrinter>
                   )}
               </div>
             </div>
             {!selectedLabel && !selectedSetorConfig && (
               <p className="text-sm text-gray-500">
-                Por favor, escolha um modelo de etiqueta
+                Por favor, <br />
+                escolha um modelo de etiqueta
               </p>
             )}
             {selectedLabel && !selectedSetorConfig && (
               <p className="text-sm text-gray-500">
-                Por favor, selecione um setor para visualizar a etiqueta.
+                Por favor, <br />
+                selecione um setor para <br />
+                visualizar a etiqueta.
               </p>
             )}
           </div>
-          <div>
-            <Button>Aqui</Button>
+          <div className="flex gap-2 justify-center">
+            <Button className="bg-chart-4 text-foreground">
+              <PrinterCheck />
+              Gerar
+            </Button>
+            <Button className="bg-chart-2">
+              <Plus />
+              Fila
+            </Button>
           </div>
         </div>
         {/* Texto Vertical (Fixo à direita) */}
