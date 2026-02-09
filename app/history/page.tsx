@@ -5,6 +5,7 @@ import { historyTableColumns } from "./_components/table-columns";
 
 const History = async () => {
   const dataSector = await db.labelGeneration.findMany();
+
   return (
     <main className="flex flex-col gap-8">
       <div>

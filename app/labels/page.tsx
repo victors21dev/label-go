@@ -1,52 +1,25 @@
-"use client";
-
-import { Button } from "../_components/ui/button";
-import { useReactToPrint } from "react-to-print";
-import { useRef, useState } from "react";
 import TitleToPage from "../_components/title-page";
+import SelectOption from "../_components/select-option";
+import { db } from "../_lib/prisma";
 import LabelRefeicao from "../_label-models/refeicao";
+import ContentPrinter from "../_components/content-printer";
+import SelectClient from "../_components/select-client";
 
-const Label = () => {
-  const [larguraLabel, setLarguraLabel] = useState("6.2cm");
-  const [alturaLabel, setAlturaLabel] = useState("4.8cm");
-
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  const reactToPrintFn = useReactToPrint({
-    contentRef: contentRef,
-  });
-
-  const convert_mm_to_cm = (mm: number) => {
-    let cm = mm / 10;
-    console.log(cm);
-  };
-
-  const handleLabelGenerator = async (mm: number) => {
-    await convert_mm_to_cm(mm);
-    await reactToPrintFn();
-  };
+const Label = async () => {
+  const dataOptionLabelSelect = await db.labelModel.findMany();
+  const dataOptionSectorSelect = await db.sector.findMany();
 
   return (
     <main className="flex flex-col gap-8">
       <div>
         <TitleToPage title="Etiquetas" description="Gere aqui suas etiquetas" />
       </div>
-
-      <div className="flex gap-2 flex-col">
-        <Button className="w-fit" onClick={() => handleLabelGenerator(62)}>
-          Print
-        </Button>
-        <div ref={contentRef}>
-          <div
-            style={{
-              width: larguraLabel,
-              height: alturaLabel,
-            }}
-            className="border p-2 rounded-2xl"
-          >
-            <LabelRefeicao />
-          </div>
-        </div>
+      {/* Opção Setor */}
+      <div className="flex flex-col gap-4">
+        {/* <SelectOption title="Setor" dataoption={dataOptionSectorSelect} /> */}
+      </div>
+      <div>
+        <SelectClient data={dataOptionLabelSelect} />
       </div>
     </main>
   );
