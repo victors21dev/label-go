@@ -1,12 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import SelectOption from "./select-option";
 import LabelRefeicao from "../_label-models/refeicao";
-import ContentPrinter from "./content-printer";
+import ContentPrinter, { ContentPrinterRef } from "./content-printer";
 import CalendarComponent from "./calendar-component";
 import InputComponet from "./input";
-import { Info, Plus, PrinterCheck, TicketPlus, View } from "lucide-react";
+import {
+  Info,
+  ListOrdered,
+  Plus,
+  PrinterCheck,
+  TicketPlus,
+} from "lucide-react";
 import { Button } from "./ui/button";
 
 type OptionLabelDetails = {
@@ -58,6 +64,11 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
     }
   };
 
+  const printerRef = useRef<ContentPrinterRef>(null);
+  const handleExternalPrint = () => {
+    printerRef.current?.print();
+  };
+
   return (
     <div className="grid grid-cols-[auto_auto_2fr] gap-2">
       {/* INFORMAÇÕES */}
@@ -87,7 +98,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
             min={1}
           />
         </div>
-        {/* Texto Vertical */}
+        {/* Vertical */}
         <div className="flex w-8 h-full bg-chart-1 items-center justify-center overflow-hidden">
           <div className="rotate-180 [writing-mode:vertical-lr] flex items-center justify-center gap-2 font-bold text-white whitespace-nowrap">
             <Info size={16} />
@@ -95,22 +106,26 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
           </div>
         </div>
       </div>
+
       {/* VISUALIZADOR */}
       <div className="flex gap-4 min-w-83.25 h-140 justify-between p-4 border-2 rounded-2xl overflow-hidden">
         <div className="flex flex-col gap-4">
           <div className="flex-1 overflow-y-auto w-full">
             <div className="flex min-w-max">
               <div>
-                {selectedLabel &&
-                  selectedSetorConfig &&
-                  selectedModelConfig && (
-                    <ContentPrinter
-                      larguraLabelProps={String(selectedModelConfig.widthMm)}
-                      alturaLabelProps={String(selectedModelConfig.heightMm)}
-                    >
-                      <div>{renderLabelComponent()}</div>
-                    </ContentPrinter>
-                  )}
+                <div className="flex flex-col gap-4">
+                  {selectedLabel &&
+                    selectedSetorConfig &&
+                    selectedModelConfig && (
+                      <ContentPrinter
+                        ref={printerRef}
+                        larguraLabelProps={String(selectedModelConfig.widthMm)}
+                        alturaLabelProps={String(selectedModelConfig.heightMm)}
+                      >
+                        <div>{renderLabelComponent()}</div>
+                      </ContentPrinter>
+                    )}
+                </div>
               </div>
             </div>
             {!selectedLabel && !selectedSetorConfig && (
@@ -128,17 +143,20 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
             )}
           </div>
           <div className="flex gap-2 justify-center">
-            <Button className="bg-chart-4 text-foreground">
+            <Button
+              className="bg-chart-4 text-foreground"
+              onClick={handleExternalPrint}
+            >
               <PrinterCheck />
               Gerar
             </Button>
             <Button className="bg-chart-2">
-              <Plus />
+              <ListOrdered />
               Fila
             </Button>
           </div>
         </div>
-        {/* Texto Vertical (Fixo à direita) */}
+        {/*Vertical */}
         <div className="flex w-8 h-full bg-chart-2 items-center justify-center overflow-hidden shrink-0">
           <div className="rotate-180 [writing-mode:vertical-lr] flex items-center justify-center gap-2 font-bold text-card whitespace-nowrap">
             <TicketPlus className="rotate-90" size={16} />
@@ -146,6 +164,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
           </div>
         </div>
       </div>
+
       {/* GERADOR */}
       <div className="bg-secondary rounded-2xl p-6 grid grid-rows-[1fr_auto] h-140">
         <div>Content</div>

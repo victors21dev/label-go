@@ -1,8 +1,7 @@
 "use client";
 
-import { Button } from "../_components/ui/button";
 import { useReactToPrint } from "react-to-print";
-import { useRef } from "react";
+import { useRef, useImperativeHandle, forwardRef } from "react";
 import React from "react";
 
 interface ContentPrinterProps {
@@ -11,32 +10,28 @@ interface ContentPrinterProps {
   alturaLabelProps: string;
 }
 
-const ContentPrinter = ({
-  children,
-  larguraLabelProps,
-  alturaLabelProps,
-}: ContentPrinterProps) => {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const reactToPrintFn = useReactToPrint({
-    contentRef: contentRef,
-  });
+export interface ContentPrinterRef {
+  print: () => void;
+}
 
-  const handleLabelGenerator = async () => {
-    await reactToPrintFn();
-  };
+const ContentPrinter = forwardRef<ContentPrinterRef, ContentPrinterProps>(
+  ({ children }, ref) => {
+    const contentRef = useRef<HTMLDivElement>(null);
 
-  return (
-    <div>
-      <div className="flex gap-2 flex-col">
-        <Button className="w-fit" onClick={handleLabelGenerator}>
-          Print
-        </Button>
-        <div ref={contentRef}>
-          <div>{children}</div>
-        </div>
-      </div>
-    </div>
-  );
-};
+    const reactToPrintFn = useReactToPrint({
+      contentRef: contentRef,
+    });
+
+    useImperativeHandle(ref, () => ({
+      print: () => {
+        reactToPrintFn();
+      },
+    }));
+
+    return <div ref={contentRef}>{children}</div>;
+  }
+);
+
+ContentPrinter.displayName = "ContentPrinter";
 
 export default ContentPrinter;
