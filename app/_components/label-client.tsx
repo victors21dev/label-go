@@ -59,9 +59,9 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
   };
 
   return (
-    <div className="grid grid-cols-[auto_2fr_1fr] gap-2">
+    <div className="grid grid-cols-[auto_auto_2fr] gap-2">
       {/* INFORMAÇÕES */}
-      <div className="bg-card p-4 rounded-2xl border-2 grid grid-cols-[248px_auto] gap-2">
+      <div className="bg-card p-4 rounded-2xl border-2 grid grid-cols-[248px_auto] gap-2 h-140">
         {/* Card */}
         <div className="flex flex-col gap-4 w-62">
           <div>
@@ -88,7 +88,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
           />
         </div>
         {/* Texto Vertical */}
-        <div className="flex w-8 h-full bg-amber-600 items-center justify-center overflow-hidden">
+        <div className="flex w-8 h-full bg-chart-1 items-center justify-center overflow-hidden">
           <div className="rotate-180 [writing-mode:vertical-lr] flex items-center justify-center gap-2 font-bold text-white whitespace-nowrap">
             <Info size={16} />
             INFORMAÇÕES
@@ -96,41 +96,48 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
         </div>
       </div>
       {/* VISUALIZADOR */}
-      <div className="flex gap-4 w-full justify-between p-4 border-2 rounded-2xl">
-        <div className="flex">
-          <div>
-            {selectedLabel && selectedSetorConfig && selectedModelConfig && (
-              <ContentPrinter
-                larguraLabelProps={String(selectedModelConfig.widthMm)}
-                alturaLabelProps={String(selectedModelConfig.heightMm)}
-              >
-                {renderLabelComponent()}
-              </ContentPrinter>
-            )}
-
+      <div className="flex gap-4 min-w-79.5 h-140 justify-between p-4 border-2 rounded-2xl overflow-hidden">
+        <div className="flex flex-col gap-4">
+          <div className="flex-1 overflow-y-auto w-full">
+            <div className="flex min-w-max">
+              <div>
+                {selectedLabel &&
+                  selectedSetorConfig &&
+                  selectedModelConfig && (
+                    <ContentPrinter
+                      larguraLabelProps={String(selectedModelConfig.widthMm)}
+                      alturaLabelProps={String(selectedModelConfig.heightMm)}
+                    >
+                      {renderLabelComponent()}
+                    </ContentPrinter>
+                  )}
+              </div>
+            </div>
             {!selectedLabel && !selectedSetorConfig && (
               <p className="text-sm text-gray-500">
-                Por favor, escolhe um modelo de etiqueta
+                Por favor, escolha um modelo de etiqueta
               </p>
             )}
-
             {selectedLabel && !selectedSetorConfig && (
               <p className="text-sm text-gray-500">
                 Por favor, selecione um setor para visualizar a etiqueta.
               </p>
             )}
           </div>
+          <div>
+            <Button>Aqui</Button>
+          </div>
         </div>
-        {/* Texto Vertical */}
-        <div className="flex w-8 h-full bg-primary items-center justify-center overflow-hidden">
-          <div className="rotate-180 [writing-mode:vertical-lr] flex items-center justify-center gap-2 font-bold text-white whitespace-nowrap">
+        {/* Texto Vertical (Fixo à direita) */}
+        <div className="flex w-8 h-full bg-chart-2 items-center justify-center overflow-hidden shrink-0">
+          <div className="rotate-180 [writing-mode:vertical-lr] flex items-center justify-center gap-2 font-bold text-card whitespace-nowrap">
             <TicketPlus className="rotate-90" size={16} />
             MODELO ETIQUETA
           </div>
         </div>
       </div>
       {/* GERADOR */}
-      <div className="bg-secondary rounded-2xl p-6 grid grid-rows-[1fr_auto]">
+      <div className="bg-secondary rounded-2xl p-6 grid grid-rows-[1fr_auto] h-140">
         <div>Content</div>
         <div className="flex w-full justify-end">
           <Button>Gerar as etiquetas</Button>
