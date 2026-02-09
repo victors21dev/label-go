@@ -1,6 +1,6 @@
 import TitleToPage from "../_components/title-page";
 import { db } from "../_lib/prisma";
-import SelectClient from "../_components/select-client";
+import LabelClient from "../_components/label-client";
 
 const Label = async () => {
   const dataOptionLabelSelect = await db.labelModel.findMany();
@@ -12,7 +12,7 @@ const Label = async () => {
         <TitleToPage title="Etiquetas" description="Gere aqui suas etiquetas" />
       </div>
       <div>
-        <SelectClient
+        <LabelClient
           dataLabel={dataOptionLabelSelect}
           dataSelect={dataOptionSectorSelect}
         />

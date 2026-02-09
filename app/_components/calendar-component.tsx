@@ -17,6 +17,7 @@ const CalendarComponent = () => {
     <Card className="w-fit p-0">
       <CardContent className="p-0">
         <Calendar
+          className="flex w-full"
           mode="range"
           locale={ptBR}
           defaultMonth={dateRange?.from}

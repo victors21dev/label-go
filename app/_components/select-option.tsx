@@ -29,7 +29,7 @@ const SelectOption = ({
     <div>
       <label className="font-bold">{title}</label>
       <Select onValueChange={onValueChange}>
-        <SelectTrigger className="min-w-45">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Escolha a opção..." />
         </SelectTrigger>
         <SelectContent>

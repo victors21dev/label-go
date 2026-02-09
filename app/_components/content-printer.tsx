@@ -32,15 +32,7 @@ const ContentPrinter = ({
           Print
         </Button>
         <div ref={contentRef}>
-          <div
-            style={{
-              width: `${larguraLabelProps}cm`,
-              height: `${alturaLabelProps}cm`,
-            }}
-            className="border p-2 rounded-2xl"
-          >
-            {children}
-          </div>
+          <div>{children}</div>
         </div>
       </div>
     </div>
