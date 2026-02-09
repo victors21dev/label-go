@@ -4,46 +4,78 @@ import { useState } from "react";
 import SelectOption from "./select-option";
 import LabelRefeicao from "../_label-models/refeicao";
 import ContentPrinter from "./content-printer";
+import CalendarComponent from "./calendar-component";
 
-type OptionDetails = {
+type OptionLabelDetails = {
   id: string | number;
   name: string;
   heightMm: number;
   widthMm: number;
 };
 
-type SelectClientProps = {
-  data: OptionDetails[];
+type OptionSelectDetails = {
+  id: string | number;
+  name: string;
+  coordinatorName: string;
 };
 
-const SelectClient = ({ data }: SelectClientProps) => {
-  const ModelLabels = [
-    {
-      name: "Refeição",
-      component: <LabelRefeicao />,
-    },
-  ];
+type SelectClientProps = {
+  dataLabel: OptionLabelDetails[];
+  dataSelect: OptionSelectDetails[];
+};
 
-  const [selected, setSelected] = useState("");
-  const selectedModelConfig = data.find((model) => model.name === selected);
-  const selectedModel = ModelLabels.find((model) => model.name === selected);
+const SelectClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
+  const [selectedLabel, setSelectedLabel] = useState("");
+  const [selectSector, setSelectSector] = useState("");
+
+  const selectedModelConfig = dataLabel.find((m) => m.name === selectedLabel);
+  const selectedSetorConfig = dataSelect.find((s) => s.name === selectSector);
+
+  const renderLabelComponent = () => {
+    if (!selectedSetorConfig) return null;
+
+    switch (selectedLabel) {
+      case "Refeição":
+        return <LabelRefeicao dataSector={[selectedSetorConfig]} />;
+      default:
+        return null;
+    }
+  };
 
   return (
-    <div className="flex flex-col gap-2">
-      <SelectOption
-        title="Modelo da etiqueta"
-        dataoption={data}
-        onValueChange={setSelected}
-      />
-
-      <div className={selected ? "" : "hidden"}>
-        <ContentPrinter
-          larguraLabelProps={String(selectedModelConfig?.widthMm)}
-          alturaLabelProps={String(selectedModelConfig?.heightMm)}
-        >
-          {selectedModel?.component}
-        </ContentPrinter>
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-4">
+        <div>
+          <CalendarComponent />
+        </div>
+        <div className="flex flex-col gap-4">
+          <SelectOption
+            title="Modelo da etiqueta"
+            dataoption={dataLabel}
+            onValueChange={setSelectedLabel}
+          />
+          <SelectOption
+            title="Setor"
+            dataoption={dataSelect}
+            onValueChange={setSelectSector}
+          />
+        </div>
       </div>
+
+      {selectedLabel && selectedSetorConfig && selectedModelConfig && (
+        <ContentPrinter
+          larguraLabelProps={String(selectedModelConfig.widthMm)}
+          alturaLabelProps={String(selectedModelConfig.heightMm)}
+        >
+          {renderLabelComponent()}
+        </ContentPrinter>
+      )}
+
+      {selectedLabel && !selectedSetorConfig && (
+        <p className="text-sm text-gray-500">
+          Por favor, selecione um setor para visualizar a etiqueta.
+        </p>
+      )}
     </div>
   );
 };

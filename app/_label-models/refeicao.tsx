@@ -1,6 +1,18 @@
 import QRCode from "react-qr-code";
 
-const LabelRefeicao = () => {
+type dataSectorOptions = {
+  id: string | number;
+  name: string;
+  coordinatorName: string;
+};
+
+type LabelRefeicaoProps = {
+  dataSector: dataSectorOptions[];
+};
+
+const LabelRefeicao = ({ dataSector }: LabelRefeicaoProps) => {
+  let data = dataSector[0];
+
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <div className="flex flex-col h-full">
@@ -27,11 +39,11 @@ const LabelRefeicao = () => {
               <div className="flex flex-col h-full justify-center">
                 <div>
                   Setor:
-                  <span className="font-bold ml-2">T.I.</span>
+                  <span className="font-bold ml-2">{data.name}</span>
                 </div>
                 <div>
                   Coord.:
-                  <span className="font-bold ml-2">Alan Lira</span>
+                  <span className="font-bold ml-2">{data.coordinatorName}</span>
                 </div>
                 <div>
                   Val.:
