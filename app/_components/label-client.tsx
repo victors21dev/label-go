@@ -166,8 +166,21 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       </div>
 
       {/* GERADOR */}
-      <div className="bg-secondary rounded-2xl p-6 grid grid-rows-[1fr_auto] h-140">
-        <div>Content</div>
+      <div className="p-4 border-2 rounded-2xl grid grid-rows-[1fr_auto] h-140">
+        <div>
+          <div className="font-bold">Fila para imprimir(3)</div>
+          <div className="text-sm flex flex-col gap-2">
+            <div className="p-2 border rounded-lg">
+              Refeição | Almoço | Tecnologia da Informação | 06/02/2026 | (12)
+            </div>
+            <div className="p-2 border rounded-lg">
+              Refeição | Almoço | Tecnologia da Informação | 06/02/2026 | (12)
+            </div>
+            <div className="p-2 border rounded-lg">
+              Refeição | Almoço | Tecnologia da Informação | 06/02/2026 | (12)
+            </div>
+          </div>
+        </div>
         <div className="flex w-full justify-end">
           <Button>Gerar as etiquetas</Button>
         </div>
