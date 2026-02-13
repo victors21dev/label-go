@@ -1,8 +1,8 @@
-import { DataTable } from "../_components/data-table";
-import TitleToPage from "../_components/title-page";
+import { DataTable } from "../../_components/data-table";
+import TitleToPage from "../../_components/title-page";
 import { userTableColumns } from "./_components/table-columns";
-import { db } from "../_lib/prisma";
-import { Button } from "../_components/ui/button";
+import { db } from "../../_lib/prisma";
+import { Button } from "../../_components/ui/button";
 import { Plus } from "lucide-react";
 
 const Sector = async () => {

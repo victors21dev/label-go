@@ -1,10 +1,10 @@
 import { Plus } from "lucide-react";
-import { DataTable } from "../_components/data-table";
-import TitleToPage from "../_components/title-page";
-import { db } from "../_lib/prisma";
+import { DataTable } from "../../_components/data-table";
+import TitleToPage from "../../_components/title-page";
+import { db } from "../../_lib/prisma";
 import { printerTableColumns } from "./_components/table-columns";
-import { Button } from "../_components/ui/button";
-import InitForm from "../_components/init-form";
+import { Button } from "../../_components/ui/button";
+import InitForm from "../../_components/init-form";
 import Form from "./_components/form-printer";
 
 const History = async () => {

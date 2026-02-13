@@ -1,4 +1,4 @@
-import TitleToPage from "./_components/title-page";
+import TitleToPage from "../_components/title-page";
 
 export default function Home() {
   return (
