@@ -5,8 +5,7 @@ import { redirect } from "next/navigation";
 export async function checkUserStatus() {
   const { userId } = await auth();
 
-  if (!userId) redirect("/login");
-  console.log(userId);
+  if (!userId) return null;
 
   let user = await db.user.findUnique({
     where: { id: userId },

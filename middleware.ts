@@ -1,30 +1,22 @@
-// proxy.ts
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-// Defina as rotas que NÃO precisam de autenticação
 const isPublicRoute = createRouteMatcher([
   "/login(.*)",
   "/cadastro(.*)",
   "/unauthorized(.*)",
 ]);
 
-export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+export default clerkMiddleware((auth, req) => {
+  const userId = auth();
 
-  // 1. Se o usuário NÃO está logado e tenta acessar algo privado -> Vai para Login
   if (!userId && !isPublicRoute(req)) {
-    return (await auth()).redirectToSignIn();
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("redirect_url", req.url);
+    return NextResponse.redirect(loginUrl);
   }
 
-  // 2. Se o usuário ESTÁ logado e tenta acessar o Login -> Vai para Home
-  // Isso evita o loop de ficar preso na tela de login já estando autenticado
-  if (
-    userId &&
-    isPublicRoute(req) &&
-    !req.nextUrl.pathname.startsWith("/unauthorized")
-  ) {
-    return Response.redirect(new URL("/", req.url));
-  }
+  return NextResponse.next();
 });
 
 export const config = {

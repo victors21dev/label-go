@@ -4,15 +4,13 @@ export default function LoginPage() {
   return (
     <>
       <SignedIn>
-        {/* Se já está logado, vai pra home */}
-        <meta httpEquiv="refresh" content="0; url=/" />
+        <RedirectToSignIn redirectUrl="/" />
       </SignedIn>
 
       <SignedOut>
         <SignIn
           path="/login"
           routing="path"
-          signUpUrl="/cadastro"
           afterSignInUrl="/"
           fallbackRedirectUrl="/"
         />

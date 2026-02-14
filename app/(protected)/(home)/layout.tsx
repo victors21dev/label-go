@@ -7,6 +7,7 @@ export default async function MainLayout({
   children: React.ReactNode;
 }) {
   await checkUserStatus();
+
   return (
     <div className="flex h-full w-full">
       <Sidebar />
