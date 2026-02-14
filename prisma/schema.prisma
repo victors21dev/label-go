@@ -8,17 +8,15 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  nick     String @unique
-  password String
-  role     Role   @default(USER)
+  id     String     @id
+  role   Role       @default(USER)
+  status UserStatus @default(UNAUTHORIZED)
 
-  sector   Sector @relation(fields: [sectorId], references: [id])
-  sectorId String
+  sectorId String?
+  sector   Sector? @relation(fields: [sectorId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
   labelGenerations LabelGeneration[]
 }
 
@@ -98,4 +96,9 @@ enum TypeOfMeal {
   BREAKFAST
   LUNCH
   DINNER
+}
+
+enum UserStatus {
+  AUTHORIZED
+  UNAUTHORIZED
 }

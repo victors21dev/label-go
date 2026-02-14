@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "UserStatus" AS ENUM ('AUTHORIZED', 'UNAUTHORIZED');
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "status" "UserStatus" NOT NULL DEFAULT 'UNAUTHORIZED';
