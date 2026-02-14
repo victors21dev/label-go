@@ -1,10 +1,10 @@
 import { Plus } from "lucide-react";
-import { DataTable } from "../../_components/data-table";
-import TitleToPage from "../../_components/title-page";
-import { db } from "../../_lib/prisma";
+import { DataTable } from "@/app/_components/data-table";
+import TitleToPage from "@/app/_components/title-page";
+import { db } from "@/app/_lib/prisma";
 import { LabelModelTableColumns } from "./_components/table-columns";
 import Form from "./_components/form-config";
-import InitForm from "../../_components/init-form";
+import InitForm from "@/app/_components/init-form";
 
 const Config = async () => {
   const dataConfig = await db.labelModel.findMany();

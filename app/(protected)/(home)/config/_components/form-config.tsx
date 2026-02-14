@@ -2,7 +2,7 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { labelSchema } from "../../../_schema/schemas";
+import { labelSchema } from "@/app/_schema/schemas";
 import { Button } from "@/app/_components/ui/button";
 import { createGenericAction } from "@/app/_components/actions";
 import { z } from "zod";
