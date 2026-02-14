@@ -1,3 +1,4 @@
+// middleware.ts
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
@@ -7,21 +8,26 @@ const isPublicRoute = createRouteMatcher([
   "/unauthorized(.*)",
 ]);
 
-export default clerkMiddleware((auth, req) => {
-  const userId = auth();
+export default clerkMiddleware(async (auth, req) => {
+  const userId = await auth();
+
+  const { pathname } = req.nextUrl;
+
+  if (pathname.startsWith("/_next")) {
+    return NextResponse.next();
+  }
+
+  if (pathname.includes(".")) {
+    return NextResponse.next();
+  }
 
   if (!userId && !isPublicRoute(req)) {
-    const loginUrl = new URL("/login", req.url);
-    loginUrl.searchParams.set("redirect_url", req.url);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ["/((?!_next).*)"],
 };

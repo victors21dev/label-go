@@ -1,20 +1,22 @@
-import { SignIn, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nextjs";
+"use client";
+
+import { SignIn, useAuth } from "@clerk/nextjs";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  return (
-    <>
-      <SignedIn>
-        <RedirectToSignIn redirectUrl="/" />
-      </SignedIn>
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
 
-      <SignedOut>
-        <SignIn
-          path="/login"
-          routing="path"
-          afterSignInUrl="/"
-          fallbackRedirectUrl="/"
-        />
-      </SignedOut>
-    </>
+  useEffect(() => {
+    if (isSignedIn) {
+      router.replace("/");
+    }
+  }, [isSignedIn, router]);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <SignIn path="/login" routing="path" />
+    </div>
   );
 }
