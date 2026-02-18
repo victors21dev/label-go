@@ -11,10 +11,6 @@ const Sector = async () => {
     <main className="flex flex-col gap-8">
       <div className="flex justify-between w-full">
         <TitleToPage title="Usuários" description="Acompanhe seus usuários" />
-        <Button>
-          <Plus />
-          Adicionar novo usuário
-        </Button>
       </div>
       <div>
         <DataTable data={dataUser} columns={userTableColumns} />
