@@ -1,6 +1,4 @@
-// middleware.ts
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
   "/login(.*)",
@@ -9,25 +7,16 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const userId = await auth();
-
-  const { pathname } = req.nextUrl;
-
-  if (pathname.startsWith("/_next")) {
-    return NextResponse.next();
-  }
-
-  if (pathname.includes(".")) {
-    return NextResponse.next();
-  }
+  const { userId } = await auth();
 
   if (!userId && !isPublicRoute(req)) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return (await auth()).redirectToSignIn({ returnBackUrl: req.url });
   }
-
-  return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/((?!_next).*)"],
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
 };

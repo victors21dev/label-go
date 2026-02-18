@@ -1,7 +1,7 @@
 "use client";
 
 import { Row } from "@tanstack/react-table";
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Copy, Edit, MoreHorizontal, Trash2 } from "lucide-react";
 
 import { Button } from "@/app/_components/ui/button";
 import {
@@ -11,6 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/_components/ui/dropdown-menu";
+import { ReactNode } from "react";
+import { ConfirmDialog } from "./confirmDialog";
 
 interface WithId {
   id: string;
@@ -19,13 +21,17 @@ interface WithId {
 interface DataTableRowActionsProps<TData extends WithId> {
   row: Row<TData>;
   onEdit?: (value: TData) => void;
-  onDelete?: (value: TData) => void;
+  deleteOptions?: {
+    title: string;
+    description: string;
+    onConfirm: () => void;
+  };
 }
 
 export function DataTableRowActions<TData extends WithId>({
   row,
   onEdit,
-  onDelete,
+  deleteOptions,
 }: DataTableRowActionsProps<TData>) {
   const element = row.original;
 
@@ -33,7 +39,6 @@ export function DataTableRowActions<TData extends WithId>({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">Abrir menu</span>
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -46,19 +51,31 @@ export function DataTableRowActions<TData extends WithId>({
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
+        <div className="flex flex-col gap-2">
+          <DropdownMenuItem onClick={() => onEdit?.(element)}>
+            <Edit className="mr-2 h-4 w-4" />
+            Editar
+          </DropdownMenuItem>
 
-        <DropdownMenuItem onClick={() => onEdit?.(element)}>
-          <Edit className="mr-2 h-4 w-4" />
-          Editar
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          onClick={() => onDelete?.(element)}
-          className="text-destructive focus:text-destructive"
-        >
-          <Trash className="mr-2 h-4 w-4 text-destructive" />
-          Apagar
-        </DropdownMenuItem>
+          {deleteOptions && (
+            <DropdownMenuItem
+              onSelect={(e) => e.preventDefault()}
+              className="p-0"
+            >
+              <ConfirmDialog
+                title={deleteOptions.title}
+                description={deleteOptions.description}
+                onConfirm={deleteOptions.onConfirm}
+                trigger={
+                  <div className="flex px-2 gap-2 py-2 text-destructive">
+                    <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                    <span>Excluir</span>
+                  </div>
+                }
+              />
+            </DropdownMenuItem>
+          )}
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );
