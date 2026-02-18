@@ -1,3 +1,4 @@
+"use client";
 import {
   LayoutDashboard,
   Printer,
@@ -12,21 +13,37 @@ import SidebarButton from "./sidebar-button";
 import { ModeToggle } from "./button-mode-togle";
 import { SignOutButton } from "@clerk/nextjs";
 
+import { motion } from "motion/react";
+
 let icon_size = 20;
 
 const Sidebar = () => {
   return (
-    <div className="flex flex-col w-64 bg-card justify-between">
+    <div className="flex flex-col w-64 bg-muted justify-between">
       <div>
         {/* IMAGEM */}
         <div className="px-8 py-6">
           <div className="flex gap-2 items-center">
-            <h1 className="text-2xl font-bold text-nowrap">LABEL-GO</h1>
-            <ModeToggle />
+            <h1 className="text-2xl font-bold text-nowrap">
+              <div className="flex">
+                <div>LABEL-</div>
+                <motion.div
+                  className="cursor-"
+                  whileHover={{
+                    rotate: 360,
+                  }}
+                >
+                  GO
+                </motion.div>
+              </div>
+            </h1>
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <ModeToggle />
+            </motion.div>
           </div>
         </div>
         {/* Botões */}
-        <div className="flex flex-col gap-2 p-2">
+        <div className="flex flex-col gap-2 p-2 px-6 w-full">
           <SidebarButton href="/">
             <LayoutDashboard size={icon_size} />
             Dashboard
