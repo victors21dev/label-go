@@ -2,8 +2,6 @@ import { DataTable } from "@/app/_components/data-table";
 import TitleToPage from "@/app/_components/title-page";
 import { userTableColumns } from "./_components/table-columns";
 import { db } from "@/app/_lib/prisma";
-import { Button } from "@/app/_components/ui/button";
-import { Plus } from "lucide-react";
 
 const Sector = async () => {
   const dataUser = await db.user.findMany();
