@@ -24,6 +24,7 @@ export default function RootLayout({
       <html lang="pt-br" suppressHydrationWarning>
         <body
           className={`${inter.className} antialiased bg-muted w-full h-full`}
+          suppressHydrationWarning
         >
           <ThemeProvider
             attribute="class"
