@@ -4,18 +4,18 @@ import { redirect } from "next/navigation";
 
 export async function checkUserStatus() {
   const { userId } = await auth();
-
   if (!userId) return null;
 
+  // 1. Tenta buscar o usuário no banco primeiro
   let user = await db.user.findUnique({
     where: { id: userId },
   });
 
-  const user_current = await currentUser();
-
-  if (!user_current) return null;
-
+  // 2. Se não existe, busca dados do Clerk e cria
   if (!user) {
+    const user_current = await currentUser();
+    if (!user_current) return null;
+
     user = await db.user.create({
       data: {
         id: userId,
@@ -30,7 +30,10 @@ export async function checkUserStatus() {
     });
   }
 
+  // 3. Redirecionamento de segurança
+  // IMPORTANTE: Verifique se a URL atual já não é /unauthorized para evitar loop infinito
   if (user.status === "UNAUTHORIZED") {
+    // Note: redirect() lança um erro que o Next.js captura para mudar de rota
     redirect("/unauthorized");
   }
 
