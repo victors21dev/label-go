@@ -41,8 +41,6 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
   const selectedModelConfig = dataLabel.find((m) => m.name === selectedLabel);
   const selectedSetorConfig = dataSelect.find((s) => s.name === selectSector);
 
-  console.log(selectedModelConfig);
-
   const renderLabelComponent = () => {
     if (!selectedSetorConfig) return null;
 
