@@ -164,7 +164,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       </div>
 
       {/* GERADOR */}
-      <div className="p-4 border-2 rounded-2xl grid grid-rows-[1fr_auto] h-140">
+      {/* <div className="p-4 border-2 rounded-2xl grid grid-rows-[1fr_auto] h-140">
         <div>
           <div className="font-bold">Fila para imprimir(3)</div>
           <div className="text-sm flex flex-col gap-2">
@@ -182,7 +182,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
         <div className="flex w-full justify-end">
           <Button>Gerar as etiquetas</Button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

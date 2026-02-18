@@ -15,7 +15,7 @@ const SidebarButton = ({ href, children }: SidebarButtonProps) => {
   return (
     <motion.div whileHover={{ scale: 1.1 }} className="flex w-full hover:">
       <Button
-        className={`justify-start gap-2 px-6 py-3 w-full text-foreground hover:bg-sidebar-ring hover:text-popover-foreground ${
+        className={`justify-start gap-2 px-6 py-3 w-full text-foreground hover:bg-chart-1 hover:text-popover-foreground ${
           pathname === href ? "bg-primary text-background" : "bg-muted"
         }`}
         asChild
