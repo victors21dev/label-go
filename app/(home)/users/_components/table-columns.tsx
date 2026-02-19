@@ -1,8 +1,11 @@
 "use client";
 
+import { deleteUser } from "@/app/_actions/users";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { User } from "@/generated/prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const userTableColumns: ColumnDef<User>[] = [
   {
@@ -42,12 +45,31 @@ export const userTableColumns: ColumnDef<User>[] = [
   {
     header: "Ações",
     id: "actions",
-    cell: ({ row }) => (
-      <DataTableRowActions
-        row={row}
-        onEdit={(item) => console.log("Editando", item.name)}
-        onDelete={(item) => console.log("Deletando", item.id)}
-      />
-    ),
+    cell: ({ row }) => {
+      const label = row.original;
+      const router = useRouter();
+
+      const handleDelete = async () => {
+        try {
+          await deleteUser(label.id);
+          toast.success("Usuário removido!");
+          router.refresh();
+        } catch (error) {
+          toast.error("Erro ao deletar.");
+        }
+      };
+
+      return (
+        <DataTableRowActions
+          row={row}
+          onEdit={(item) => console.log("Edit", item)}
+          deleteOptions={{
+            title: "Excluir usuário",
+            description: `Tem certeza que deseja apagar o usuário "${label.name}"?`,
+            onConfirm: handleDelete,
+          }}
+        />
+      );
+    },
   },
 ];

@@ -1,8 +1,11 @@
 "use client";
 
+import { deleteSector } from "@/app/_actions/sectors";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { Sector } from "@/generated/prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const sectorTableColumns: ColumnDef<Sector>[] = [
   {
@@ -28,12 +31,31 @@ export const sectorTableColumns: ColumnDef<Sector>[] = [
   {
     header: "Ações",
     id: "actions",
-    cell: ({ row }) => (
-      <DataTableRowActions
-        row={row}
-        onEdit={(item) => console.log("Editando", item.name)}
-        onDelete={(item) => console.log("Deletando", item.id)}
-      />
-    ),
+    cell: ({ row }) => {
+      const label = row.original;
+      const router = useRouter();
+
+      const handleDelete = async () => {
+        try {
+          await deleteSector(label.id);
+          toast.success("Setor removido!");
+          router.refresh();
+        } catch (error) {
+          toast.error("Erro ao deletar.");
+        }
+      };
+
+      return (
+        <DataTableRowActions
+          row={row}
+          onEdit={(item) => console.log("Edit", item)}
+          deleteOptions={{
+            title: "Excluir Setor",
+            description: `Tem certeza que deseja apagar o setor "${label.name}"?`,
+            onConfirm: handleDelete,
+          }}
+        />
+      );
+    },
   },
 ];

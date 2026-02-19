@@ -3,36 +3,41 @@
 import { db } from "@/app/_lib/prisma";
 import { revalidatePath } from "next/cache";
 
-export async function deleteLabelModel(id: string) {
+export async function deleteSector(id: string) {
   try {
-    await db.labelModel.delete({
+    await db.sector.delete({
       where: { id },
     });
 
-    revalidatePath("/config");
+    revalidatePath("/sectors");
 
     return { success: true };
   } catch (error) {
     console.error("Erro ao deletar:", error);
-    return { success: false, error: "Não foi possível excluir o item." };
+    return { success: false, error: "Não foi possível excluir o setor." };
   }
 }
 
-export async function updateLabelModel(
+export async function updateSector(
   id: string,
-  data: { name?: string; widthMm?: number; heightMm?: number }
+  data: {
+    name?: string;
+    coordinatorName?: string;
+  }
 ) {
   try {
-    await db.labelModel.update({
+    await db.sector.update({
       where: { id },
       data: {
         ...data,
-        widthMm: data.widthMm ? Number(data.widthMm) : undefined,
-        heightMm: data.heightMm ? Number(data.heightMm) : undefined,
+        name: data.name ? String(data.name) : undefined,
+        coordinatorName: data.coordinatorName
+          ? String(data.coordinatorName)
+          : undefined,
       },
     });
 
-    revalidatePath("/config");
+    revalidatePath("/sectors");
 
     return { success: true };
   } catch (error) {

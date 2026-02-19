@@ -3,36 +3,39 @@
 import { db } from "@/app/_lib/prisma";
 import { revalidatePath } from "next/cache";
 
-export async function deleteLabelModel(id: string) {
+export async function deletePrinter(id: string) {
   try {
-    await db.labelModel.delete({
+    await db.printer.delete({
       where: { id },
     });
 
-    revalidatePath("/config");
+    revalidatePath("/printers");
 
     return { success: true };
   } catch (error) {
     console.error("Erro ao deletar:", error);
-    return { success: false, error: "Não foi possível excluir o item." };
+    return { success: false, error: "Não foi possível excluir a impressora." };
   }
 }
 
-export async function updateLabelModel(
+export async function updatePrinter(
   id: string,
-  data: { name?: string; widthMm?: number; heightMm?: number }
+  data: {
+    brand?: string;
+    model?: string;
+  }
 ) {
   try {
-    await db.labelModel.update({
+    await db.printer.update({
       where: { id },
       data: {
         ...data,
-        widthMm: data.widthMm ? Number(data.widthMm) : undefined,
-        heightMm: data.heightMm ? Number(data.heightMm) : undefined,
+        brand: data.brand ? String(data.brand) : undefined,
+        model: data.model ? String(data.model) : undefined,
       },
     });
 
-    revalidatePath("/config");
+    revalidatePath("/printers");
 
     return { success: true };
   } catch (error) {
