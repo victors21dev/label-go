@@ -2,16 +2,8 @@ import { DataTable } from "@/app/_components/data-table";
 import TitleToPage from "@/app/_components/title-page";
 import { db } from "@/app/_lib/prisma";
 import { historyTableColumns } from "./_components/table-columns";
-import { checkUserStatus } from "@/app/_lib/check-user";
-import { redirect } from "next/navigation";
 
 const History = async () => {
-  const user = await checkUserStatus();
-
-  if (user === "UNAUTHORIZED") {
-    redirect("/unauthorized");
-  }
-
   const dataSector = await db.labelGeneration.findMany();
 
   return (

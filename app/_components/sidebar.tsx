@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import SidebarButton from "./sidebar-button";
 import { ModeToggle } from "./button-mode-togle";
-import { SignOutButton } from "@clerk/nextjs";
 
 import { motion } from "motion/react";
 
@@ -74,14 +73,6 @@ const Sidebar = () => {
             Configuração
           </SidebarButton>
         </div>
-      </div>
-      <div className="flex p-2 justify-center">
-        <SignOutButton>
-          <div className="flex w-full gap-2 mb-4">
-            <LogOut />
-            Sair
-          </div>
-        </SignOutButton>
       </div>
     </div>
   );
