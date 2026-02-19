@@ -31,9 +31,10 @@ type OptionSelectDetails = {
 type SelectClientProps = {
   dataLabel: OptionLabelDetails[];
   dataSelect: OptionSelectDetails[];
+  dataQr: string;
 };
 
-const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
+const LabelClient = ({ dataLabel, dataSelect, dataQr }: SelectClientProps) => {
   const [selectedLabel, setSelectedLabel] = useState("");
   const [selectSector, setSelectSector] = useState("");
   const [quantityNumber, setQuantityNumber] = useState("");
@@ -53,6 +54,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
               printQtd={Number(quantityNumber)}
               width={selectedModelConfig.widthMm}
               height={selectedModelConfig.heightMm}
+              qr={dataQr}
             />
           )
         );

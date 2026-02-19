@@ -1,6 +1,6 @@
 import crypto from "crypto";
 
-const SECRET = process.env.CRYPTO_SECRET || "zedamanga";
+const SECRET = `${process.env.NEXT_PUBLIC_CRYPTO_SECRET}`;
 
 function b64url(buf: Buffer) {
   return buf

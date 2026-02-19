@@ -6,11 +6,19 @@ type dataSectorOptions = {
   coordinatorName: string;
 };
 
+type OptionsQrDetails = {
+  setor: string;
+  coordenador: string;
+  validade: string;
+  tipo: string;
+};
+
 type LabelRefeicaoProps = {
   printQtd: number;
   dataSector: dataSectorOptions[];
   width: number;
   height: number;
+  qr: string;
 };
 
 const LabelRefeicao = ({
@@ -18,6 +26,7 @@ const LabelRefeicao = ({
   printQtd,
   width,
   height,
+  qr,
 }: LabelRefeicaoProps) => {
   let data = dataSector[0];
   if (!data) return null;
@@ -49,7 +58,10 @@ const LabelRefeicao = ({
             <div className="grid grid-cols-[auto_1fr] gap-2 h-full">
               <div className="w-fit">
                 <div className="flex items-center h-full">
-                  <QRCode size={60} value="hey" />
+                  <QRCode
+                    size={60}
+                    value={`https://valida-qr.vercel.app/?data=${qr}`}
+                  />
                 </div>
               </div>
               <div className="relative">
