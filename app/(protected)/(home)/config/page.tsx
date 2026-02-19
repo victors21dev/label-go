@@ -5,9 +5,18 @@ import { db } from "@/app/_lib/prisma";
 import { LabelModelTableColumns } from "./_components/table-columns";
 import Form from "./_components/form-config";
 import InitForm from "@/app/_components/init-form";
+import { checkUserStatus } from "@/app/_lib/check-user";
+import { redirect } from "next/navigation";
 
 const Config = async () => {
   const dataConfig = await db.labelModel.findMany();
+
+  const user = await checkUserStatus();
+
+  if (user === "UNAUTHORIZED") {
+    redirect("/unauthorized");
+  }
+
   return (
     <main className="flex flex-col gap-8">
       <div className="flex justify-between w-full">

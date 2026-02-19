@@ -5,9 +5,18 @@ import { db } from "@/app/_lib/prisma";
 import { sectorTableColumns } from "./_components/table-columns";
 import InitForm from "@/app/_components/init-form";
 import Form from "./_components/form-sector";
+import { checkUserStatus } from "@/app/_lib/check-user";
+import { redirect } from "next/navigation";
 
 const Sector = async () => {
   const dataSector = await db.sector.findMany();
+
+  const user = await checkUserStatus();
+
+  if (user === "UNAUTHORIZED") {
+    redirect("/unauthorized");
+  }
+
   return (
     <main className="flex flex-col gap-8">
       <div className="flex justify-between w-full">

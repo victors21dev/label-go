@@ -3,12 +3,20 @@ import { DataTable } from "@/app/_components/data-table";
 import TitleToPage from "@/app/_components/title-page";
 import { db } from "@/app/_lib/prisma";
 import { printerTableColumns } from "./_components/table-columns";
-import { Button } from "@/app/_components/ui/button";
 import InitForm from "@/app/_components/init-form";
 import Form from "./_components/form-printer";
+import { checkUserStatus } from "@/app/_lib/check-user";
+import { redirect } from "next/navigation";
 
 const History = async () => {
   const dataSector = await db.printer.findMany();
+
+  const user = await checkUserStatus();
+
+  if (user === "UNAUTHORIZED") {
+    redirect("/unauthorized");
+  }
+
   return (
     <main className="flex flex-col gap-8">
       <div className="flex justify-between w-full">
