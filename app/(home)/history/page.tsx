@@ -6,13 +6,13 @@ import { checkUserStatus } from "@/app/_lib/check-user";
 import { redirect } from "next/navigation";
 
 const History = async () => {
-  const dataSector = await db.labelGeneration.findMany();
-
   const user = await checkUserStatus();
 
   if (user === "UNAUTHORIZED") {
     redirect("/unauthorized");
   }
+
+  const dataSector = await db.labelGeneration.findMany();
 
   return (
     <main className="flex flex-col gap-8">
