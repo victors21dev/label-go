@@ -1,17 +1,29 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "./prisma";
-import { redirect } from "next/navigation";
 
-export async function checkUserStatus() {
-  const { userId } = await auth();
+type CheckUserResult =
+  | {
+      id: string;
+      status: "AUTHORIZED" | "UNAUTHORIZED";
+      role: "USER" | "ADMIN";
+      name: string;
+      imageUrl: string | null;
+    }
+  | "UNAUTHORIZED"
+  | null;
+
+export async function checkUserStatus(): Promise<CheckUserResult> {
+  const authData = await auth();
+  const userId = authData.userId;
+
+  // Se chegou aqui sem userId, middleware não protegeu (ou rota pública)
   if (!userId) return null;
 
-  // 1. Tenta buscar o usuário no banco primeiro
   let user = await db.user.findUnique({
     where: { id: userId },
   });
 
-  // 2. Se não existe, busca dados do Clerk e cria
+  // Cria o usuário na primeira vez que ele logar
   if (!user) {
     const user_current = await currentUser();
     if (!user_current) return null;
@@ -25,16 +37,14 @@ export async function checkUserStatus() {
           `${user_current.firstName ?? ""} ${
             user_current.lastName ?? ""
           }`.trim() || "Usuário",
-        imageUrl: user_current.imageUrl,
+        imageUrl: user_current.imageUrl ?? null,
       },
     });
   }
 
-  // 3. Redirecionamento de segurança
-  // IMPORTANTE: Verifique se a URL atual já não é /unauthorized para evitar loop infinito
+  // Regra de autorização da sua app
   if (user.status === "UNAUTHORIZED") {
-    // Note: redirect() lança um erro que o Next.js captura para mudar de rota
-    redirect("/unauthorized");
+    return "UNAUTHORIZED";
   }
 
   return user;
