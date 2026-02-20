@@ -1,4 +1,8 @@
+"use client";
+
 import QRCode from "react-qr-code";
+import { handleGenerateLink } from "@/app/_actions/generate-link";
+import { useEffect, useState } from "react";
 
 type dataSectorOptions = {
   id: string | number;
@@ -18,7 +22,6 @@ type LabelRefeicaoProps = {
   dataSector: dataSectorOptions[];
   width: number;
   height: number;
-  qr: string;
 };
 
 const LabelRefeicao = ({
@@ -26,10 +29,27 @@ const LabelRefeicao = ({
   printQtd,
   width,
   height,
-  qr,
 }: LabelRefeicaoProps) => {
-  let data = dataSector[0];
-  if (!data) return null;
+  const [qrCodeLink, setQrCodeLink] = useState("");
+  const data = dataSector[0];
+
+  useEffect(() => {
+    if (!data) return;
+
+    const getLink = async () => {
+      const link = await handleGenerateLink({
+        setor: data.name,
+        coordenador: data.coordinatorName,
+        validade: "19/02/2026",
+        tipo: "Almoço",
+      });
+      setQrCodeLink(link);
+    };
+
+    getLink();
+  }, [data]);
+
+  if (!data || !qrCodeLink) return null;
 
   return (
     <div>
@@ -60,7 +80,7 @@ const LabelRefeicao = ({
                 <div className="flex items-center h-full">
                   <QRCode
                     size={60}
-                    value={`https://valida-qr.vercel.app/?data=${qr}`}
+                    value={`https://valida-qr.vercel.app/?data=${qrCodeLink}`}
                   />
                 </div>
               </div>
