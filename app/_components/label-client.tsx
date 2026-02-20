@@ -14,6 +14,8 @@ import {
   TicketPlus,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { eachDayOfInterval, format } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 type OptionLabelDetails = {
   id: string | number;
@@ -34,6 +36,11 @@ type SelectClientProps = {
 };
 
 const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: new Date(),
+  });
+
   const [selectedLabel, setSelectedLabel] = useState("");
   const [selectSector, setSelectSector] = useState("");
   const [quantityNumber, setQuantityNumber] = useState("");
@@ -42,24 +49,26 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
   const selectedSetorConfig = dataSelect.find((s) => s.name === selectSector);
 
   const renderLabelComponent = () => {
-    if (!selectedSetorConfig) return null;
+    if (!selectedSetorConfig || !dateRange?.from) return null;
 
-    switch (selectedLabel) {
-      case "Refeição": {
-        return (
-          selectedModelConfig && (
-            <LabelRefeicao
-              dataSector={selectedSetorConfig ? [selectedSetorConfig] : []}
-              printQtd={Number(quantityNumber)}
-              width={selectedModelConfig.widthMm}
-              height={selectedModelConfig.heightMm}
-            />
-          )
-        );
-      }
-      default:
-        return null;
-    }
+    const days = dateRange.to
+      ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
+      : [dateRange.from];
+
+    return (
+      <div className="flex flex-col gap-4">
+        {days.map((day) => (
+          <LabelRefeicao
+            key={day.toISOString()}
+            date={day}
+            dataSector={selectedSetorConfig ? [selectedSetorConfig] : []}
+            printQtd={Number(quantityNumber)}
+            width={selectedModelConfig!.widthMm}
+            height={selectedModelConfig!.heightMm}
+          />
+        ))}
+      </div>
+    );
   };
 
   const printerRef = useRef<ContentPrinterRef>(null);
@@ -75,7 +84,10 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
         <div className="flex flex-col gap-4 w-62">
           <div>
             <h2 className="font-bold">Data</h2>
-            <CalendarComponent />
+            <CalendarComponent
+              selectedRange={dateRange}
+              onRangeChange={setDateRange}
+            />
           </div>
           <SelectOption
             title="Modelo da etiqueta"

@@ -3,6 +3,7 @@
 import QRCode from "react-qr-code";
 import { handleGenerateLink } from "@/app/_actions/generate-link";
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
 
 type dataSectorOptions = {
   id: string | number;
@@ -18,6 +19,7 @@ type OptionsQrDetails = {
 };
 
 type LabelRefeicaoProps = {
+  date: Date;
   printQtd: number;
   dataSector: dataSectorOptions[];
   width: number;
@@ -25,6 +27,7 @@ type LabelRefeicaoProps = {
 };
 
 const LabelRefeicao = ({
+  date,
   dataSector,
   printQtd,
   width,
@@ -33,6 +36,8 @@ const LabelRefeicao = ({
   const [qrCodeLink, setQrCodeLink] = useState("");
   const data = dataSector[0];
 
+  const dateFormatted = format(date, "dd/MM/yyyy");
+
   useEffect(() => {
     if (!data) return;
 
@@ -40,14 +45,13 @@ const LabelRefeicao = ({
       const link = await handleGenerateLink({
         setor: data.name,
         coordenador: data.coordinatorName,
-        validade: "19/02/2026",
+        validade: dateFormatted, // Passa a data correta para o QR Code
         tipo: "Almoço",
       });
       setQrCodeLink(link);
     };
-
     getLink();
-  }, [data]);
+  }, [data, dateFormatted]);
 
   if (!data || !qrCodeLink) return null;
 
@@ -98,8 +102,8 @@ const LabelRefeicao = ({
                       </span>
                     </div>
                     <div>
-                      Val.:
-                      <span className="font-bold ml-2">06/02/2026</span>
+                      Val.:{" "}
+                      <span className="font-bold ml-2">{dateFormatted}</span>
                     </div>
                     <div>
                       Tipo:

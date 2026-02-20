@@ -7,12 +7,12 @@ import { Calendar } from "./ui/calendar";
 import { Card, CardContent } from "./ui/card";
 import { ptBR } from "date-fns/locale";
 
-const CalendarComponent = () => {
-  const [dateRange, setDateRange] = React.useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 0),
-  });
+interface CalendarProps {
+  selectedRange: DateRange | undefined;
+  onRangeChange: (range: DateRange | undefined) => void;
+}
 
+const CalendarComponent = ({ selectedRange, onRangeChange }: CalendarProps) => {
   return (
     <Card className="w-fit p-0">
       <CardContent className="p-0">
@@ -20,9 +20,8 @@ const CalendarComponent = () => {
           className="flex w-full"
           mode="range"
           locale={ptBR}
-          defaultMonth={dateRange?.from}
-          selected={dateRange}
-          onSelect={setDateRange}
+          selected={selectedRange}
+          onSelect={onRangeChange}
           numberOfMonths={1}
           disabled={(date) => {
             const hoje = new Date();
