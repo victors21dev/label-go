@@ -35,7 +35,15 @@ type SelectClientProps = {
   dataSelect: OptionSelectDetails[];
 };
 
+const mealTypeOptions = [
+  { id: "BREAKFAST", name: "Café da Manhã" },
+  { id: "LUNCH", name: "Almoço" },
+  { id: "DINNER", name: "Jantar" },
+];
+
 const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
+  const [selectedMealType, setSelectedMealType] = useState("LUNCH");
+
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(),
@@ -55,12 +63,18 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
       : [dateRange.from];
 
+    const mealTypeName =
+      mealTypeOptions.find(
+        (m) => m.id === selectedMealType || m.name === selectedMealType
+      )?.name || "Almoço";
+
     return (
       <div className="flex flex-col gap-4">
         {days.map((day) => (
           <LabelRefeicao
             key={day.toISOString()}
             date={day}
+            mealType={mealTypeName}
             dataSector={selectedSetorConfig ? [selectedSetorConfig] : []}
             printQtd={Number(quantityNumber)}
             width={selectedModelConfig!.widthMm}
@@ -98,6 +112,11 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
             title="Setor"
             dataoption={dataSelect}
             onValueChange={setSelectSector}
+          />
+          <SelectOption
+            title="Tipo"
+            dataoption={mealTypeOptions}
+            onValueChange={setSelectedMealType}
           />
           <InputComponet
             id="1"
