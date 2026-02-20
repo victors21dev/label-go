@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/_components/ui/card";
-import { SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function UnauthorizedPage() {
@@ -37,15 +36,6 @@ export default function UnauthorizedPage() {
           <Button asChild variant="outline" className="w-full">
             <Link href="/">Tentar novamente</Link>
           </Button>
-
-          <SignOutButton>
-            <Button
-              variant="ghost"
-              className="w-full text-destructive hover:bg-destructive/10 hover:text-destructive"
-            >
-              Sair da conta
-            </Button>
-          </SignOutButton>
         </CardFooter>
       </Card>
     </div>
