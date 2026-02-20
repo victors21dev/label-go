@@ -13,6 +13,7 @@ import SidebarButton from "./sidebar-button";
 import { ModeToggle } from "./button-mode-togle";
 
 import { motion } from "motion/react";
+import { SignOutButtonComponent } from "./sign-out-button";
 
 let icon_size = 20;
 
@@ -72,6 +73,10 @@ const Sidebar = () => {
             <Settings size={icon_size} />
             Configuração
           </SidebarButton>
+          <hr />
+          <div className="flex flex-col w-full">
+            <SignOutButtonComponent />
+          </div>
         </div>
       </div>
     </div>

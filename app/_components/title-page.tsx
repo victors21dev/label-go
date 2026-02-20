@@ -1,3 +1,5 @@
+import { UserButton } from "@clerk/nextjs";
+
 type TitleToPageProps = {
   title: string;
   description: string;
@@ -5,9 +7,14 @@ type TitleToPageProps = {
 
 const TitleToPage = ({ title, description }: TitleToPageProps) => {
   return (
-    <header>
-      <div className="text-lg font-bold">{title}</div>
-      <div className="text-sm text-muted-foreground">{description}</div>
+    <header className="w-full flex justify-between">
+      <div>
+        <div className="text-lg font-bold">{title}</div>
+        <div className="text-sm text-muted-foreground">{description}</div>
+      </div>
+      <div>
+        <UserButton />
+      </div>
     </header>
   );
 };
