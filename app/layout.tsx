@@ -23,6 +23,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="pt-br" suppressHydrationWarning>
         <body
+          suppressHydrationWarning
           className={`${inter.className} antialiased bg-muted w-full h-full`}
         >
           <ThemeProvider
