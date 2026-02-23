@@ -73,10 +73,6 @@ const Sidebar = () => {
             <Settings size={icon_size} />
             Configuração
           </SidebarButton>
-          <hr />
-          <div className="flex flex-col w-full">
-            <SignOutButtonComponent />
-          </div>
         </div>
       </div>
     </div>
