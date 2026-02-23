@@ -1,6 +1,6 @@
 "use client";
 
-import { LabelGeneration } from "@/generated/prisma/client";
+import { LabelGeneration } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const historyTableColumns: ColumnDef<LabelGeneration>[] = [

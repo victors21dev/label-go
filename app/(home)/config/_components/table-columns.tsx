@@ -1,6 +1,6 @@
 "use client";
 
-import { LabelModel } from "@/generated/prisma/client";
+import { LabelModel } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { ArrowUpDown, Trash2 } from "lucide-react";

@@ -2,7 +2,7 @@
 
 import { deleteSector } from "@/app/_actions/sectors";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
-import { Sector } from "@/generated/prisma/client";
+import { Sector } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

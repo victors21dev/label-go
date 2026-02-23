@@ -2,7 +2,7 @@
 
 import { deletePrinter } from "@/app/_actions/printers";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
-import { Printer } from "@/generated/prisma/client";
+import { Printer } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

@@ -2,7 +2,7 @@
 
 import { deleteUser } from "@/app/_actions/users";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
-import { User } from "@/generated/prisma/client";
+import { User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
