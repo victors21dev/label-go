@@ -2,7 +2,7 @@
 
 import { db } from "@/app/_lib/prisma";
 import { revalidatePath } from "next/cache";
-import { Role, UserStatus } from "@/generated/prisma/client";
+import { Role, UserStatus } from "@prisma/client";
 
 export async function deleteUser(id: string) {
   try {
