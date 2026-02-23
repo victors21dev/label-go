@@ -1,7 +1,4 @@
-"use client"; // Obrigatório para usar hooks de estado
-
-import { useState, useEffect } from "react";
-import { UserButton } from "@clerk/nextjs";
+import { UserProfileButton } from "./user-profile-button";
 
 type TitleToPageProps = {
   title: string;
@@ -9,26 +6,14 @@ type TitleToPageProps = {
 };
 
 const TitleToPage = ({ title, description }: TitleToPageProps) => {
-  const [mounted, setMounted] = useState(false);
-
-  // O useEffect só roda no lado do cliente
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
-    <header className="w-full flex justify-between items-center">
+    <header className="w-full flex justify-between items-center py-4">
       <div>
-        <div className="text-lg font-bold">{title}</div>
-        <div className="text-sm text-muted-foreground">{description}</div>
+        <h1 className="text-xl font-bold">{title}</h1>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
-      <div className="flex items-center">
-        {/* Renderiza um esqueleto ou espaço vazio até o cliente estar pronto */}
-        {mounted ? (
-          <UserButton afterSignOutUrl="/" />
-        ) : (
-          <div className="h-8 w-8 animate-pulse bg-muted rounded-full" />
-        )}
+      <div className="flex items-center gap-4">
+        <UserProfileButton />
       </div>
     </header>
   );
