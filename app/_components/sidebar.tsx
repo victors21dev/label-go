@@ -7,13 +7,11 @@ import {
   Ticket,
   History,
   UserIcon,
-  LogOut,
 } from "lucide-react";
 import SidebarButton from "./sidebar-button";
 import { ModeToggle } from "./button-mode-togle";
 
 import { motion } from "motion/react";
-import { SignOutButtonComponent } from "./sign-out-button";
 
 let icon_size = 20;
 

@@ -10,8 +10,6 @@ export async function deleteUser(id: string) {
       where: { id },
     });
 
-    revalidatePath("/users");
-
     return { success: true };
   } catch (error) {
     console.error("Erro ao deletar:", error);
@@ -39,8 +37,6 @@ export async function updateUser(
         status: data.status ? (data.status as UserStatus) : undefined,
       },
     });
-
-    revalidatePath("/users");
 
     return { success: true };
   } catch (error) {

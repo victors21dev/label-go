@@ -9,8 +9,6 @@ export async function deleteLabelModel(id: string) {
       where: { id },
     });
 
-    revalidatePath("/config");
-
     return { success: true };
   } catch (error) {
     console.error("Erro ao deletar:", error);
@@ -31,8 +29,6 @@ export async function updateLabelModel(
         heightMm: data.heightMm ? Number(data.heightMm) : undefined,
       },
     });
-
-    revalidatePath("/config");
 
     return { success: true };
   } catch (error) {

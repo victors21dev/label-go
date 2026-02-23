@@ -9,8 +9,6 @@ export async function deleteSector(id: string) {
       where: { id },
     });
 
-    revalidatePath("/sectors");
-
     return { success: true };
   } catch (error) {
     console.error("Erro ao deletar:", error);
@@ -36,8 +34,6 @@ export async function updateSector(
           : undefined,
       },
     });
-
-    revalidatePath("/sectors");
 
     return { success: true };
   } catch (error) {

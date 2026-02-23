@@ -9,8 +9,6 @@ export async function deletePrinter(id: string) {
       where: { id },
     });
 
-    revalidatePath("/printers");
-
     return { success: true };
   } catch (error) {
     console.error("Erro ao deletar:", error);
@@ -34,8 +32,6 @@ export async function updatePrinter(
         model: data.model ? String(data.model) : undefined,
       },
     });
-
-    revalidatePath("/printers");
 
     return { success: true };
   } catch (error) {
