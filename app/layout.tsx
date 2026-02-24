@@ -20,12 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="pt-br" suppressHydrationWarning>
-        <body
-          suppressHydrationWarning
-          className={`${inter.className} antialiased bg-muted w-full h-full`}
-        >
+    <html lang="pt-br" suppressHydrationWarning>
+      <body className={`${inter.className} antialiased bg-muted w-full h-full`}>
+        <ClerkProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -34,8 +31,8 @@ export default function RootLayout({
           >
             {children}
           </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
