@@ -13,6 +13,7 @@ import {
 } from "@/app/_components/ui/dropdown-menu";
 import { ReactNode } from "react";
 import { ConfirmDialog } from "./confirmDialog";
+import { SheetComponent } from "./sheet";
 
 interface WithId {
   id: string;
@@ -52,10 +53,17 @@ export function DataTableRowActions<TData extends WithId>({
 
         <DropdownMenuSeparator />
         <div className="flex flex-col gap-2">
-          <DropdownMenuItem onClick={() => onEdit?.(element)}>
-            <Edit className="mr-2 h-4 w-4" />
-            Editar
-          </DropdownMenuItem>
+          <SheetComponent
+            openButton={
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                className="cursor-pointer"
+              >
+                <Edit className="mr-2 h-4 w-4" />
+                <span>Editar</span>
+              </DropdownMenuItem>
+            }
+          />
 
           {deleteOptions && (
             <DropdownMenuItem

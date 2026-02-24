@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -12,12 +13,14 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 
-export function SheetComponent() {
+type SheetComponent = {
+  openButton: ReactNode;
+};
+
+export function SheetComponent({ openButton }: SheetComponent) {
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
-      </SheetTrigger>
+      <SheetTrigger asChild>{openButton}</SheetTrigger>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Edit profile</SheetTitle>
