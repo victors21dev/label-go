@@ -65,15 +65,6 @@ export function UserProfileButton() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={() =>
-                window.open("https://accounts.clerk.com/user", "_blank")
-              }
-            >
-              <User className="mr-2 h-4 w-4" />
-              <span>Perfil</span>
-            </DropdownMenuItem>
 
             <DropdownMenuItem
               onClick={handleLogout}
