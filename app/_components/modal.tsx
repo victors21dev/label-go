@@ -25,7 +25,12 @@ const Modal = ({ title, children }: ModalProps) => {
 
   return (
     <>
-      <Button onClick={() => setShowModal(true)}>{title}</Button>
+      <Button
+        className="bg-chart-2 hover:bg-chart-3 cursor-pointer"
+        onClick={() => setShowModal(true)}
+      >
+        {title}
+      </Button>
 
       {showModal &&
         createPortal(

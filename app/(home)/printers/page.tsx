@@ -11,12 +11,12 @@ const History = async () => {
 
   return (
     <main className="flex flex-col gap-8">
-      <div className="flex justify-between w-full">
-        <TitleToPage
-          title="Impressoras"
-          description="Configure sua impressora aqui"
-        />
-        {/* Button form */}
+      <TitleToPage
+        title="Impressoras"
+        description="Configure sua impressora aqui"
+      />
+
+      <div className="flex w-full justify-end">
         <InitForm
           title="Adicionar impressora"
           title_button={
@@ -29,9 +29,7 @@ const History = async () => {
           <Form />
         </InitForm>
       </div>
-      <div>
-        <DataTable columns={printerTableColumns} data={dataSector} />
-      </div>
+      <DataTable columns={printerTableColumns} data={dataSector} />
     </main>
   );
 };

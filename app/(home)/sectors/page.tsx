@@ -11,12 +11,13 @@ const Sector = async () => {
 
   return (
     <main className="flex flex-col gap-8">
-      <div className="flex justify-between w-full">
-        <TitleToPage
-          title="Setores"
-          description="Registre seus setores nessa aba"
-        />
-        {/* Button form */}
+      <TitleToPage
+        title="Setores"
+        description="Registre seus setores nessa aba"
+      />
+      {/* Button form */}
+
+      <div className="flex w-full justify-end">
         <InitForm
           title="Adicionar configuração"
           title_button={
@@ -29,9 +30,7 @@ const Sector = async () => {
           <Form />
         </InitForm>
       </div>
-      <div>
-        <DataTable data={dataSector} columns={sectorTableColumns} />
-      </div>
+      <DataTable data={dataSector} columns={sectorTableColumns} />
     </main>
   );
 };

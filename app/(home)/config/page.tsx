@@ -11,12 +11,11 @@ const Config = async () => {
 
   return (
     <main className="flex flex-col gap-8">
-      <div className="flex justify-between w-full">
-        <TitleToPage
-          title="Configuração"
-          description="Faça suas configurações aqui"
-        />
-        {/* Button form */}
+      <TitleToPage
+        title="Configuração"
+        description="Faça suas configurações aqui"
+      />
+      <div className="flex w-full justify-end">
         <InitForm
           title="Adicionar configuração"
           title_button={
