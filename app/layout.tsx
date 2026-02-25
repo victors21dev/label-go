@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./_components/theme-provider";
+import { AuthProvider } from "./_components/session-provider";
 // import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({
@@ -29,7 +30,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
         {/* </ClerkProvider> */}
       </body>
