@@ -18,12 +18,12 @@ export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
   {
     accessorKey: "widthMm",
     header: "Largura",
-    cell: ({ row }) => `${row.getValue("widthMm")} mm`,
+    cell: ({ row }) => `${row.getValue("widthMm")} cm`,
   },
   {
     accessorKey: "heightMm",
     header: "Altura",
-    cell: ({ row }) => `${row.getValue("heightMm")} mm`,
+    cell: ({ row }) => `${row.getValue("heightMm")} cm`,
   },
   {
     accessorKey: "createdAt",
