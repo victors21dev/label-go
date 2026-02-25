@@ -6,37 +6,48 @@ export default withAuth(
     const token = req.nextauth.token;
     const { pathname } = req.nextUrl;
 
-    // Se o usuário está logado e tenta acessar rotas de "convidado"
-    const isAuthPage =
-      pathname.startsWith("/login") ||
-      pathname.startsWith("/register") ||
-      pathname.startsWith("/unauthorized");
+    // 1. Se o usuário ESTÁ logado
+    if (token) {
+      const isUnauthorizedUser = token.status === "UNAUTHORIZED";
 
-    if (token && isAuthPage) {
-      // Redireciona para a home (página principal do sistema)
-      return NextResponse.redirect(new URL("/", req.url));
+      // Regra: Usuário UNAUTHORIZED só pode ver a página /unauthorized
+      if (isUnauthorizedUser && pathname !== "/unauthorized") {
+        return NextResponse.redirect(new URL("/unauthorized", req.url));
+      }
+
+      // Regra: Usuário ATIVO não pode ver Login, Register ou Unauthorized
+      const isAuthPage =
+        pathname === "/login" ||
+        pathname === "/register" ||
+        pathname === "/unauthorized";
+
+      if (!isUnauthorizedUser && isAuthPage) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
     }
 
     return NextResponse.next();
   },
   {
     callbacks: {
-      // O middleware só será executado se authorized retornar true
-      // Aqui permitimos que ele sempre execute para podermos fazer a lógica manual acima
-      authorized: () => true,
+      authorized: ({ token, req }) => {
+        const { pathname } = req.nextUrl;
+
+        // Rotas que qualquer pessoa (logada ou não) pode acessar
+        if (pathname === "/login" || pathname === "/register") {
+          return true;
+        }
+
+        // Para qualquer outra rota (/, /sectors, /unauthorized), precisa de token
+        return !!token;
+      },
+    },
+    pages: {
+      signIn: "/login",
     },
   }
 );
 
 export const config = {
-  matcher: [
-    /*
-     * Match em todas as rotas exceto:
-     * 1. /api (rotas de API)
-     * 2. /_next/static (arquivos estáticos)
-     * 3. /_next/image (otimização de imagens)
-     * 4. /favicon.ico (ícone)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

@@ -35,11 +35,13 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Senha incorreta");
         }
 
+        // IMPORTANTE: Retornar o status aqui para que o JWT possa capturá-lo
         return {
           id: user.id,
           name: user.name,
           email: user.email,
-          role: user.role, // Adicionando o role do seu schema
+          role: user.role,
+          status: user.status,
         };
       },
     }),
@@ -48,25 +50,28 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    // Passa o ID e o Role para o token JWT
     async jwt({ token, user }) {
+      // O 'user' só está disponível no momento do login (primeira execução)
       if (user) {
-        token.role = (user as any).role;
         token.id = user.id;
+        token.role = (user as any).role;
+        token.status = (user as any).status;
       }
       return token;
     },
-    // Passa o ID e o Role para a Sessão que o Frontend lê
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).role = token.role;
         (session.user as any).id = token.id;
+        (session.user as any).role = token.role;
+        (session.user as any).status = token.status;
       }
       return session;
     },
   },
   pages: {
-    signIn: "/login", // Redireciona para sua página customizada
+    signIn: "/login",
+    // Se quiser que o NextAuth saiba para onde mandar em caso de erro de autorização:
+    error: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

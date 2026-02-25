@@ -1,4 +1,6 @@
-import { Lock } from "lucide-react";
+"use client"; // Necessário para usar o signOut
+
+import { Lock, LogOut } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import {
   Card,
@@ -9,6 +11,7 @@ import {
   CardTitle,
 } from "@/app/_components/ui/card";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 export default function UnauthorizedPage() {
   return (
@@ -27,14 +30,19 @@ export default function UnauthorizedPage() {
         <CardContent className="text-center text-sm text-muted-foreground">
           <p>
             Para acessar o sistema, você precisa ter o status{" "}
-            <strong>"ACTIVE"</strong>. Entre em contato com o suporte ou aguarde
-            a liberação do seu perfil.
+            <strong className="text-foreground">"ACTIVE"</strong>. Entre em
+            contato com o suporte ou aguarde a liberação do seu perfil.
           </p>
         </CardContent>
 
         <CardFooter className="flex flex-col gap-2">
-          <Button asChild variant="outline" className="w-full">
-            <Link href="/">Tentar novamente</Link>
+          {/* Botão para deslogar */}
+          <Button
+            className="w-full gap-2 cursor-pointer"
+            onClick={() => signOut({ callbackUrl: "/login" })}
+          >
+            <LogOut className="h-4 w-4" />
+            Sair desta conta
           </Button>
         </CardFooter>
       </Card>
