@@ -31,7 +31,6 @@ interface DataTableRowActionsProps<TData extends WithId> {
 
 export function DataTableRowActions<TData extends WithId>({
   row,
-  onEdit,
   deleteOptions,
 }: DataTableRowActionsProps<TData>) {
   const element = row.original;
@@ -54,6 +53,7 @@ export function DataTableRowActions<TData extends WithId>({
         <DropdownMenuSeparator />
         <div className="flex flex-col gap-2">
           <SheetComponent
+            dataTable={row}
             openButton={
               <DropdownMenuItem
                 onSelect={(e) => e.preventDefault()}

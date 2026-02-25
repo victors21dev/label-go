@@ -13,22 +13,28 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 
+import { Row } from "@tanstack/react-table"; // Importe o tipo Row
+
 type SheetComponent = {
   openButton: ReactNode;
+  dataTable: Row<any>;
 };
 
-export function SheetComponent({ openButton }: SheetComponent) {
+export function SheetComponent({ openButton, dataTable }: SheetComponent) {
+  const data = dataTable.original;
+  console.log(data);
   return (
     <Sheet>
       <SheetTrigger asChild>{openButton}</SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
+          <SheetTitle>Editar</SheetTitle>
           <SheetDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+            Faça a edição dos seus dados e salve abaixo
           </SheetDescription>
         </SheetHeader>
-        <div className="grid flex-1 auto-rows-min gap-6 px-4">
+        {/* Colocar o formulário aqui */}
+        {/* <div className="grid flex-1 auto-rows-min gap-6 px-4">
           <div className="grid gap-3">
             <Label htmlFor="sheet-demo-name">Name</Label>
             <Input id="sheet-demo-name" defaultValue="Pedro Duarte" />
@@ -37,11 +43,11 @@ export function SheetComponent({ openButton }: SheetComponent) {
             <Label htmlFor="sheet-demo-username">Username</Label>
             <Input id="sheet-demo-username" defaultValue="@peduarte" />
           </div>
-        </div>
+        </div> */}
         <SheetFooter>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit">Salvar Informações</Button>
           <SheetClose asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline">Fechar</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

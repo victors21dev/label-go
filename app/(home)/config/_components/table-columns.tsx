@@ -67,7 +67,6 @@ export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
       return (
         <DataTableRowActions
           row={row}
-          onEdit={(item) => console.log("Edit", item)}
           deleteOptions={{
             title: "Excluir Modelo",
             description: `Tem certeza que deseja apagar o modelo "${label.name}"?`,
