@@ -36,9 +36,12 @@ export function SheetComponent({
   const [isOpen, setIsOpen] = useState(false);
   const [sectors, setSectors] = useState<{ id: string; name: string }[]>([]);
 
+  // Verificadores de Tipo de Dado
   const isUser = "username" in data && "role" in data;
+  const isSector = "coordinatorName" in data && !isUser;
+  const isPrinter = "brand" in data && "model" in data;
+  const isLabelModel = "widthMm" in data && "heightMm" in data;
 
-  // Carrega setores apenas se for edição de usuário
   useEffect(() => {
     if (isUser && isOpen) {
       getSectors().then(setSectors);
@@ -46,8 +49,14 @@ export function SheetComponent({
   }, [isUser, isOpen]);
 
   async function handleSubmit(formData: FormData) {
+    let type = "other";
+    if (isUser) type = "user";
+    else if (isSector) type = "sector";
+    else if (isPrinter) type = "printer";
+    else if (isLabelModel) type = "labelmodel";
+
     try {
-      await updateDataAction(data.id, isUser ? "user" : "other", formData);
+      await updateDataAction(data.id, type, formData);
       toast.success("Atualizado com sucesso!");
       setIsOpen(false);
     } catch (error) {
@@ -58,70 +67,157 @@ export function SheetComponent({
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>{openButton}</SheetTrigger>
-      <SheetContent className="sm:max-w-md">
+      <SheetContent className="sm:max-w-md overflow-y-auto">
         <form action={handleSubmit} className="flex flex-col h-full gap-4">
           <SheetHeader>
-            <SheetTitle>Editar Usuário</SheetTitle>
+            <SheetTitle>
+              Editar{" "}
+              {isUser
+                ? "Usuário"
+                : isSector
+                ? "Setor"
+                : isPrinter
+                ? "Impressora"
+                : "Modelo"}
+            </SheetTitle>
             <SheetDescription>
-              Altere as permissões e status do usuário.
+              Faça as alterações necessárias e clique em salvar.
             </SheetDescription>
           </SheetHeader>
 
           <div className="grid gap-4 px-4 py-4">
-            <div className="grid gap-2">
-              <Label>Nome Completo</Label>
-              <Input name="name" defaultValue={data.name} required />
-            </div>
+            {/* FORMULÁRIO: USUÁRIO */}
+            {isUser && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Nome Completo</Label>
+                  <Input name="name" defaultValue={data.name} required />
+                </div>
+                <div className="grid gap-2">
+                  <Label>E-mail</Label>
+                  <Input
+                    name="email"
+                    type="email"
+                    defaultValue={data.email}
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label>Cargo (Role)</Label>
+                    <Select name="role" defaultValue={data.role}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="USER">Usuário</SelectItem>
+                        <SelectItem value="ADMIN">Administrador</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Status</Label>
+                    <Select name="status" defaultValue={data.status}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="AUTHORIZED">Autorizado</SelectItem>
+                        <SelectItem value="UNAUTHORIZED">
+                          Não Autorizado
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid gap-2">
+                  <Label>Setor</Label>
+                  <Select
+                    name="sectorId"
+                    defaultValue={data.sectorId || "none"}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um setor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Nenhum Setor</SelectItem>
+                      {sectors.map((s) => (
+                        <SelectItem key={s.id} value={s.id}>
+                          {s.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
 
-            <div className="grid grid-cols-2 gap-4">
-              {/* SELECT PARA ROLE */}
-              <div className="grid gap-2">
-                <Label>Cargo (Role)</Label>
-                <Select name="role" defaultValue={data.role}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="USER">USER</SelectItem>
-                    <SelectItem value="ADMIN">ADMIN</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            {/* FORMULÁRIO: SETOR */}
+            {isSector && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Nome do Setor</Label>
+                  <Input name="name" defaultValue={data.name} required />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Coordenador</Label>
+                  <Input
+                    name="coordinatorName"
+                    defaultValue={data.coordinatorName}
+                    required
+                  />
+                </div>
+              </>
+            )}
 
-              {/* SELECT PARA STATUS */}
-              <div className="grid gap-2">
-                <Label>Status</Label>
-                <Select name="status" defaultValue={data.status}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="AUTHORIZED">AUTHORIZED</SelectItem>
-                    <SelectItem value="UNAUTHORIZED">UNAUTHORIZED</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+            {/* FORMULÁRIO: IMPRESSORA */}
+            {isPrinter && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Marca</Label>
+                  <Input name="brand" defaultValue={data.brand} required />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Modelo</Label>
+                  <Input name="model" defaultValue={data.model} required />
+                </div>
+              </>
+            )}
 
-            {/* SELECT PARA SETOR (DINÂMICO) */}
-            <div className="grid gap-2">
-              <Label>Setor</Label>
-              <Select name="sectorId" defaultValue={data.sectorId || ""}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione um setor" />
-                </SelectTrigger>
-                <SelectContent>
-                  {sectors.map((sector) => (
-                    <SelectItem key={sector.id} value={sector.id}>
-                      {sector.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {/* FORMULÁRIO: MODELO DE ETIQUETA */}
+            {isLabelModel && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Nome do Modelo</Label>
+                  <Input name="name" defaultValue={data.name} required />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label>Largura (mm)</Label>
+                    <Input
+                      name="widthMm"
+                      type="number"
+                      step="0.1"
+                      defaultValue={data.widthMm}
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Altura (mm)</Label>
+                    <Input
+                      name="heightMm"
+                      type="number"
+                      step="0.1"
+                      defaultValue={data.heightMm}
+                      required
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
-          <SheetFooter className="mt-auto">
+          <SheetFooter className="mt-auto pt-4">
             <Button type="submit" className="w-full">
               Salvar Informações
             </Button>

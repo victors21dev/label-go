@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { ArrowUpDown, Trash2 } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
-import { deleteLabelModel } from "@/app/_actions/label-model";
+import { deleteLabelModel } from "@/app/_actions/label-model-delete";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/app/_components/confirmDialog";
 import { useRouter } from "next/navigation";

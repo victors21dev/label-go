@@ -1,6 +1,6 @@
 "use client";
 
-import { deletePrinter } from "@/app/_actions/printers";
+import { deletePrinter } from "@/app/_actions/printers-delete";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { Printer } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";

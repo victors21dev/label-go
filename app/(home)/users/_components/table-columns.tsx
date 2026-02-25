@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteUser } from "@/app/_actions/users";
+import { deleteUser } from "@/app/_actions/users-delete";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { Badge } from "@/app/_components/ui/badge";
 import { User } from "@prisma/client";

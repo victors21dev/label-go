@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteSector } from "@/app/_actions/sectors";
+import { deleteSector } from "@/app/_actions/sectors-delete";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { Sector } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
