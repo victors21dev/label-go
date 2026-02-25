@@ -69,7 +69,7 @@ export default function RegisterPage() {
                   name="username"
                   placeholder="victors21dev"
                   required
-                  autoComplete="off"
+                  autoComplete="one-time-code"
                 />
               </div>
 
@@ -92,7 +92,7 @@ export default function RegisterPage() {
                   name="password"
                   type="password"
                   required
-                  autoComplete="off"
+                  autoComplete="one-time-code"
                 />
               </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react"; // Mudamos para useTransition para o loading
+import { useTransition } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { Button } from "@/app/_components/ui/button";
@@ -8,12 +8,14 @@ import { Input } from "@/app/_components/ui/input";
 import { Label } from "@/app/_components/ui/label";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/app/_components/ui/card";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
@@ -24,11 +26,10 @@ export default function LoginPage() {
     const password = formData.get("password") as string;
 
     startTransition(async () => {
-      // O "credentials" deve ser o mesmo ID definido no route.ts do NextAuth
       const result = await signIn("credentials", {
         username,
         password,
-        redirect: false, // Falso para podermos tratar o erro com Toast
+        redirect: false,
       });
 
       if (result?.error) {
@@ -36,7 +37,7 @@ export default function LoginPage() {
       } else {
         toast.success("Login realizado com sucesso!");
         router.push("/");
-        router.refresh(); // Garante que o middleware perceba a nova sessão
+        router.refresh();
       }
     });
   }
@@ -47,9 +48,16 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle>Login na sua conta</CardTitle>
           <CardDescription>Entre com seu usuário e senha</CardDescription>
+          <CardAction>
+            <Link href="/register" passHref>
+              <Button className="cursor-pointer" variant="link">
+                Novo? Registre-se
+              </Button>
+            </Link>
+          </CardAction>
         </CardHeader>
+
         <CardContent>
-          {/* Usamos a action nativa do formulário */}
           <form action={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
