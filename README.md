@@ -44,6 +44,7 @@ Crie um arquivo .env na raiz do projeto:
 
 ```bash
 DATABASE_URL="postgresql"
+NEXT_PUBLIC_CRYPTO_SECRET="senha"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="seu_secret_gerado_aqui"
 ```
