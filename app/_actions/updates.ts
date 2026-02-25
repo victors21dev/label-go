@@ -1,5 +1,6 @@
 "use server";
 import { db } from "@/app/_lib/prisma";
+import { Role, UserStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function updateDataAction(
@@ -8,8 +9,19 @@ export async function updateDataAction(
   formData: FormData
 ) {
   const data = Object.fromEntries(formData.entries());
-
-  if (type === "sector") {
+  if (type === "user") {
+    await db.user.update({
+      where: { id },
+      data: {
+        name: data.name as string,
+        email: data.email as string,
+        role: data.role as Role,
+        status: data.status as UserStatus,
+        // Se você quiser permitir trocar o setor pelo ID:
+        sectorId: (data.sectorId as string) || null,
+      },
+    });
+  } else if (type === "sector") {
     await db.sector.update({
       where: { id },
       data: {
@@ -35,4 +47,10 @@ export async function updateDataAction(
 
   revalidatePath("/"); // Atualiza a tabela automaticamente
   return { success: true };
+}
+
+export async function getSectors() {
+  return await db.sector.findMany({
+    orderBy: { name: "asc" },
+  });
 }
