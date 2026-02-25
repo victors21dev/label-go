@@ -1,4 +1,4 @@
-import { UserProfileButton } from "./user-profile-button";
+// import { UserProfileButton } from "./user-profile-button";
 
 type TitleToPageProps = {
   title: string;
@@ -12,9 +12,9 @@ const TitleToPage = ({ title, description }: TitleToPageProps) => {
         <h1 className="text-xl font-bold">{title}</h1>
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>
-      <div className="flex items-center gap-4">
+      {/* <div className="flex items-center gap-4">
         <UserProfileButton />
-      </div>
+      </div> */}
     </header>
   );
 };

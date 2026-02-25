@@ -63,10 +63,6 @@ const Sidebar = () => {
             <Printer size={icon_size} />
             Impressoras
           </SidebarButton>
-          <SidebarButton href="/users">
-            <UserIcon size={icon_size} />
-            Usuários
-          </SidebarButton>
           <SidebarButton href="/config">
             <Settings size={icon_size} />
             Configuração
