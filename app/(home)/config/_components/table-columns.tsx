@@ -3,7 +3,7 @@
 import { LabelModel } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
-import { ArrowUpDown, Trash2 } from "lucide-react";
+import { ArrowUpDown, RulerDimensionLine, Ticket, Trash2 } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { deleteLabelModel } from "@/app/_actions/label-model-delete";
 import { toast } from "sonner";
@@ -13,17 +13,46 @@ import { useRouter } from "next/navigation";
 export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
   {
     accessorKey: "name",
-    header: "Nome",
+    header: "Nome Modelo da Etiqueta",
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+
+      return (
+        <div className="flex items-center gap-2 font-medium">
+          <Ticket className="h-4 w-4 text-muted-foreground" />
+          <span>{name}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "widthMm",
     header: "Largura",
-    cell: ({ row }) => `${row.getValue("widthMm")} cm`,
+    cell: ({ row }) => {
+      const value = row.getValue("widthMm") as number;
+      // Opcional: Se quiser converter mm para cm, divida por 10.
+      // Se o valor já for cm, mantenha apenas {value}.
+      return (
+        <div className="flex items-center gap-2">
+          <RulerDimensionLine className="h-4 w-4 text-muted-foreground" />
+          <span>{value} cm</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "heightMm",
     header: "Altura",
-    cell: ({ row }) => `${row.getValue("heightMm")} cm`,
+    cell: ({ row }) => {
+      const value = row.getValue("heightMm") as number;
+      return (
+        <div className="flex items-center gap-2">
+          {/* Rotação de 90 graus para indicar altura vertical */}
+          <RulerDimensionLine className="h-4 w-4 text-muted-foreground rotate-90" />
+          <span>{value} cm</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "createdAt",

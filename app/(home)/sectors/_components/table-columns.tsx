@@ -4,17 +4,35 @@ import { deleteSector } from "@/app/_actions/sectors-delete";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { Sector } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import { Building2, UserCog } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export const sectorTableColumns: ColumnDef<Sector>[] = [
   {
     accessorKey: "name",
-    header: "Nome do setor",
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+      return (
+        <div className="flex items-center gap-2 font-medium">
+          <Building2 className="h-4 w-4 text-primary" />
+          <span>{name}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "coordinatorName",
     header: "Coordenador(a)",
+    cell: ({ row }) => {
+      const coordinator = row.getValue("coordinatorName") as string;
+      return (
+        <div className="flex items-center gap-2">
+          <UserCog className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm">{coordinator}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "createdAt",

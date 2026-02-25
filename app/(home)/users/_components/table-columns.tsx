@@ -93,9 +93,7 @@ export const userTableColumns: ColumnDef<User>[] = [
 
       if (status === "AUTHORIZED") {
         return (
-          <Badge className="bg-chart-3 text-white border-none">
-            Autorizado
-          </Badge>
+          <Badge className="bg-chart-3 text- border-none">Autorizado</Badge>
         );
       }
 

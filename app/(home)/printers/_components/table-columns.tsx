@@ -4,6 +4,7 @@ import { deletePrinter } from "@/app/_actions/printers-delete";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { Printer } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import { Info, PrinterIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -11,10 +12,28 @@ export const printerTableColumns: ColumnDef<Printer>[] = [
   {
     accessorKey: "brand",
     header: "Marca",
+    cell: ({ row }) => {
+      const brand = row.getValue("brand") as string;
+      return (
+        <div className="flex items-center gap-2">
+          <PrinterIcon className="h-4 w-4 text-muted-foreground" />
+          <span className="font-medium">{brand}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "model",
     header: "Modelo",
+    cell: ({ row }) => {
+      const model = row.getValue("model") as string;
+      return (
+        <div className="flex items-center gap-2">
+          <Info className="h-4 w-4 text-muted-foreground" />
+          <span>{model}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "createdAt",

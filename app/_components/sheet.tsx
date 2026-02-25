@@ -104,7 +104,7 @@ export function SheetComponent({
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label>Cargo (Role)</Label>
+                    <Label>Permissão</Label>
                     <Select name="role" defaultValue={data.role}>
                       <SelectTrigger>
                         <SelectValue />
