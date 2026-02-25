@@ -55,6 +55,14 @@ const mealTypeOptions = [
   { id: "DINNER", name: "Jantar" },
 ];
 
+const generateId = () => {
+  if (typeof window !== "undefined" && window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  // Fallback para navegadores antigos ou contextos HTTP
+  return Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+};
+
 const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
   const [selectedMealType, setSelectedMealType] = useState("LUNCH");
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
@@ -120,7 +128,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       : format(dateRange.from, "dd/MM/yyyy");
 
     const newItem: QueueItem = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       labelModel: selectedLabel,
       mealType: mealTypeName,
       sector: selectSector,
