@@ -18,7 +18,9 @@ export const userTableColumns: ColumnDef<User>[] = [
         <div className="flex items-center gap-3">
           <img
             className="w-8 h-8 rounded-full object-cover hover:"
-            src={imageUrl || "/default-avatar.png"}
+            src={
+              imageUrl || "/default-avatar-icon-of-social-media-user-vector.jpg"
+            }
             alt={`Foto de ${name}`}
           />
           <span className="font-medium">{name}</span>
