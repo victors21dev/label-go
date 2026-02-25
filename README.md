@@ -28,7 +28,7 @@
 ### 1. Clone o repositório:
 
 ```bash
-git clone [https://github.com/seu-usuario/label-go.git](https://github.com/seu-usuario/label-go.git)
+git clone [https://github.com/victors21dev//label-go.git](https://github.com/victors21dev//label-go.git)
 cd label-go
 ```
 
