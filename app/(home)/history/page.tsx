@@ -4,7 +4,15 @@ import { db } from "@/app/_lib/prisma";
 import { historyTableColumns } from "./_components/table-columns";
 
 const History = async () => {
-  const dataSector = await db.labelGeneration.findMany();
+  const dataSector = await db.labelGeneration.findMany({
+    include: {
+      sector: true,
+      user: true,
+      labelModel: true,
+      printer: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <main className="flex flex-col gap-8">

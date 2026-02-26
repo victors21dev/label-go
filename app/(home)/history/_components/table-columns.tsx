@@ -1,19 +1,20 @@
 "use client";
 
-import { LabelGeneration } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const historyTableColumns: ColumnDef<LabelGeneration>[] = [
+// Usamos any para permitir o acesso às propriedades incluídas pelo Prisma (include)
+export const historyTableColumns: ColumnDef<any>[] = [
   {
-    accessorKey: "labelModel",
+    id: "modelo",
+    accessorKey: "labelModel.name",
     header: "Modelo",
   },
   {
-    accessorKey: "sector",
+    accessorKey: "sector.name",
     header: "Setor",
   },
   {
-    accessorKey: "printer",
+    accessorKey: "printer.brand",
     header: "Impressora",
   },
   {
@@ -21,16 +22,15 @@ export const historyTableColumns: ColumnDef<LabelGeneration>[] = [
     header: "Quantidade",
   },
   {
-    accessorKey: "user",
+    accessorKey: "user.name",
     header: "Usuário",
   },
   {
     accessorKey: "date",
     header: "Validade",
     cell: ({ row }) => {
-      const date = new Date(row.getValue("createdAt"));
+      const date = new Date(row.original.date);
       return new Intl.DateTimeFormat("pt-BR", {
-        timeZone: "America/Sao_Paulo",
         dateStyle: "short",
         timeStyle: "short",
       }).format(date);
@@ -40,7 +40,7 @@ export const historyTableColumns: ColumnDef<LabelGeneration>[] = [
     accessorKey: "createdAt",
     header: "Data de Criação",
     cell: ({ row }) => {
-      const date = new Date(row.getValue("createdAt"));
+      const date = new Date(row.original.createdAt);
       return new Intl.DateTimeFormat("pt-BR", {
         timeZone: "America/Sao_Paulo",
         dateStyle: "short",

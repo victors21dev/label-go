@@ -29,15 +29,17 @@ import { Input } from "./ui/input";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  // Adicionamos uma prop opcional para definir qual coluna filtrar
+  // Se não for passada, tentamos pegar a primeira
+  filterColumnId?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filterColumnId,
 }: DataTableProps<TData, TValue>) {
-  // sorting
   const [sorting, setSorting] = React.useState<SortingState>([]);
-
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -56,19 +58,26 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
-  // @ts-ignore
-  const name0column = columns[0].accessorKey;
+
+  /**
+   * LÓGICA DE FILTRO CORRIGIDA:
+   * Priorizamos a prop filterColumnId.
+   * Caso não exista, tentamos pegar o 'id' ou o 'accessorKey' da primeira coluna.
+   */
+  const firstColumn = columns[0] as any;
+  const targetColumnId =
+    filterColumnId || firstColumn.id || firstColumn.accessorKey;
 
   return (
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder={`Filtrar por ${columns[0].header}`}
+          placeholder={`Filtrar...`}
           value={
-            (table.getColumn(name0column)?.getFilterValue() as string) ?? ""
+            (table.getColumn(targetColumnId)?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn(name0column)?.setFilterValue(event.target.value)
+            table.getColumn(targetColumnId)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -78,18 +87,16 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -130,7 +137,7 @@ export function DataTable<TData, TValue>({
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          <ChevronLeft />
+          <ChevronLeft className="h-4 w-4 mr-2" />
           Anterior
         </Button>
         <Button
@@ -140,7 +147,7 @@ export function DataTable<TData, TValue>({
           disabled={!table.getCanNextPage()}
         >
           Próximo
-          <ChevronRight />
+          <ChevronRight className="h-4 w-4 ml-2" />
         </Button>
       </div>
     </div>
