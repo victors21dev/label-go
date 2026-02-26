@@ -48,7 +48,7 @@ const Sidebar = () => {
           </SidebarButton>
           <SidebarButton href="/labels">
             <Ticket size={icon_size} />
-            Gerador de tiquetas
+            Gerador de Etiquetas
           </SidebarButton>
           <SidebarButton href="/history">
             <History size={icon_size} />
