@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useSession } from "next-auth/react";
 import SelectOption from "./select-option";
 import LabelRefeicao from "../_label-models/refeicao";
 import ContentPrinter, { ContentPrinterRef } from "./content-printer";
@@ -18,14 +19,27 @@ import {
 import { Button } from "./ui/button";
 import { eachDayOfInterval, format } from "date-fns";
 import { DateRange } from "react-day-picker";
+import { saveLabels } from "../_actions/labels";
+
+import NextAuth, { DefaultSession } from "next-auth";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+    } & DefaultSession["user"];
+  }
+}
 
 type QueueItem = {
   id: string;
   labelModel: string;
+  labelModelId: string; // ID para o Prisma
   mealType: string;
   sector: string;
+  sectorId: string; // ID para o Prisma
   dateRangeText: string;
-  originalDate: Date; // Armazena a data real para o QR Code
+  originalDate: Date;
   quantity: number;
   width: number;
   height: number;
@@ -59,11 +73,11 @@ const generateId = () => {
   if (typeof window !== "undefined" && window.crypto?.randomUUID) {
     return window.crypto.randomUUID();
   }
-  // Fallback para navegadores antigos ou contextos HTTP
   return Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
 };
 
 const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
+  const { data: session } = useSession();
   const [selectedMealType, setSelectedMealType] = useState("LUNCH");
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: new Date(),
@@ -120,28 +134,24 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       return;
     }
 
-    // 1. Identifica todos os dias no intervalo selecionado
     const days = dateRange.to
       ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
       : [dateRange.from];
 
-    // 2. Cria um item de fila para CADA dia
-    const newItems: QueueItem[] = days.map((day) => {
-      return {
-        id: generateId(),
-        labelModel: selectedLabel,
-        mealType: mealTypeName,
-        sector: selectSector,
-        // Texto individual para cada etiqueta na fila
-        dateRangeText: format(day, "dd/MM/yyyy"),
-        originalDate: day,
-        quantity: Number(quantityNumber),
-        width: selectedModelConfig!.widthMm,
-        height: selectedModelConfig!.heightMm,
-      };
-    });
+    const newItems: QueueItem[] = days.map((day) => ({
+      id: generateId(),
+      labelModel: selectedLabel,
+      labelModelId: String(selectedModelConfig!.id),
+      mealType: mealTypeName,
+      sector: selectSector,
+      sectorId: String(selectedSetorConfig!.id),
+      dateRangeText: format(day, "dd/MM/yyyy"),
+      originalDate: day,
+      quantity: Number(quantityNumber),
+      width: selectedModelConfig!.widthMm,
+      height: selectedModelConfig!.heightMm,
+    }));
 
-    // 3. Adiciona todos os novos itens ao estado da fila de uma vez
     setPrintQueue((prev) => [...prev, ...newItems]);
   };
 
@@ -149,18 +159,53 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
     setPrintQueue((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const handleExternalPrint = () => {
+  const handleExternalPrint = async () => {
+    if (!session?.user?.id) return alert("Usuário não autenticado.");
+    if (!selectedSetorConfig || !selectedModelConfig || !dateRange?.from)
+      return;
+
+    // 1. Imprime o visualizador
     printerRef.current?.print();
+
+    // 2. Salva no banco (mapeia os dias visíveis no momento)
+    const days = dateRange.to
+      ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
+      : [dateRange.from];
+
+    const dataToSave = days.map((day) => ({
+      userId: session.user.id,
+      sectorId: String(selectedSetorConfig.id),
+      labelModelId: String(selectedModelConfig.id),
+      quantity: Number(quantityNumber),
+      date: day,
+    }));
+
+    await saveLabels(dataToSave);
   };
 
-  const handleBatchPrint = () => {
+  const handleBatchPrint = async () => {
+    if (!session?.user?.id) return alert("Usuário não autenticado.");
     if (printQueue.length === 0) return;
+
+    // 1. Imprime a fila
     batchPrinterRef.current?.print();
+
+    // 2. Salva a fila inteira no banco
+    const dataToSave = printQueue.map((item) => ({
+      userId: session.user.id,
+      sectorId: item.sectorId,
+      labelModelId: item.labelModelId,
+      quantity: item.quantity,
+      date: item.originalDate,
+    }));
+
+    await saveLabels(dataToSave);
+    setPrintQueue([]); // Limpa a fila após salvar e imprimir
   };
 
   return (
     <div className="flex gap-2">
-      {/* INFORMAÇÕES */}
+      {/* SEÇÃO DE INFORMAÇÕES */}
       <div className="bg-card h-fit p-4 rounded-2xl border-2 grid grid-cols-[auto_auto] gap-4">
         <div className="flex flex-col gap-4 w-62">
           <div>
@@ -201,7 +246,8 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
           </div>
         </div>
       </div>
-      {/* VISUALIZADOR */}
+
+      {/* SEÇÃO VISUALIZADOR */}
       <div className="flex gap-4 min-w-83.25 h-140 justify-between p-4 border-2 rounded-2xl overflow-hidden">
         <div className="flex flex-col gap-4 flex-1">
           <div className="flex-1 overflow-y-auto w-full">
@@ -240,6 +286,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
           </div>
         </div>
       </div>
+
       {/* FILA DE IMPRESSÃO */}
       <div className="bg-card p-4 border-2 rounded-2xl flex flex-col w-full h-140 shadow-sm overflow-hidden">
         <div className="flex items-center justify-between mb-4 border-b pb-2">
@@ -279,15 +326,12 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
                 >
                   <Trash2 size={12} />
                 </button>
-
                 <div className="text-[10px] font-bold text-chart-2 uppercase truncate">
                   {item.labelModel} • {item.mealType}
                 </div>
-
                 <div className="text-xs font-semibold truncate mt-1 pr-2">
                   {item.sector}
                 </div>
-
                 <div className="flex justify-between items-center mt-2 text-[10px] text-muted-foreground gap-1">
                   <span className="truncate">{item.dateRangeText}</span>
                   <span className="font-bold bg-chart-2/10 text-chart-2 px-2 py-0.5 rounded-full shrink-0">
@@ -310,6 +354,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
           </Button>
         </div>
       </div>
+
       {/* IMPRESSOR DE LOTE OCULTO */}
       <div className="hidden">
         <ContentPrinter
