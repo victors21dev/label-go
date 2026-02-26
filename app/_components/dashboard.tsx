@@ -77,16 +77,8 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
   };
 
   return (
-    <div className="p-8 space-y-8 bg-background min-h-screen">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Dashboard de Etiquetas
-          </h1>
-          <p className="text-muted-foreground">
-            Consumo real extraído do banco de dados.
-          </p>
-        </div>
+    <div className="space-y-8 bg-background min-h-screen mt-4">
+      <div className="flex items-center justify-end">
         <div className="flex items-center gap-4">
           {isLoading && (
             <Loader2 className="animate-spin text-primary" size={20} />
