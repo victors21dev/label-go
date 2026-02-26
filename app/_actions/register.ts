@@ -12,7 +12,7 @@ export async function registerAction(prevState: any, formData: FormData) {
   const sectorId = formData.get("sectorId") as string;
 
   try {
-    // 1. Check if user exists
+    // 1. Verificar se o e-mail ou usuário já existem
     const userExists = await db.user.findFirst({
       where: {
         OR: [{ email }, { username }],
@@ -23,11 +23,10 @@ export async function registerAction(prevState: any, formData: FormData) {
       return { error: "Usuário ou Email já cadastrados." };
     }
 
-    // 2. Hash password
+    // 2. Criptografar a senha
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 3. Create in DB
-    // Note: Ensure these Enums (USER, UNAUTHORIZED) match your schema exactly
+    // 3. Criar no banco de dados
     await db.user.create({
       data: {
         name,
@@ -35,19 +34,12 @@ export async function registerAction(prevState: any, formData: FormData) {
         email,
         password: hashedPassword,
         sectorId: sectorId || null,
-        role: "USER", // Added if your schema requires it
-        status: "UNAUTHORIZED", // Added if your schema requires it
       },
     });
   } catch (error) {
-    // Next.js redirect throws a special error; we must let it pass through
-    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
-      throw error;
-    }
-    console.error("Registration error:", error);
     return { error: "Erro ao criar conta. Tente novamente." };
   }
 
-  // 4. Redirect
+  // 4. Redirecionar após sucesso (fora do try/catch)
   redirect("/login?success=account-created");
 }
