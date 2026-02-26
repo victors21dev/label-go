@@ -120,26 +120,29 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       return;
     }
 
-    const dateText = dateRange.to
-      ? `${format(dateRange.from, "dd/MM")} - ${format(
-          dateRange.to,
-          "dd/MM/yyyy"
-        )}`
-      : format(dateRange.from, "dd/MM/yyyy");
+    // 1. Identifica todos os dias no intervalo selecionado
+    const days = dateRange.to
+      ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
+      : [dateRange.from];
 
-    const newItem: QueueItem = {
-      id: generateId(),
-      labelModel: selectedLabel,
-      mealType: mealTypeName,
-      sector: selectSector,
-      dateRangeText: dateText,
-      originalDate: dateRange.from,
-      quantity: Number(quantityNumber),
-      width: selectedModelConfig!.widthMm,
-      height: selectedModelConfig!.heightMm,
-    };
+    // 2. Cria um item de fila para CADA dia
+    const newItems: QueueItem[] = days.map((day) => {
+      return {
+        id: generateId(),
+        labelModel: selectedLabel,
+        mealType: mealTypeName,
+        sector: selectSector,
+        // Texto individual para cada etiqueta na fila
+        dateRangeText: format(day, "dd/MM/yyyy"),
+        originalDate: day,
+        quantity: Number(quantityNumber),
+        width: selectedModelConfig!.widthMm,
+        height: selectedModelConfig!.heightMm,
+      };
+    });
 
-    setPrintQueue((prev) => [...prev, newItem]);
+    // 3. Adiciona todos os novos itens ao estado da fila de uma vez
+    setPrintQueue((prev) => [...prev, ...newItems]);
   };
 
   const removeFromQueue = (id: string) => {
