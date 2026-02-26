@@ -1,7 +1,6 @@
-// app/_actions/login.ts
 "use server";
 
-import { db } from "@/app/_lib/prisma"; // Caminho do seu prisma client
+import { db } from "@/app/_lib/prisma";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 
@@ -23,8 +22,7 @@ export async function loginAction(prevState: any, formData: FormData) {
     return { error: "Usuário ou senha inválidos" };
   }
 
-  // 3. Se deu certo, aqui você criaria a sessão (Cookies, JWT ou NextAuth)
   console.log("Login realizado com sucesso!");
 
-  redirect("/"); // Exemplo de redirecionamento
+  redirect("/");
 }
