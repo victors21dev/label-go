@@ -59,7 +59,7 @@ export function UserNav() {
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
@@ -69,7 +69,7 @@ export function UserNav() {
             <Settings className="mr-2 h-4 w-4" />
             <span>Configurações</span>
           </DropdownMenuItem>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer text-red-600 focus:text-red-600"
