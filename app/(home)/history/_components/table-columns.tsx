@@ -1,6 +1,10 @@
 "use client";
 
+import { deleteHistory } from "@/app/_actions/history-delete";
+import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // Usamos any para permitir o acesso às propriedades incluídas pelo Prisma (include)
 export const historyTableColumns: ColumnDef<any>[] = [
@@ -46,6 +50,36 @@ export const historyTableColumns: ColumnDef<any>[] = [
         dateStyle: "short",
         timeStyle: "short",
       }).format(date);
+    },
+  },
+  {
+    header: "Ações",
+    id: "actions",
+    cell: ({ row }) => {
+      const label = row.original;
+      const router = useRouter();
+
+      const handleDelete = async () => {
+        try {
+          await deleteHistory(label.id);
+          toast.success("Histórico removido!");
+          router.refresh();
+        } catch (error) {
+          toast.error("Erro ao deletar.");
+        }
+      };
+
+      return (
+        <DataTableRowActions
+          row={row}
+          deleteOptions={{
+            title: "Excluir Impressora",
+            description: `Tem certeza que deseja apagar o histórico? "${label.createdAt}"?`,
+            onConfirm: handleDelete,
+          }}
+          editOn={false}
+        />
+      );
     },
   },
 ];

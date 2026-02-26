@@ -27,11 +27,13 @@ interface DataTableRowActionsProps<TData extends WithId> {
     description: string;
     onConfirm: () => void;
   };
+  editOn: Boolean;
 }
 
 export function DataTableRowActions<TData extends WithId>({
   row,
   deleteOptions,
+  editOn = true,
 }: DataTableRowActionsProps<TData>) {
   const element = row.original;
 
@@ -52,18 +54,20 @@ export function DataTableRowActions<TData extends WithId>({
 
         <DropdownMenuSeparator />
         <div className="flex flex-col gap-2">
-          <SheetComponent
-            dataTable={row}
-            openButton={
-              <DropdownMenuItem
-                onSelect={(e) => e.preventDefault()}
-                className="cursor-pointer"
-              >
-                <Edit className="mr-2 h-4 w-4" />
-                <span>Editar</span>
-              </DropdownMenuItem>
-            }
-          />
+          {editOn && (
+            <SheetComponent
+              dataTable={row}
+              openButton={
+                <DropdownMenuItem
+                  onSelect={(e) => e.preventDefault()}
+                  className="cursor-pointer"
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  <span>Editar</span>
+                </DropdownMenuItem>
+              }
+            />
+          )}
 
           {deleteOptions && (
             <DropdownMenuItem
