@@ -144,6 +144,7 @@ export const userTableColumns: ColumnDef<User>[] = [
             description: `Tem certeza que deseja apagar o usuário "${label.name}"?`,
             onConfirm: handleDelete,
           }}
+          editOn={true}
         />
       );
     },

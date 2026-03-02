@@ -73,6 +73,7 @@ export const printerTableColumns: ColumnDef<Printer>[] = [
             description: `Tem certeza que deseja apagar a impressora "${label.model}"?`,
             onConfirm: handleDelete,
           }}
+          editOn={true}
         />
       );
     },

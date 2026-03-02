@@ -72,6 +72,7 @@ export const sectorTableColumns: ColumnDef<Sector>[] = [
             description: `Tem certeza que deseja apagar o setor "${label.name}"?`,
             onConfirm: handleDelete,
           }}
+          editOn={true}
         />
       );
     },

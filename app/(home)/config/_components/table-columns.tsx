@@ -101,6 +101,7 @@ export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
             description: `Tem certeza que deseja apagar o modelo "${label.name}"?`,
             onConfirm: handleDelete,
           }}
+          editOn={true}
         />
       );
     },
