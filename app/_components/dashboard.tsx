@@ -77,7 +77,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
   };
 
   return (
-    <div className="space-y-8 bg-background min-h-screen mt-4">
+    <div className="space-y-8 min-h-screen mt-4">
       <div className="flex items-center justify-end">
         <div className="flex items-center gap-4">
           {isLoading && (
