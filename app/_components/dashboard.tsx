@@ -152,7 +152,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
       {/* GRÁFICOS SUPERIORES */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         {/* LINHA */}
-        <Card className="col-span-4">
+        <Card className="col-span-4 min-w-0">
           <CardHeader>
             <CardTitle>Tendência de Impressão</CardTitle>
             <CardDescription>
@@ -182,7 +182,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
         </Card>
 
         {/* PIZZA */}
-        <Card className="col-span-3">
+        <Card className="col-span-3 min-w-0">
           <CardHeader>
             <CardTitle>Distribuição por Modelo</CardTitle>
             <CardDescription>Uso por tipo de etiqueta.</CardDescription>
@@ -215,7 +215,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
       </div>
 
       {/* BARRAS */}
-      <Card>
+      <Card className="min-w-0">
         <CardHeader>
           <CardTitle>Consumo por Setor</CardTitle>
           <CardDescription>
