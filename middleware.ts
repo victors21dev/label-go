@@ -37,9 +37,4 @@ export const config = {
     "/printers/:path*",
     "/config/:path*",
   ],
-  debug: process.env.NODE_ENV === "development",
-  pages: {
-    signIn: "/login",
-    error: "/login",
-  },
 };
