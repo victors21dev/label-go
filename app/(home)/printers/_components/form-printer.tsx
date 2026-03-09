@@ -6,6 +6,7 @@ import { printerSchema } from "@/app/_schema/schemas";
 import { Button } from "@/app/_components/ui/button";
 import { createGenericAction } from "@/app/_components/actions";
 import { z } from "zod";
+import { toast } from "sonner";
 
 // Criamos um tipo específico para este formulário de impressora
 type PrinterFormData = z.infer<typeof printerSchema>;
@@ -23,10 +24,10 @@ const Form = () => {
   const onSubmit: SubmitHandler<PrinterFormData> = async (data) => {
     const result = await createGenericAction(data, "printer");
     if (result.success) {
-      alert("Impressora salva com sucesso!");
+      toast.success("Impressora salva com sucesso!");
       reset();
     } else {
-      alert("Erro: " + result.error);
+      toast.error("Erro: " + result.error);
     }
   };
 

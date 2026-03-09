@@ -6,6 +6,7 @@ import { labelSchema } from "@/app/_schema/schemas";
 import { Button } from "@/app/_components/ui/button";
 import { createGenericAction } from "@/app/_components/actions";
 import { z } from "zod";
+import { toast } from "sonner";
 
 type LabelFormData = z.infer<typeof labelSchema>;
 
@@ -23,10 +24,10 @@ const Form = () => {
   const onSubmit: SubmitHandler<LabelFormData> = async (data) => {
     const result = await createGenericAction(data, "labelModel");
     if (result.success) {
-      alert("Configuração salva com sucesso!");
+      toast.success("Configuração salva com sucesso!");
       reset();
     } else {
-      alert("Erro: " + result.error);
+      toast.error("Erro: " + result.error);
     }
   };
 

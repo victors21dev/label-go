@@ -23,6 +23,7 @@ import { saveLabels } from "../_actions/labels";
 
 import NextAuth, { DefaultSession } from "next-auth";
 import { Role, UserStatus } from "@prisma/client";
+import { toast } from "sonner";
 
 declare module "next-auth" {
   interface Session {
@@ -187,7 +188,10 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
   };
 
   const handleBatchPrint = async () => {
-    if (!session?.user?.id) return alert("Usuário não autenticado.");
+    if (!session?.user?.id)
+      return toast.error(
+        "Usuário não autenticado, por favor atualize a página"
+      );
     if (printQueue.length === 0) return;
 
     // 1. Imprime a fila
