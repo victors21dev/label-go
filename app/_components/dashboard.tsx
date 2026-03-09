@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Adicionado useEffect
 import {
   Card,
   CardContent,
@@ -34,6 +34,9 @@ interface DashboardProps {
 }
 
 export default function DashboardLayout({ initialData }: DashboardProps) {
+  // Estado para evitar erro de hidratação e garantir que o gráfico só renderize no cliente
+  const [isMounted, setIsMounted] = useState(false);
+
   const [data, setData] = useState(
     initialData || {
       totalLabels: 0,
@@ -53,6 +56,11 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  // Efeito para marcar como montado
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const handleDateChange = async (newRange: DateRange | undefined) => {
     setDate(newRange);
 
@@ -71,6 +79,15 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
       }
     }
   };
+
+  // Se não estiver montado, renderiza o layout sem os gráficos para evitar o erro de width(-1)
+  if (!isMounted) {
+    return (
+      <div className="p-8">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 min-h-screen mt-4">
@@ -162,7 +179,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
           <CardContent>
             <div className="w-full h-[300px]">
               {data.formattedTimeline?.length > 0 && (
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                   <LineChart data={data.formattedTimeline}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                     <XAxis dataKey="date" fontSize={12} />
@@ -190,7 +207,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
           <CardContent>
             <div className="w-full h-[300px]">
               {data.formattedModels?.length > 0 && (
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                   <PieChart>
                     <Pie
                       data={data.formattedModels}
@@ -225,7 +242,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
         <CardContent>
           <div className="w-full h-[350px]">
             {data.formattedSectors?.length > 0 && (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <BarChart data={data.formattedSectors}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="name" fontSize={12} />
