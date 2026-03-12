@@ -69,7 +69,7 @@ const LabelRefeicao = ({
             height: `${height}cm`,
           }}
         >
-          <div className="flex flex-col h-full text-[10px] justify-center">
+          <div className="flex flex-col h-full text-[8px] justify-center">
             <div className="justify-center text-center">
               AUTORIZAÇÃO DE <span className="font-bold">REFEIÇÃO</span>
               {/* Linha */}
@@ -83,14 +83,14 @@ const LabelRefeicao = ({
               ></div>
             </div>
             <div className="flex w-full h-full">
-              <div className="w-fit">
+              {/* <div className="w-fit">
                 <div className="flex items-center h-full">
                   <QRCode
                     size={60}
                     value={`https://valida-qr.vercel.app/?data=${qrCodeLink}`}
                   />
                 </div>
-              </div>
+              </div> */}
               <div className="flex flex-col ml-2">
                 <div className="flex flex-col mt-1">
                   <div>
@@ -106,14 +106,18 @@ const LabelRefeicao = ({
                 </div>
                 <div className="relative">
                   <div className="relative h-full">
-                    <div className="flex flex-col h-full justify-center">
+                    <div className="flex h-full justify-center gap-2 items-center">
                       <div>
                         Val.:{" "}
-                        <span className="font-bold ml-2">{dateFormatted}</span>
+                        <span className="font-bold ml-2 text-[12px]">
+                          {dateFormatted}
+                        </span>
                       </div>
                       <div>
                         Tipo: {""}
-                        <span className="font-bold ml-2">{mealType}</span>
+                        <span className="font-bold ml-2 text-[12px]">
+                          {mealType}
+                        </span>
                       </div>
                       <div></div>
                     </div>
