@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "./_components/theme-provider";
 import { AuthProvider } from "./_components/session-provider";
-// import { ClerkProvider } from "@clerk/nextjs";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "auto",
+const fontlocal = localFont({
+  src: "../public/Inter_18pt-Regular.ttf",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -22,8 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased bg-muted w-full h-full`}>
-        {/* <ClerkProvider> */}
+      <body
+        className={`${fontlocal.className} antialiased bg-muted w-full h-full`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -32,7 +32,6 @@ export default function RootLayout({
         >
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
-        {/* </ClerkProvider> */}
       </body>
     </html>
   );
