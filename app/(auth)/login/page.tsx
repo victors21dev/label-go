@@ -8,7 +8,6 @@ import { Input } from "@/app/_components/ui/input";
 import { Label } from "@/app/_components/ui/label";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -21,60 +20,85 @@ export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  async function handleSubmit(formData: FormData) {
+  // Alterado para receber o FormData corretamente
+  async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
 
     startTransition(async () => {
-      const result = await signIn("credentials", {
-        username,
-        password,
-        redirect: false,
-      });
+      try {
+        const result = await signIn("credentials", {
+          username,
+          password,
+          redirect: false,
+        });
 
-      if (result?.error) {
-        toast.error("Usuário ou senha inválidos");
-      } else {
-        toast.success("Login realizado com sucesso!");
-        router.push("/");
-        router.refresh();
+        if (result?.error) {
+          // O NextAuth retorna erros específicos, aqui tratamos de forma genérica
+          toast.error("Usuário ou senha inválidos");
+        } else {
+          toast.success("Login realizado com sucesso!");
+
+          // Refresh garante que o Middleware e o Layout vejam a nova sessão
+          router.push("/");
+          router.refresh();
+        }
+      } catch (error) {
+        toast.error("Ocorreu um erro inesperado");
       }
     });
   }
 
   return (
-    <div className="flex w-85 items-center justify-center">
+    // Ajustado de w-85 para w-full e adicionado min-h-screen para centralizar
+    <div className="flex min-h-screen w-full items-center justify-center p-4">
       <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Login na sua conta</CardTitle>
-          <CardDescription>Entre com seu usuário e senha</CardDescription>
-          <CardAction>
-            <Link href="/register" passHref>
-              <Button className="cursor-pointer" variant="link">
+        <CardHeader className="space-y-1">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-2xl">Login</CardTitle>
+            <Link href="/register">
+              <Button variant="link" className="px-0 font-normal">
                 Novo? Registre-se
               </Button>
             </Link>
-          </CardAction>
+          </div>
+          <CardDescription>
+            Entre com seu usuário e senha para acessar o LabelGO
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
-          <form action={handleSubmit}>
-            <div className="flex flex-col gap-6">
+          {/* Usando onSubmit para melhor controle com useTransition no Client Side */}
+          <form onSubmit={handleFormSubmit}>
+            <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="username">Usuário</Label>
                 <Input
                   id="username"
                   name="username"
+                  type="text"
                   required
-                  placeholder="victors21dev"
+                  placeholder="seu_usuario"
+                  disabled={isPending}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="password">Senha</Label>
-                <Input id="password" name="password" type="password" required />
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Senha</Label>
+                </div>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  disabled={isPending}
+                />
               </div>
               <Button type="submit" className="w-full" disabled={isPending}>
-                {isPending ? "Carregando..." : "Entrar"}
+                {isPending ? "Autenticando..." : "Entrar"}
               </Button>
             </div>
           </form>

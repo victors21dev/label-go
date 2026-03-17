@@ -14,28 +14,23 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) {
-          throw new Error("Dados de login necessários");
-        }
+        if (!credentials?.username || !credentials?.password) return null;
 
         const user = await db.user.findUnique({
           where: { username: credentials.username },
         });
 
-        if (!user || !user.password) {
-          throw new Error("Usuário não encontrado");
-        }
+        // Verificação de segurança: usuário existe e tem senha?
+        if (!user || !user.password) return null;
 
         const passwordMatch = await bcrypt.compare(
           credentials.password,
           user.password
         );
 
-        if (!passwordMatch) {
-          throw new Error("Senha incorreta");
-        }
+        if (!passwordMatch) return null;
 
-        // IMPORTANTE: Retornar o status aqui para que o JWT possa capturá-lo
+        // Retornamos os dados que queremos que o JWT capture
         return {
           id: user.id,
           name: user.name,
@@ -48,10 +43,24 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 dias
   },
+  // --- CORREÇÃO PARA LOCALHOST:5173 ---
+  useSecureCookies: process.env.NODE_ENV === "production",
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production", // False em dev para aceitar HTTP
+      },
+    },
+  },
+  // ------------------------------------
   callbacks: {
     async jwt({ token, user }) {
-      // O 'user' só está disponível no momento do login (primeira execução)
       if (user) {
         token.id = user.id;
         token.role = (user as any).role;
@@ -70,7 +79,6 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
-    // Se quiser que o NextAuth saiba para onde mandar em caso de erro de autorização:
     error: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
