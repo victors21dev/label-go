@@ -6,7 +6,6 @@ export default withAuth(
     const token = req.nextauth.token;
     const { pathname } = req.nextUrl;
 
-    // Se for USER, restringir rotas de admin
     if (token?.role === "USER") {
       const userRoutes = ["/", "/labels", "/history", "/sectors"];
       const isAllowed = userRoutes.some(
@@ -20,13 +19,14 @@ export default withAuth(
   },
   {
     callbacks: {
-      // Retorna true se houver token, permitindo o acesso à rota
       authorized: ({ token }) => !!token,
+    },
+    pages: {
+      signIn: "/login",
     },
   }
 );
 
 export const config = {
-  // Protege tudo, exceto login, api, pasta public e arquivos do next
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico|login|fonts).*)"],
 };

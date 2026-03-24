@@ -1,5 +1,8 @@
 "use client";
+
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
+import { motion } from "motion/react";
 import {
   LayoutDashboard,
   Printer,
@@ -8,26 +11,23 @@ import {
   Ticket,
   History,
   UserIcon,
-  LogOut,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+
 import SidebarButton from "./sidebar-button";
 import { ModeToggle } from "./button-mode-togle";
-import { useSession, signOut } from "next-auth/react";
-import { motion } from "motion/react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
 import { cn } from "@/app/_lib/utils";
 
-let icon_size = 20;
+// Boa prática: Constantes em maiúsculo fora do componente
+const ICON_SIZE = 20;
 
 const Sidebar = () => {
   const { data: session } = useSession();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const user = session?.user as any;
-  const isAdmin = user?.role === "ADMIN";
+  // Verificação segura do cargo do usuário
+  const isAdmin = (session?.user as any)?.role === "ADMIN";
 
   return (
     <motion.div
@@ -39,10 +39,10 @@ const Sidebar = () => {
         isCollapsed ? "items-center" : "items-start"
       )}
     >
-      {/* BOTÃO DE TOGGLE - POSICIONADO EXATAMENTE NA BORDA */}
+      {/* BOTÃO DE TOGGLE */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-12 z-100 flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-accent transition-colors"
+        className="absolute -right-3 top-12 z-50 flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-accent transition-colors"
       >
         {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
@@ -74,7 +74,6 @@ const Sidebar = () => {
               >
                 GO
               </motion.span>
-              {/* No modo SMALL, o toggle fica abaixo da logo ou suspenso */}
               <ModeToggle />
             </div>
           )}
@@ -88,28 +87,28 @@ const Sidebar = () => {
           )}
         >
           <SidebarButton href="/">
-            <LayoutDashboard size={icon_size} />
+            <LayoutDashboard size={ICON_SIZE} />
             {!isCollapsed && (
               <span className="ml-3 font-medium">Dashboard</span>
             )}
           </SidebarButton>
 
           <SidebarButton href="/labels">
-            <Ticket size={icon_size} />
+            <Ticket size={ICON_SIZE} />
             {!isCollapsed && (
               <span className="ml-3 font-medium">Etiquetas</span>
             )}
           </SidebarButton>
 
           <SidebarButton href="/history">
-            <History size={icon_size} />
+            <History size={ICON_SIZE} />
             {!isCollapsed && (
               <span className="ml-3 font-medium">Histórico</span>
             )}
           </SidebarButton>
 
           <SidebarButton href="/sectors">
-            <Table size={icon_size} />
+            <Table size={ICON_SIZE} />
             {!isCollapsed && <span className="ml-3 font-medium">Setores</span>}
           </SidebarButton>
 
@@ -124,19 +123,19 @@ const Sidebar = () => {
                 )}
               </div>
               <SidebarButton href="/printers">
-                <Printer size={icon_size} />
+                <Printer size={ICON_SIZE} />
                 {!isCollapsed && (
                   <span className="ml-3 font-medium">Impressoras</span>
                 )}
               </SidebarButton>
               <SidebarButton href="/users">
-                <UserIcon size={icon_size} />
+                <UserIcon size={ICON_SIZE} />
                 {!isCollapsed && (
                   <span className="ml-3 font-medium">Usuários</span>
                 )}
               </SidebarButton>
               <SidebarButton href="/config">
-                <Settings size={icon_size} />
+                <Settings size={ICON_SIZE} />
                 {!isCollapsed && (
                   <span className="ml-3 font-medium">Configuração</span>
                 )}
