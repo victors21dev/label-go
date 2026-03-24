@@ -1,11 +1,9 @@
 import { db } from "@/app/_lib/prisma";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db),
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -20,7 +18,6 @@ export const authOptions: NextAuthOptions = {
           where: { username: credentials.username },
         });
 
-        // Verificação de segurança: usuário existe e tem senha?
         if (!user || !user.password) return null;
 
         const passwordMatch = await bcrypt.compare(
@@ -30,7 +27,6 @@ export const authOptions: NextAuthOptions = {
 
         if (!passwordMatch) return null;
 
-        // Retornamos os dados que queremos que o JWT capture
         return {
           id: user.id,
           name: user.name,
@@ -43,9 +39,8 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 dias
+    maxAge: 30 * 24 * 60 * 60,
   },
-  // ------------------------------------
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -56,7 +51,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
+      if (token && session.user) {
         (session.user as any).id = token.id;
         (session.user as any).role = token.role;
         (session.user as any).status = token.status;
