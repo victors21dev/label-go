@@ -109,13 +109,13 @@ const LabelRefeicao = ({
                     <div className="flex h-full justify-center gap-2 items-center">
                       <div>
                         Val.:{" "}
-                        <span className="font-bold ml-2 text-[12px]">
+                        <span className="font-bold ml-2 text-[10px]">
                           {dateFormatted}
                         </span>
                       </div>
                       <div>
                         Tipo: {""}
-                        <span className="font-bold ml-2 text-[12px]">
+                        <span className="font-bold ml-2 text-[10px]">
                           {mealType}
                         </span>
                       </div>
