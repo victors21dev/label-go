@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  allowedDevOrigins: [process.env.NEXTAUTH_URL || "http://localhost:3000"],
+  allowedDevOrigins: ["192.168.50.180", "localhost"],
 };
 
 export default nextConfig;
