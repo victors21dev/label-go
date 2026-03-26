@@ -59,7 +59,11 @@ npx prisma generate
 npx prisma db push
 ```
 
-### 5. Inicie o servidor:
+### 5. Mude o allowedDevOrigins em next.config.ts:
+
+- ip_da_maquina_hospedeira
+
+### 6. Inicie o servidor:
 
 ```bash
 npm run dev
