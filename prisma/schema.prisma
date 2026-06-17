@@ -85,6 +85,8 @@ model LabelGeneration {
 
   status LabelStatus @default(GENERATED)
 
+  metadata Json?
+
   createdAt DateTime @default(now())
 }
 

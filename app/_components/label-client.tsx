@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import SelectOption from "./select-option";
 import LabelRefeicao from "../_label-models/refeicao";
+import LabelEvento from "../_label-models/evento";
 import ContentPrinter, { ContentPrinterRef } from "./content-printer";
 import CalendarComponent from "./calendar-component";
 import InputComponet from "./input";
@@ -38,15 +39,16 @@ declare module "next-auth" {
 type QueueItem = {
   id: string;
   labelModel: string;
-  labelModelId: string; // ID para o Prisma
+  labelModelId: string;
   mealType: string;
   sector: string;
-  sectorId: string; // ID para o Prisma
+  sectorId: string;
   dateRangeText: string;
   originalDate: Date;
   quantity: number;
   width: number;
   height: number;
+  metadata?: Record<string, string>;
 };
 
 type OptionLabelDetails = {
@@ -90,6 +92,13 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
   const [selectedLabel, setSelectedLabel] = useState("");
   const [selectSector, setSelectSector] = useState("");
   const [quantityNumber, setQuantityNumber] = useState("");
+
+  const [eventTitle, setEventTitle] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+  const [eventLocation, setEventLocation] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [eventTime, setEventTime] = useState("");
+
   const [printQueue, setPrintQueue] = useState<QueueItem[]>([]);
 
   const selectedModelConfig = dataLabel.find((m) => m.name === selectedLabel);
@@ -97,6 +106,12 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
 
   const printerRef = useRef<ContentPrinterRef>(null);
   const batchPrinterRef = useRef<ContentPrinterRef>(null);
+
+  useEffect(() => {
+    if (selectedLabel === "Evento" && !selectSector && dataSelect.length > 0) {
+      setSelectSector(dataSelect[0].name);
+    }
+  }, [selectedLabel, dataSelect, selectSector]);
 
   const mealTypeName =
     mealTypeOptions.find(
@@ -106,23 +121,40 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
   const renderLabelComponent = () => {
     if (!selectedSetorConfig || !dateRange?.from) return null;
 
-    const days = dateRange.to
+    const days = dateRange.to && selectedLabel !== "Evento"
       ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
       : [dateRange.from];
 
     return (
       <div className="flex flex-col gap-4">
-        {days.map((day) => (
-          <LabelRefeicao
-            key={day.toISOString()}
-            date={day}
-            mealType={mealTypeName}
-            dataSector={selectedSetorConfig ? [selectedSetorConfig] : []}
-            printQtd={Number(quantityNumber)}
-            width={selectedModelConfig!.widthMm}
-            height={selectedModelConfig!.heightMm}
-          />
-        ))}
+        {days.map((day) =>
+          selectedLabel === "Evento" ? (
+            <LabelEvento
+              key={day.toISOString()}
+              date={day}
+              mealType={mealTypeName}
+              dataSector={[selectedSetorConfig]}
+              printQtd={Number(quantityNumber)}
+              width={selectedModelConfig!.widthMm}
+              height={selectedModelConfig!.heightMm}
+              eventTitle={eventTitle}
+              eventDescription={eventDescription}
+              eventLocation={eventLocation}
+              eventDate={eventDate}
+              eventTime={eventTime}
+            />
+          ) : (
+            <LabelRefeicao
+              key={day.toISOString()}
+              date={day}
+              mealType={mealTypeName}
+              dataSector={[selectedSetorConfig]}
+              printQtd={Number(quantityNumber)}
+              width={selectedModelConfig!.widthMm}
+              height={selectedModelConfig!.heightMm}
+            />
+          )
+        )}
       </div>
     );
   };
@@ -154,6 +186,16 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       quantity: Number(quantityNumber),
       width: selectedModelConfig!.widthMm,
       height: selectedModelConfig!.heightMm,
+      metadata:
+        selectedLabel === "Evento"
+          ? {
+              eventTitle,
+              eventDescription,
+              eventLocation,
+              eventDate,
+              eventTime,
+            }
+          : undefined,
     }));
 
     setPrintQueue((prev) => [...prev, ...newItems]);
@@ -182,6 +224,16 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       labelModelId: String(selectedModelConfig.id),
       quantity: Number(quantityNumber),
       date: day,
+      metadata:
+        selectedLabel === "Evento"
+          ? {
+              eventTitle,
+              eventDescription,
+              eventLocation,
+              eventDate,
+              eventTime,
+            }
+          : undefined,
     }));
 
     await saveLabels(dataToSave);
@@ -204,6 +256,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       labelModelId: item.labelModelId,
       quantity: item.quantity,
       date: item.originalDate,
+      metadata: item.metadata,
     }));
 
     await saveLabels(dataToSave);
@@ -215,28 +268,74 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       {/* SEÇÃO DE INFORMAÇÕES */}
       <div className="bg-card h-fit p-4 rounded-2xl border-2 grid grid-cols-[auto_auto] gap-4">
         <div className="flex flex-col gap-4 w-62">
-          <div>
-            <h2 className="font-bold">Data</h2>
-            <CalendarComponent
-              selectedRange={dateRange}
-              onRangeChange={setDateRange}
-            />
-          </div>
+          {selectedLabel !== "Evento" && (
+            <div>
+              <h2 className="font-bold">Data</h2>
+              <CalendarComponent
+                selectedRange={dateRange}
+                onRangeChange={setDateRange}
+              />
+            </div>
+          )}
           <SelectOption
             title="Modelo da etiqueta"
             dataoption={dataLabel}
             onValueChange={setSelectedLabel}
           />
-          <SelectOption
-            title="Setor"
-            dataoption={dataSelect}
-            onValueChange={setSelectSector}
-          />
-          <SelectOption
-            title="Tipo"
-            dataoption={mealTypeOptions}
-            onValueChange={setSelectedMealType}
-          />
+          {selectedLabel === "Evento" && (
+            <div className="flex flex-col gap-3 p-3 border rounded-xl bg-accent/20">
+              <span className="text-xs font-bold text-chart-2 uppercase tracking-wider">Dados do Evento</span>
+              <InputComponet
+                id="event-title"
+                title="Título"
+                type="text"
+                placeholder="Ex: Arraiá dos Amigos"
+                onValueChange={setEventTitle}
+              />
+              <InputComponet
+                id="event-description"
+                title="Descrição"
+                type="text"
+                placeholder="Descrição opcional..."
+                onValueChange={setEventDescription}
+              />
+              <InputComponet
+                id="event-location"
+                title="Local"
+                type="text"
+                placeholder="Ex: AABB"
+                onValueChange={setEventLocation}
+              />
+              <InputComponet
+                id="event-date"
+                title="Data do Evento"
+                type="date"
+                placeholder="Selecione a data"
+                onValueChange={setEventDate}
+              />
+              <InputComponet
+                id="event-time"
+                title="Horário"
+                type="time"
+                placeholder="Selecione o horário"
+                onValueChange={setEventTime}
+              />
+            </div>
+          )}
+          {selectedLabel !== "Evento" && (
+            <SelectOption
+              title="Setor"
+              dataoption={dataSelect}
+              onValueChange={setSelectSector}
+            />
+          )}
+          {selectedLabel !== "Evento" && (
+            <SelectOption
+              title="Tipo"
+              dataoption={mealTypeOptions}
+              onValueChange={setSelectedMealType}
+            />
+          )}
           <InputComponet
             id="1"
             title="Quantidade"
@@ -370,17 +469,36 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
           alturaLabelProps="auto"
         >
           <div className="flex flex-col gap-0">
-            {printQueue.map((item) => (
-              <LabelRefeicao
-                key={item.id}
-                date={item.originalDate}
-                mealType={item.mealType}
-                dataSector={dataSelect.filter((s) => s.name === item.sector)}
-                printQtd={item.quantity}
-                width={item.width}
-                height={item.height}
-              />
-            ))}
+            {printQueue.map((item) => {
+              const BatchComponent =
+                item.labelModel === "Evento" ? LabelEvento : LabelRefeicao;
+              return item.labelModel === "Evento" ? (
+                <LabelEvento
+                  key={item.id}
+                  date={item.originalDate}
+                  mealType={item.mealType}
+                  dataSector={dataSelect.filter((s) => s.name === item.sector)}
+                  printQtd={item.quantity}
+                  width={item.width}
+                  height={item.height}
+                  eventTitle={item.metadata?.eventTitle}
+                  eventDescription={item.metadata?.eventDescription}
+                  eventLocation={item.metadata?.eventLocation}
+                  eventDate={item.metadata?.eventDate}
+                  eventTime={item.metadata?.eventTime}
+                />
+              ) : (
+                <LabelRefeicao
+                  key={item.id}
+                  date={item.originalDate}
+                  mealType={item.mealType}
+                  dataSector={dataSelect.filter((s) => s.name === item.sector)}
+                  printQtd={item.quantity}
+                  width={item.width}
+                  height={item.height}
+                />
+              );
+            })}
           </div>
         </ContentPrinter>
       </div>

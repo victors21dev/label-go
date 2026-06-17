@@ -12,6 +12,7 @@ export async function saveLabels(data: any[]) {
       date: item.date,
       justification: "",
       status: "GENERATED",
+      metadata: item.metadata ?? undefined,
     })),
   });
 }
