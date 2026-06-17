@@ -148,12 +148,12 @@ export const historyTableColumns: ColumnDef<any>[] = [
       const router = useRouter();
 
       const handleDelete = async () => {
-        try {
-          await deleteHistory(label.id);
+        const result = await deleteHistory(label.id);
+        if (result.success) {
           toast.success("Histórico removido!");
           router.refresh();
-        } catch (error) {
-          toast.error("Erro ao deletar.");
+        } else {
+          toast.error(result.error || "Erro ao deletar.");
         }
       };
 
