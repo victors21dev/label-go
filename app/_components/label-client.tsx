@@ -95,8 +95,8 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
 
   const [eventTitle, setEventTitle] = useState("");
   const [eventDescription, setEventDescription] = useState("");
-  const [eventLocation, setEventLocation] = useState("");
-  const [eventDate, setEventDate] = useState("");
+  const [eventLocation, setEventLocation] = useState("AABB");
+  const [eventDate, setEventDate] = useState("2026-06-19");
   const [eventTime, setEventTime] = useState("");
 
   const [printQueue, setPrintQueue] = useState<QueueItem[]>([]);
@@ -306,20 +306,26 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
                 placeholder="Ex: AABB"
                 onValueChange={setEventLocation}
               />
-              <InputComponet
-                id="event-date"
-                title="Data do Evento"
-                type="date"
-                placeholder="Selecione a data"
-                onValueChange={setEventDate}
-              />
-              <InputComponet
-                id="event-time"
-                title="Horário"
-                type="time"
-                placeholder="Selecione o horário"
-                onValueChange={setEventTime}
-              />
+              <div className="flex flex-row gap-2">
+                <div className="flex-1">
+                  <InputComponet
+                    id="event-date"
+                    title="Data do Evento"
+                    type="date"
+                    placeholder="Selecione a data"
+                    onValueChange={setEventDate}
+                  />
+                </div>
+                <div className="flex-1">
+                  <InputComponet
+                    id="event-time"
+                    title="Horário"
+                    type="time"
+                    placeholder="Horário"
+                    onValueChange={setEventTime}
+                  />
+                </div>
+              </div>
             </div>
           )}
           {selectedLabel !== "Evento" && (
