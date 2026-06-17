@@ -11,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/_components/ui/dropdown-menu";
-import { ReactNode } from "react";
 import { ConfirmDialog } from "./confirmDialog";
 import { SheetComponent } from "./sheet";
 
@@ -40,54 +39,54 @@ export function DataTableRowActions<TData extends WithId>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
+        <Button variant="ghost" size="icon-sm" className="hover:bg-accent">
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="min-w-44">
         <DropdownMenuItem
           onClick={() => navigator.clipboard.writeText(element.id)}
+          className="cursor-pointer"
         >
-          <Copy className="mr-2 h-4 w-4" />
-          Copiar chave
+          <Copy className="mr-3 h-4 w-4 text-muted-foreground" />
+          <span>Copiar chave</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
-        <div className="flex flex-col gap-2">
-          {editOn && (
-            <SheetComponent
-              dataTable={row}
-              openButton={
-                <DropdownMenuItem
-                  onSelect={(e) => e.preventDefault()}
-                  className="cursor-pointer"
-                >
-                  <Edit className="mr-2 h-4 w-4" />
-                  <span>Editar</span>
-                </DropdownMenuItem>
+
+        {editOn && (
+          <SheetComponent
+            dataTable={row}
+            openButton={
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                className="cursor-pointer"
+              >
+                <Edit className="mr-3 h-4 w-4 text-muted-foreground" />
+                <span>Editar</span>
+              </DropdownMenuItem>
+            }
+          />
+        )}
+
+        {deleteOptions && (
+          <DropdownMenuItem
+            onSelect={(e) => e.preventDefault()}
+            className="p-0 focus:bg-transparent"
+          >
+            <ConfirmDialog
+              title={deleteOptions.title}
+              description={deleteOptions.description}
+              onConfirm={deleteOptions.onConfirm}
+              trigger={
+                <div className="flex w-full items-center gap-3 px-2 py-1.5 text-destructive cursor-pointer rounded-sm hover:bg-destructive/10 transition-colors">
+                  <Trash2 className="h-4 w-4" />
+                  <span>Excluir</span>
+                </div>
               }
             />
-          )}
-
-          {deleteOptions && (
-            <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
-              className="p-0"
-            >
-              <ConfirmDialog
-                title={deleteOptions.title}
-                description={deleteOptions.description}
-                onConfirm={deleteOptions.onConfirm}
-                trigger={
-                  <div className="flex px-2 gap-2 py-2 text-destructive">
-                    <Trash2 className="mr-2 h-4 w-4 text-destructive" />
-                    <span>Excluir</span>
-                  </div>
-                }
-              />
-            </DropdownMenuItem>
-          )}
-        </div>
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

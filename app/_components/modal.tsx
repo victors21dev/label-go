@@ -3,7 +3,7 @@
 import { useState, ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "./ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 type ModalProps = {
   title: ReactNode;
@@ -25,12 +25,14 @@ const Modal = ({ title, children }: ModalProps) => {
 
   return (
     <>
-      <Button
-        className="bg-chart-2 hover:bg-chart-3 cursor-pointer"
-        onClick={() => setShowModal(true)}
-      >
-        {title}
-      </Button>
+      <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+        <Button
+          className="bg-chart-2 hover:bg-chart-3 cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+          onClick={() => setShowModal(true)}
+        >
+          {title}
+        </Button>
+      </motion.div>
 
       {showModal &&
         createPortal(

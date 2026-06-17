@@ -19,11 +19,11 @@ const Sector = async () => {
 
       <div className="flex w-full justify-end">
         <InitForm
-          title="Adicionar configuração"
+          title="Adicionar setor"
           title_button={
             <>
               <Plus />
-              Novo modelo de configuração
+              Adicionar setor
             </>
           }
         >

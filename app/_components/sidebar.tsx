@@ -10,6 +10,7 @@ import {
   Table,
   Ticket,
   History,
+  FileText,
   UserIcon,
   ChevronLeft,
   ChevronRight,
@@ -40,12 +41,14 @@ const Sidebar = () => {
       )}
     >
       {/* BOTÃO DE TOGGLE */}
-      <button
+      <motion.button
         onClick={() => setIsCollapsed(!isCollapsed)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
         className="absolute -right-3 top-12 z-50 flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-accent transition-colors"
       >
         {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-      </button>
+      </motion.button>
 
       <div className="flex flex-col w-full h-full overflow-hidden">
         {/* HEADER: LOGO E MODE TOGGLE */}
@@ -97,6 +100,13 @@ const Sidebar = () => {
             <Ticket size={ICON_SIZE} />
             {!isCollapsed && (
               <span className="ml-3 font-medium">Etiquetas</span>
+            )}
+          </SidebarButton>
+
+          <SidebarButton href="/reports">
+            <FileText size={ICON_SIZE} />
+            {!isCollapsed && (
+              <span className="ml-3 font-medium">Relatórios</span>
             )}
           </SidebarButton>
 

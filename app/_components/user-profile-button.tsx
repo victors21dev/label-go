@@ -14,20 +14,35 @@ import { Button } from "@/app/_components/ui/button";
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/app/_components/ui/avatar";
-import { LogOut, User, Settings } from "lucide-react";
+import { Badge } from "@/app/_components/ui/badge";
+import {
+  LogOut,
+  User,
+  Settings,
+  Shield,
+  Mail,
+} from "lucide-react";
+
+const roleLabel: Record<string, string> = {
+  ADMIN: "Administrador",
+  USER: "Usuário",
+};
+
+const statusVariant: Record<string, "default" | "destructive" | "secondary" | "outline"> = {
+  AUTHORIZED: "default",
+  UNAUTHORIZED: "destructive",
+};
 
 export function UserNav() {
   const { data: session } = useSession();
 
-  // Se não houver sessão, não renderiza nada ou um esqueleto
   if (!session?.user) return null;
 
-  // Pega as iniciais do nome para o fallback do avatar
-  const initials = session.user.name
+  const user = session.user as any;
+  const initials = user.name
     ?.split(" ")
-    .map((n) => n[0])
+    .map((n: string) => n[0])
     .join("")
     .toUpperCase()
     .slice(0, 2);
@@ -35,48 +50,79 @@ export function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+        <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:ring-2 hover:ring-ring/30 transition-all">
           <Avatar className="h-10 w-10 border">
-            <AvatarImage
-              src={session.user.image ?? ""}
-              alt={session.user.name ?? ""}
-            />
-            <AvatarFallback className="bg-primary text-primary-foreground">
+            <AvatarFallback className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground font-semibold">
               {initials}
             </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {session.user.name}
-            </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {session.user.email}
-            </p>
+      <DropdownMenuContent className="w-64" align="end" forceMount>
+        {/* Header */}
+        <DropdownMenuLabel className="p-0">
+          <div className="flex items-center gap-3 px-3 py-3">
+            <Avatar className="h-11 w-11 border-2 border-border">
+              <AvatarFallback className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground font-semibold text-sm">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col gap-1 flex-1 min-w-0">
+              <p className="text-sm font-semibold leading-none truncate">
+                {user.name}
+              </p>
+              <div className="flex items-center gap-1.5">
+                <Mail className="h-3 w-3 text-muted-foreground shrink-0" />
+                <p className="text-xs text-muted-foreground truncate">
+                  {user.email}
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <Badge
+                  variant={statusVariant[user.status] || "secondary"}
+                  className="h-5 text-[10px] px-1.5 gap-1"
+                >
+                  <Shield className="h-2.5 w-2.5" />
+                  {roleLabel[user.role] || user.role}
+                </Badge>
+              </div>
+            </div>
           </div>
         </DropdownMenuLabel>
-        {/* <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
-            <User className="mr-2 h-4 w-4" />
-            <span>Perfil</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Configurações</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup> */}
+
         <DropdownMenuSeparator />
+
+        {/* Menu items */}
+        <DropdownMenuGroup>
+          <DropdownMenuItem className="cursor-pointer gap-3 py-2">
+            <User className="h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-col">
+              <span className="text-sm">Meu Perfil</span>
+              <span className="text-xs text-muted-foreground">Ver informações da conta</span>
+            </div>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer gap-3 py-2">
+            <Settings className="h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-col">
+              <span className="text-sm">Configurações</span>
+              <span className="text-xs text-muted-foreground">Preferências do sistema</span>
+            </div>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+
+        <DropdownMenuSeparator />
+
+        {/* Logout */}
         <DropdownMenuItem
-          className="cursor-pointer text-red-600 focus:text-red-600"
+          className="cursor-pointer gap-3 py-2 text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950/30"
           onClick={() => signOut({ callbackUrl: "/login" })}
         >
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Sair</span>
+          <LogOut className="h-4 w-4" />
+          <div className="flex flex-col">
+            <span className="text-sm">Sair</span>
+            <span className="text-xs text-red-500/70">Encerrar sessão atual</span>
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

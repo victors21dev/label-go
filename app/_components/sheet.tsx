@@ -3,13 +3,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Row } from "@tanstack/react-table";
 import { toast } from "sonner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/app/_components/ui/select";
+import { SearchableSelect } from "@/app/_components/ui/searchable-select";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -105,49 +99,38 @@ export function SheetComponent({
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
                     <Label>Permissão</Label>
-                    <Select name="role" defaultValue={data.role}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="USER">Usuário</SelectItem>
-                        <SelectItem value="ADMIN">Administrador</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <SearchableSelect
+                      name="role"
+                      defaultValue={data.role}
+                      options={[
+                        { value: "USER", label: "Usuário" },
+                        { value: "ADMIN", label: "Administrador" },
+                      ]}
+                    />
                   </div>
                   <div className="grid gap-2">
                     <Label>Status</Label>
-                    <Select name="status" defaultValue={data.status}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="AUTHORIZED">Autorizado</SelectItem>
-                        <SelectItem value="UNAUTHORIZED">
-                          Não Autorizado
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <SearchableSelect
+                      name="status"
+                      defaultValue={data.status}
+                      options={[
+                        { value: "AUTHORIZED", label: "Autorizado" },
+                        { value: "UNAUTHORIZED", label: "Não Autorizado" },
+                      ]}
+                    />
                   </div>
                 </div>
                 <div className="grid gap-2">
                   <Label>Setor</Label>
-                  <Select
+                  <SearchableSelect
                     name="sectorId"
                     defaultValue={data.sectorId || "none"}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um setor" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">Nenhum Setor</SelectItem>
-                      {sectors.map((s) => (
-                        <SelectItem key={s.id} value={s.id}>
-                          {s.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder="Selecione um setor"
+                    options={[
+                      { value: "none", label: "Nenhum Setor" },
+                      ...sectors.map((s) => ({ value: s.id, label: s.name })),
+                    ]}
+                  />
                 </div>
               </>
             )}

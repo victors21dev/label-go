@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { motion } from "motion/react";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { Button } from "@/app/_components/ui/button";
@@ -53,9 +54,13 @@ export default function LoginPage() {
   }
 
   return (
-    // Ajustado de w-85 para w-full e adicionado min-h-screen para centralizar
-    <div className="flex min-h-screen w-full items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="flex min-h-screen w-full items-center justify-center p-4"
+    >
+      <Card className="w-full max-w-sm shadow-lg">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-between">
             <CardTitle className="text-2xl">Login</CardTitle>
@@ -71,7 +76,6 @@ export default function LoginPage() {
         </CardHeader>
 
         <CardContent>
-          {/* Usando onSubmit para melhor controle com useTransition no Client Side */}
           <form onSubmit={handleFormSubmit}>
             <div className="grid gap-4">
               <div className="grid gap-2">
@@ -97,13 +101,15 @@ export default function LoginPage() {
                   disabled={isPending}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isPending}>
-                {isPending ? "Autenticando..." : "Entrar"}
-              </Button>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Button type="submit" className="w-full" disabled={isPending}>
+                  {isPending ? "Autenticando..." : "Entrar"}
+                </Button>
+              </motion.div>
             </div>
           </form>
         </CardContent>
       </Card>
-    </div>
+    </motion.div>
   );
 }

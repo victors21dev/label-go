@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "./ui/button";
+import { motion } from "motion/react";
 
 import * as React from "react";
 import {
@@ -29,8 +30,6 @@ import { Input } from "./ui/input";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  // Adicionamos uma prop opcional para definir qual coluna filtrar
-  // Se não for passada, tentamos pegar a primeira
   filterColumnId?: string;
 }
 
@@ -59,20 +58,19 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  /**
-   * LÓGICA DE FILTRO CORRIGIDA:
-   * Priorizamos a prop filterColumnId.
-   * Caso não exista, tentamos pegar o 'id' ou o 'accessorKey' da primeira coluna.
-   */
   const firstColumn = columns[0] as any;
   const targetColumnId =
     filterColumnId || firstColumn.id || firstColumn.accessorKey;
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="flex items-center py-4">
         <Input
-          placeholder={`Filtrar...`}
+          placeholder="Filtrar..."
           value={
             (table.getColumn(targetColumnId)?.getFilterValue() as string) ?? ""
           }
@@ -82,7 +80,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <div className="overflow-hidden rounded-md border">
+      <div className="overflow-hidden rounded-xl border shadow-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -102,9 +100,13 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
+              table.getRowModel().rows.map((row, idx) => (
+                <motion.tr
                   key={row.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.03, duration: 0.2 }}
+                  className="group border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -115,7 +117,7 @@ export function DataTable<TData, TValue>({
                       )}
                     </TableCell>
                   ))}
-                </TableRow>
+                </motion.tr>
               ))
             ) : (
               <TableRow>
@@ -130,26 +132,36 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Anterior
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Próximo
-          <ChevronRight className="h-4 w-4 ml-2" />
-        </Button>
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <p className="text-sm text-muted-foreground">
+          Página {table.getState().pagination.pageIndex + 1} de{" "}
+          {table.getPageCount()}
+        </p>
+        <div className="flex gap-2">
+          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Anterior
+            </Button>
+          </motion.div>
+          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Próximo
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

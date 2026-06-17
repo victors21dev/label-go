@@ -1,7 +1,5 @@
-import { DataTable } from "@/app/_components/data-table";
-import TitleToPage from "@/app/_components/title-page";
 import { db } from "@/app/_lib/prisma";
-import { historyTableColumns } from "./_components/table-columns";
+import HistoryClient from "@/app/_components/history-client";
 
 const History = async () => {
   const dataSector = await db.labelGeneration.findMany({
@@ -12,19 +10,12 @@ const History = async () => {
       printer: true,
     },
     orderBy: { createdAt: "desc" },
+    take: 50,
   });
 
   return (
-    <main className="flex flex-col gap-8">
-      <div>
-        <TitleToPage
-          title="Histórico"
-          description="O histórico de todas suas etiquetas geradas"
-        />
-      </div>
-      <div>
-        <DataTable columns={historyTableColumns} data={dataSector} />
-      </div>
+    <main>
+      <HistoryClient initialData={dataSector} />
     </main>
   );
 };

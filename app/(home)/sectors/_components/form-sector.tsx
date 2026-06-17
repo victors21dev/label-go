@@ -3,11 +3,14 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sectorSchema } from "@/app/_schema/schemas";
+import { motion } from "motion/react";
 import { Button } from "@/app/_components/ui/button";
+import { Input } from "@/app/_components/ui/input";
+import { Label } from "@/app/_components/ui/label";
 import { createGenericAction } from "@/app/_components/actions";
 import { z } from "zod";
+import { toast } from "sonner";
 
-// Criamos um tipo específico para este formulário de impressora
 type PrinterFormData = z.infer<typeof sectorSchema>;
 
 const Form = () => {
@@ -23,10 +26,10 @@ const Form = () => {
   const onSubmit: SubmitHandler<PrinterFormData> = async (data) => {
     const result = await createGenericAction(data, "sector");
     if (result.success) {
-      alert("Setor salvo com sucesso!");
+      toast.success("Setor salvo com sucesso!");
       reset();
     } else {
-      alert("Erro: " + result.error);
+      toast.error("Erro: " + result.error);
     }
   };
 
@@ -34,40 +37,33 @@ const Form = () => {
     <form
       autoComplete="off"
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-5"
     >
-      {/* Campo setor */}
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">Nome setor</label>
-        <input
-          placeholder="Ex: TI"
-          {...register("name")}
-          className="border p-2 rounded-md bg-muted text-foreground"
-        />
+      <div className="grid gap-2">
+        <Label htmlFor="name">Nome do setor</Label>
+        <Input id="name" placeholder="Ex: TI" {...register("name")} />
         {errors.name && (
-          <span className="text-destructive text-xs">
-            {errors.name.message}
-          </span>
-        )}
-      </div>
-      {/* Campo coordenador */}
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">Coordenador</label>
-        <input
-          placeholder="Ex: Lira"
-          {...register("coordinatorName")}
-          className="border p-2 rounded-md bg-muted text-foreground"
-        />
-        {errors.coordinatorName && (
-          <span className="text-destructive text-xs">
-            {errors.coordinatorName.message}
-          </span>
+          <span className="text-destructive text-xs">{errors.name.message}</span>
         )}
       </div>
 
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Salvando..." : "Salvar setor"}
-      </Button>
+      <div className="grid gap-2">
+        <Label htmlFor="coordinatorName">Coordenador(a)</Label>
+        <Input
+          id="coordinatorName"
+          placeholder="Ex: Lira"
+          {...register("coordinatorName")}
+        />
+        {errors.coordinatorName && (
+          <span className="text-destructive text-xs">{errors.coordinatorName.message}</span>
+        )}
+      </div>
+
+      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <Button type="submit" disabled={isSubmitting} className="w-full">
+          {isSubmitting ? "Salvando..." : "Salvar setor"}
+        </Button>
+      </motion.div>
     </form>
   );
 };

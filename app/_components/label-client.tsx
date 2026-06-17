@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { motion, AnimatePresence } from "motion/react";
 import SelectOption from "./select-option";
 import LabelRefeicao from "../_label-models/refeicao";
 import LabelEvento from "../_label-models/evento";
@@ -210,10 +211,8 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
     if (!selectedSetorConfig || !selectedModelConfig || !dateRange?.from)
       return;
 
-    // 1. Imprime o visualizador
     printerRef.current?.print();
 
-    // 2. Salva no banco (mapeia os dias visíveis no momento)
     const days = dateRange.to
       ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
       : [dateRange.from];
@@ -246,10 +245,8 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       );
     if (printQueue.length === 0) return;
 
-    // 1. Imprime a fila
     batchPrinterRef.current?.print();
 
-    // 2. Salva a fila inteira no banco
     const dataToSave = printQueue.map((item) => ({
       userId: session.user.id,
       sectorId: item.sectorId,
@@ -260,7 +257,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
     }));
 
     await saveLabels(dataToSave);
-    setPrintQueue([]); // Limpa a fila após salvar e imprimir
+    setPrintQueue([]);
   };
 
   return (
@@ -269,13 +266,17 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       <div className="bg-card h-fit p-4 rounded-2xl border-2 grid grid-cols-[auto_auto] gap-4">
         <div className="flex flex-col gap-4 w-62">
           {selectedLabel !== "Evento" && (
-            <div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+            >
               <h2 className="font-bold">Data</h2>
               <CalendarComponent
                 selectedRange={dateRange}
                 onRangeChange={setDateRange}
               />
-            </div>
+            </motion.div>
           )}
           <SelectOption
             title="Modelo da etiqueta"
@@ -283,7 +284,13 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
             onValueChange={setSelectedLabel}
           />
           {selectedLabel === "Evento" && (
-            <div className="flex flex-col gap-3 p-3 border rounded-xl bg-accent/20">
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="flex flex-col gap-3 p-3 border rounded-xl bg-accent/20 overflow-hidden"
+            >
               <span className="text-xs font-bold text-chart-2 uppercase tracking-wider">Dados do Evento</span>
               <InputComponet
                 id="event-title"
@@ -320,21 +327,33 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
                 placeholder="Horário"
                 onValueChange={setEventTime}
               />
-            </div>
+            </motion.div>
           )}
           {selectedLabel !== "Evento" && (
-            <SelectOption
-              title="Setor"
-              dataoption={dataSelect}
-              onValueChange={setSelectSector}
-            />
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2, delay: 0.05 }}
+            >
+              <SelectOption
+                title="Setor"
+                dataoption={dataSelect}
+                onValueChange={setSelectSector}
+              />
+            </motion.div>
           )}
           {selectedLabel !== "Evento" && (
-            <SelectOption
-              title="Tipo"
-              dataoption={mealTypeOptions}
-              onValueChange={setSelectedMealType}
-            />
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2, delay: 0.1 }}
+            >
+              <SelectOption
+                title="Tipo"
+                dataoption={mealTypeOptions}
+                onValueChange={setSelectedMealType}
+              />
+            </motion.div>
           )}
           <InputComponet
             id="1"
@@ -356,33 +375,49 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       {/* SEÇÃO VISUALIZADOR */}
       <div className="flex gap-4 min-w-83.25 h-140 justify-between p-4 border-2 rounded-2xl overflow-hidden">
         <div className="flex flex-col gap-4 flex-1">
-          <div className="flex-1 overflow-y-auto w-full">
-            <div className="flex flex-col gap-4">
+          <div className="flex-1 overflow-y-auto w-full scrollbar-thin">
+            <AnimatePresence mode="wait">
               {selectedLabel && selectedSetorConfig && selectedModelConfig ? (
-                <ContentPrinter
-                  ref={printerRef}
-                  larguraLabelProps={String(selectedModelConfig.widthMm)}
-                  alturaLabelProps={String(selectedModelConfig.heightMm)}
+                <motion.div
+                  key={`${selectedLabel}-${selectSector}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <div>{renderLabelComponent()}</div>
-                </ContentPrinter>
+                  <ContentPrinter
+                    ref={printerRef}
+                    larguraLabelProps={String(selectedModelConfig.widthMm)}
+                    alturaLabelProps={String(selectedModelConfig.heightMm)}
+                  >
+                    <div>{renderLabelComponent()}</div>
+                  </ContentPrinter>
+                </motion.div>
               ) : (
-                <p className="text-sm text-gray-500 text-center mt-10">
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-sm text-muted-foreground text-center mt-10"
+                >
                   Selecione os dados para <br /> visualizar a etiqueta.
-                </p>
+                </motion.p>
               )}
-            </div>
+            </AnimatePresence>
           </div>
           <div className="flex gap-2 justify-center">
-            <Button
-              className="bg-chart-4 text-foreground"
-              onClick={handleExternalPrint}
-            >
-              <PrinterCheck className="mr-2" size={18} /> Gerar
-            </Button>
-            <Button className="bg-chart-2" onClick={addToQueue}>
-              <ListOrdered size={18} className="mr-2" /> Fila
-            </Button>
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <Button
+                className="bg-chart-4 text-foreground shadow-sm hover:shadow-md transition-shadow"
+                onClick={handleExternalPrint}
+              >
+                <PrinterCheck className="mr-2" size={18} /> Gerar
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <Button className="bg-chart-2 shadow-sm hover:shadow-md transition-shadow" onClick={addToQueue}>
+                <ListOrdered size={18} className="mr-2" /> Fila
+              </Button>
+            </motion.div>
           </div>
         </div>
         <div className="flex w-8 h-full bg-chart-2 items-center justify-center overflow-hidden shrink-0 rounded-lg">
@@ -401,18 +436,24 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
             Fila ({printQueue.length})
           </h2>
           {printQueue.length > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setPrintQueue([])}
-              className="text-destructive h-8 px-2"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
             >
-              Limpar
-            </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setPrintQueue([])}
+                className="text-destructive h-8 px-2"
+              >
+                Limpar
+              </Button>
+            </motion.div>
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-3 pr-1 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-3 pr-1 scrollbar-thin">
           {printQueue.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-muted-foreground text-sm text-center opacity-40">
               <Plus size={40} className="mb-2" />
@@ -421,11 +462,16 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
               </p>
             </div>
           ) : (
-            printQueue.map((item) => (
-              <div
-                key={item.id}
-                className="group relative p-3 border rounded-xl bg-accent/30 hover:bg-accent transition-colors border-l-4 border-l-chart-2 w-full box-border"
-              >
+            <AnimatePresence initial={false}>
+              {printQueue.map((item) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, x: 50, height: 0 }}
+                  animate={{ opacity: 1, x: 0, height: "auto" }}
+                  exit={{ opacity: 0, x: 50, height: 0 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  className="group relative p-3 border rounded-xl bg-accent/30 hover:bg-accent transition-colors border-l-4 border-l-chart-2 w-full box-border overflow-hidden"
+                >
                 <button
                   onClick={() => removeFromQueue(item.id)}
                   className="absolute right-2 top-2 bg-destructive text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-md z-10"
@@ -444,12 +490,17 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
                     {item.quantity} un
                   </span>
                 </div>
-              </div>
-            ))
-          )}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
         </div>
 
-        <div className="mt-4 pt-4 border-t">
+        <motion.div
+          className="mt-4 pt-4 border-t"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
           <Button
             className="w-full bg-chart-4 text-foreground font-bold shadow-lg disabled:opacity-50"
             disabled={printQueue.length === 0}
@@ -458,7 +509,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
             <Printer size={18} className="mr-2" />
             Imprimir Fila
           </Button>
-        </div>
+        </motion.div>
       </div>
 
       {/* IMPRESSOR DE LOTE OCULTO */}

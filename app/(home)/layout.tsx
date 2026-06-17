@@ -7,7 +7,7 @@ export default async function MainLayout({
   return (
     <div className="flex h-screen w-full overflow-hidden">
       <Sidebar />
-      <main className="bg-card flex-1 p-4 overflow-y-auto rounded-lg">
+      <main className="bg-card flex-1 p-4 overflow-y-auto rounded-lg animate-fade-in-up">
         {children}
       </main>
     </div>

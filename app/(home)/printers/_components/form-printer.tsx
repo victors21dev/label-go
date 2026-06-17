@@ -3,12 +3,14 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { printerSchema } from "@/app/_schema/schemas";
+import { motion } from "motion/react";
 import { Button } from "@/app/_components/ui/button";
+import { Input } from "@/app/_components/ui/input";
+import { Label } from "@/app/_components/ui/label";
 import { createGenericAction } from "@/app/_components/actions";
 import { z } from "zod";
 import { toast } from "sonner";
 
-// Criamos um tipo específico para este formulário de impressora
 type PrinterFormData = z.infer<typeof printerSchema>;
 
 const Form = () => {
@@ -35,41 +37,29 @@ const Form = () => {
     <form
       autoComplete="off"
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-5"
     >
-      {/* Campo Nome */}
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">Marca</label>
-        <input
-          placeholder="Ex: Epson"
-          {...register("brand")}
-          className="border p-2 rounded-md bg-muted text-foreground"
-        />
+      <div className="grid gap-2">
+        <Label htmlFor="brand">Marca</Label>
+        <Input id="brand" placeholder="Ex: Epson" {...register("brand")} />
         {errors.brand && (
-          <span className="text-destructive text-xs">
-            {errors.brand.message}
-          </span>
+          <span className="text-destructive text-xs">{errors.brand.message}</span>
         )}
       </div>
 
-      {/* Campo Modelo */}
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">Modelo</label>
-        <input
-          placeholder="Ex: L5290"
-          {...register("model")}
-          className="border p-2 rounded-md bg-muted text-foreground"
-        />
+      <div className="grid gap-2">
+        <Label htmlFor="model">Modelo</Label>
+        <Input id="model" placeholder="Ex: L5290" {...register("model")} />
         {errors.model && (
-          <span className="text-destructive text-xs">
-            {errors.model.message}
-          </span>
+          <span className="text-destructive text-xs">{errors.model.message}</span>
         )}
       </div>
 
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Salvando..." : "Salvar impressora"}
-      </Button>
+      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <Button type="submit" disabled={isSubmitting} className="w-full">
+          {isSubmitting ? "Salvando..." : "Salvar impressora"}
+        </Button>
+      </motion.div>
     </form>
   );
 };

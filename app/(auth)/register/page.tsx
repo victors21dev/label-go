@@ -1,11 +1,10 @@
 "use client";
 
 import { registerAction } from "@/app/_actions/register";
-import { getSectors } from "@/app/_actions/get-sectors"; // Importar a nova action
+import { getSectors } from "@/app/_actions/get-sectors";
 import { Button } from "@/app/_components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -16,6 +15,7 @@ import { Input } from "@/app/_components/ui/input";
 import { Label } from "@/app/_components/ui/label";
 import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { toast } from "sonner";
 
 export default function RegisterPage() {
@@ -38,8 +38,13 @@ export default function RegisterPage() {
   }, [state]);
 
   return (
-    <div className="flex w-85 items-center justify-center py-10">
-      <Card className="w-full max-w-sm">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="flex w-85 items-center justify-center py-10"
+    >
+      <Card className="w-full max-w-sm shadow-lg">
         <CardHeader>
           <CardTitle>Registro</CardTitle>
           <CardDescription>
@@ -49,8 +54,6 @@ export default function RegisterPage() {
         <CardContent>
           <form action={formAction}>
             <div className="flex flex-col gap-4">
-              {/* ... campos de name, username, email e password iguais aos anteriores ... */}
-
               <div className="grid gap-2">
                 <Label htmlFor="name">Nome Completo</Label>
                 <Input
@@ -96,14 +99,13 @@ export default function RegisterPage() {
                 />
               </div>
 
-              {/* Novo Select de Setores */}
               <div className="grid gap-2">
                 <Label htmlFor="sectorId">Setor</Label>
                 <select
                   id="sectorId"
                   name="sectorId"
                   required
-                  autoComplete="off" // Agora é obrigatório
+                  autoComplete="off"
                   className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
                   <option value="">Selecione um setor</option>
@@ -115,13 +117,15 @@ export default function RegisterPage() {
                 </select>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full mt-2"
-                disabled={isPending}
-              >
-                {isPending ? "Criando conta..." : "Criar Conta"}
-              </Button>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Button
+                  type="submit"
+                  className="w-full mt-2"
+                  disabled={isPending}
+                >
+                  {isPending ? "Criando conta..." : "Criar Conta"}
+                </Button>
+              </motion.div>
             </div>
           </form>
         </CardContent>
@@ -133,6 +137,6 @@ export default function RegisterPage() {
           </Link>
         </CardFooter>
       </Card>
-    </div>
+    </motion.div>
   );
 }

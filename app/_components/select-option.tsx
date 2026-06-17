@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+import { SearchableSelect } from "./ui/searchable-select";
 
 type OptionDetails = {
   id: string | number;
@@ -28,20 +21,15 @@ const SelectOption = ({
   return (
     <div>
       <label className="font-bold">{title}</label>
-      <Select onValueChange={onValueChange}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Escolha a opção..." />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {dataoption.map((element) => (
-              <SelectItem key={element.id} value={element.name}>
-                {element.name}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <SearchableSelect
+        onValueChange={onValueChange}
+        placeholder="Escolha a opção..."
+        options={dataoption.map((element) => ({
+          value: element.name,
+          label: element.name,
+        }))}
+        className="w-full"
+      />
     </div>
   );
 };

@@ -19,10 +19,10 @@ const InputComponet = ({
 }: InputComponetProps) => {
   return (
     <div>
-      <label className="font-bold">{title}</label>
+      <label className="font-bold text-sm">{title}</label>
       <Input
         onChange={(e) => onValueChange(e.target.value)}
-        className="w-full"
+        className="w-full transition-all duration-200 focus-visible:ring-2 focus-visible:ring-chart-2/40"
         key={id}
         type={type}
         placeholder={placeholder}
