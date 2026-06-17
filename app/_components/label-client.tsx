@@ -17,8 +17,13 @@ import {
   Trash2,
   Printer,
   Plus,
+  CalendarDays,
+  Building2,
+  Tag,
+  Hash,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 import { eachDayOfInterval, format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { saveLabels } from "../_actions/labels";
@@ -167,7 +172,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
       !quantityNumber ||
       !dateRange?.from
     ) {
-      alert("Preencha todos os campos antes de adicionar à fila!");
+      toast.error("Preencha todos os campos antes de adicionar à fila!");
       return;
     }
 
@@ -207,7 +212,7 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
   };
 
   const handleExternalPrint = async () => {
-    if (!session?.user?.id) return alert("Usuário não autenticado.");
+    if (!session?.user?.id) return toast.error("Usuário não autenticado.");
     if (!selectedSetorConfig || !selectedModelConfig || !dateRange?.from)
       return;
 
@@ -257,125 +262,183 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
     }));
 
     await saveLabels(dataToSave);
+    toast.success("Fila impressa com sucesso!");
     setPrintQueue([]);
   };
 
   return (
-    <div className="flex gap-2">
-      {/* SEÇÃO DE INFORMAÇÕES */}
-      <div className="bg-card h-fit p-4 rounded-2xl border-2 grid grid-cols-[auto_auto] gap-4">
-        <div className="flex flex-col gap-4 w-62">
-          {selectedLabel !== "Evento" && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              <h2 className="font-bold">Data</h2>
-              <CalendarComponent
-                selectedRange={dateRange}
-                onRangeChange={setDateRange}
-              />
-            </motion.div>
-          )}
-          <SelectOption
-            title="Modelo da etiqueta"
-            dataoption={dataLabel}
-            onValueChange={setSelectedLabel}
-          />
-          {selectedLabel === "Evento" && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="flex flex-col gap-3 p-3 border rounded-xl bg-accent/20 overflow-hidden"
-            >
-              <span className="text-xs font-bold text-chart-2 uppercase tracking-wider">Dados do Evento</span>
-              <InputComponet
-                id="event-title"
-                title="Título"
-                type="text"
-                placeholder="Ex: Arraiá dos Amigos"
-                onValueChange={setEventTitle}
-              />
-              <InputComponet
-                id="event-description"
-                title="Descrição"
-                type="text"
-                placeholder="Descrição opcional..."
-                onValueChange={setEventDescription}
-              />
-              <InputComponet
-                id="event-location"
-                title="Local"
-                type="text"
-                placeholder="Ex: AABB"
-                onValueChange={setEventLocation}
-              />
-              <InputComponet
-                id="event-date"
-                title="Data do Evento"
-                type="date"
-                placeholder="Selecione a data"
-                onValueChange={setEventDate}
-              />
-              <InputComponet
-                id="event-time"
-                title="Horário"
-                type="time"
-                placeholder="Horário"
-                onValueChange={setEventTime}
-              />
-            </motion.div>
-          )}
-          {selectedLabel !== "Evento" && (
-            <motion.div
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.2, delay: 0.05 }}
-            >
-              <SelectOption
-                title="Setor"
-                dataoption={dataSelect}
-                onValueChange={setSelectSector}
-              />
-            </motion.div>
-          )}
-          {selectedLabel !== "Evento" && (
-            <motion.div
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.2, delay: 0.1 }}
-            >
-              <SelectOption
-                title="Tipo"
-                dataoption={mealTypeOptions}
-                onValueChange={setSelectedMealType}
-              />
-            </motion.div>
-          )}
-          <InputComponet
-            id="1"
-            title="Quantidade"
-            type="number"
-            placeholder="Digite a quantidade..."
-            onValueChange={setQuantityNumber}
-            min={1}
-          />
-        </div>
-        <div className="flex w-8 h-full bg-chart-1 items-center justify-center overflow-hidden rounded-lg">
-          <div className="rotate-180 [writing-mode:vertical-lr] flex items-center justify-center gap-2 font-bold text-white whitespace-nowrap text-xs">
-            <Info size={16} />
-            INFORMAÇÕES
+    <div className="flex flex-col gap-6">
+      {/* TOP ROW: INFO + VISUALIZER */}
+      <div className="grid lg:grid-cols-[1fr_auto] gap-6">
+        {/* INFORMAÇÕES */}
+        <div className="bg-card border rounded-xl p-5 min-w-0">
+          <div className="flex items-center gap-3 pb-3 border-b mb-4">
+            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <Info className="h-4 w-4" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-sm">Informações da Etiqueta</h3>
+              <p className="text-xs text-muted-foreground">
+                Preencha os dados para gerar
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-5 overflow-hidden">
+            {/* DATA - lado esquerdo */}
+            {selectedLabel !== "Evento" && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+                className="shrink-0"
+              >
+                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+                  <CalendarDays className="h-3.5 w-3.5 inline mr-1" />
+                  Período
+                </label>
+                <CalendarComponent
+                  selectedRange={dateRange}
+                  onRangeChange={setDateRange}
+                />
+              </motion.div>
+            )}
+
+            {/* FORMULÁRIO - lado direito */}
+            <div className="flex-1 min-w-0 space-y-4">
+              <div>
+                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+                  <Tag className="h-3.5 w-3.5 inline mr-1" />
+                  Modelo da etiqueta
+                </label>
+                <SelectOption
+                  title=""
+                  dataoption={dataLabel}
+                  onValueChange={setSelectedLabel}
+                />
+              </div>
+
+              {selectedLabel === "Evento" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="border rounded-lg p-3 bg-accent/10 space-y-2.5"
+                >
+                  <span className="text-xs font-semibold text-chart-2 uppercase tracking-wider flex items-center gap-1.5">
+                    <TicketPlus className="h-3.5 w-3.5" />
+                    Dados do Evento
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <InputComponet
+                      id="event-title"
+                      title="Título"
+                      type="text"
+                      placeholder="Ex: Arraiá dos Amigos"
+                      onValueChange={setEventTitle}
+                    />
+                    <InputComponet
+                      id="event-description"
+                      title="Descrição"
+                      type="text"
+                      placeholder="Descrição opcional..."
+                      onValueChange={setEventDescription}
+                    />
+                    <InputComponet
+                      id="event-location"
+                      title="Local"
+                      type="text"
+                      placeholder="Ex: AABB"
+                      onValueChange={setEventLocation}
+                    />
+                    <InputComponet
+                      id="event-date"
+                      title="Data do Evento"
+                      type="date"
+                      placeholder="Selecione a data"
+                      onValueChange={setEventDate}
+                    />
+                    <InputComponet
+                      id="event-time"
+                      title="Horário"
+                      type="time"
+                      placeholder="Horário"
+                      onValueChange={setEventTime}
+                    />
+                  </div>
+                </motion.div>
+              )}
+
+              {selectedLabel !== "Evento" && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2, delay: 0.05 }}
+                >
+                  <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+                    <Building2 className="h-3.5 w-3.5 inline mr-1" />
+                    Setor
+                  </label>
+                  <SelectOption
+                    title=""
+                    dataoption={dataSelect}
+                    onValueChange={setSelectSector}
+                  />
+                </motion.div>
+              )}
+
+              {selectedLabel !== "Evento" && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2, delay: 0.1 }}
+                >
+                  <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+                    <ListOrdered className="h-3.5 w-3.5 inline mr-1" />
+                    Tipo
+                  </label>
+                  <SelectOption
+                    title=""
+                    dataoption={mealTypeOptions}
+                    onValueChange={setSelectedMealType}
+                  />
+                </motion.div>
+              )}
+
+              <div>
+                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+                  <Hash className="h-3.5 w-3.5 inline mr-1" />
+                  Quantidade
+                </label>
+                <InputComponet
+                  id="1"
+                  title=""
+                  type="number"
+                  placeholder="Digite a quantidade..."
+                  onValueChange={setQuantityNumber}
+                  min={1}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* SEÇÃO VISUALIZADOR */}
-      <div className="flex gap-4 min-w-83.25 h-140 justify-between p-4 border-2 rounded-2xl overflow-hidden">
-        <div className="flex flex-col gap-4 flex-1">
-          <div className="flex-1 overflow-y-auto w-full scrollbar-thin">
+        {/* VISUALIZADOR */}
+        <div className="bg-card border rounded-xl p-5 flex flex-col min-h-[400px] max-h-[600px]">
+          <div className="flex items-center gap-3 pb-3 border-b mb-4">
+            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <TicketPlus className="h-4 w-4" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-sm">Visualizador</h3>
+              <p className="text-xs text-muted-foreground">
+                Pré-visualização da etiqueta
+              </p>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto scrollbar-thin min-h-[200px] max-h-[500px] flex flex-col">
             <AnimatePresence mode="wait">
               {selectedLabel && selectedSetorConfig && selectedModelConfig ? (
                 <motion.div
@@ -394,122 +457,126 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
                   </ContentPrinter>
                 </motion.div>
               ) : (
-                <motion.p
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-sm text-muted-foreground text-center mt-10"
+                  className="flex flex-col items-center justify-center gap-2 text-muted-foreground flex-1"
                 >
-                  Selecione os dados para <br /> visualizar a etiqueta.
-                </motion.p>
+                  <TicketPlus className="h-10 w-10 opacity-20" />
+                  <p className="text-sm text-center">
+                    Selecione os dados para visualizar a etiqueta
+                  </p>
+                </motion.div>
               )}
             </AnimatePresence>
           </div>
-          <div className="flex gap-2 justify-center">
+
+          <div className="flex gap-3 justify-center pt-4 border-t mt-4">
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Button
-                className="bg-chart-4 text-foreground shadow-sm hover:shadow-md transition-shadow"
+                className="gap-2 bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-white shadow-sm"
+                disabled={!selectedModelConfig || !selectedSetorConfig || !quantityNumber}
                 onClick={handleExternalPrint}
               >
-                <PrinterCheck className="mr-2" size={18} /> Gerar
+                <PrinterCheck className="h-4 w-4" /> Gerar
               </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Button className="bg-chart-2 shadow-sm hover:shadow-md transition-shadow" onClick={addToQueue}>
-                <ListOrdered size={18} className="mr-2" /> Fila
+              <Button
+                variant="secondary"
+                className="gap-2 border-violet-200 dark:border-violet-800 text-violet-700 dark:text-violet-300 hover:bg-violet-50 dark:hover:bg-violet-950"
+                disabled={!selectedModelConfig || !selectedSetorConfig || !quantityNumber}
+                onClick={addToQueue}
+              >
+                <ListOrdered className="h-4 w-4" /> Fila
               </Button>
             </motion.div>
-          </div>
-        </div>
-        <div className="flex w-8 h-full bg-chart-2 items-center justify-center overflow-hidden shrink-0 rounded-lg">
-          <div className="rotate-180 [writing-mode:vertical-lr] flex items-center justify-center gap-2 font-bold text-card whitespace-nowrap uppercase text-xs">
-            <TicketPlus className="rotate-90" size={16} />
-            Visualizador
           </div>
         </div>
       </div>
 
-      {/* FILA DE IMPRESSÃO */}
-      <div className="bg-card p-4 border-2 rounded-2xl flex flex-col w-full h-140 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between mb-4 border-b pb-2">
-          <h2 className="font-bold flex items-center gap-2">
-            <ListOrdered size={20} className="text-chart-2" />
-            Fila ({printQueue.length})
-          </h2>
-          {printQueue.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-            >
+      {/* FILA DE IMPRESSÃO - abaixo */}
+      <div className="bg-card border rounded-xl p-5">
+        <div className="flex items-center justify-between pb-3 border-b mb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-chart-2/10 text-chart-2">
+              <ListOrdered className="h-4 w-4" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-sm">Fila de Impressão</h3>
+              <p className="text-xs text-muted-foreground">
+                {printQueue.length} {printQueue.length === 1 ? "item" : "itens"}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {printQueue.length > 0 && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setPrintQueue([])}
-                className="text-destructive h-8 px-2"
+                className="text-destructive h-8 px-2 text-xs"
               >
                 Limpar
               </Button>
+            )}
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button
+                className="gap-2 bg-gradient-to-r from-emerald-600 to-green-500 hover:from-emerald-500 hover:to-green-400 text-white shadow-sm"
+                disabled={printQueue.length === 0}
+                onClick={handleBatchPrint}
+              >
+                <Printer className="h-4 w-4" />
+                Imprimir ({printQueue.length})
+              </Button>
             </motion.div>
-          )}
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-3 pr-1 scrollbar-thin">
+        <div className="overflow-y-auto max-h-60 space-y-2 pr-1 scrollbar-thin">
           {printQueue.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-muted-foreground text-sm text-center opacity-40">
-              <Plus size={40} className="mb-2" />
-              <p>
-                Adicione etiquetas <br /> para imprimir em lote
-              </p>
+            <div className="flex flex-col items-center justify-center text-muted-foreground text-center gap-2 py-8">
+              <Plus className="h-8 w-8 opacity-20" />
+              <p className="text-sm">Adicione etiquetas para imprimir em lote</p>
             </div>
           ) : (
             <AnimatePresence initial={false}>
               {printQueue.map((item) => (
                 <motion.div
                   key={item.id}
-                  initial={{ opacity: 0, x: 50, height: 0 }}
-                  animate={{ opacity: 1, x: 0, height: "auto" }}
-                  exit={{ opacity: 0, x: 50, height: 0 }}
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 30 }}
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  className="group relative p-3 border rounded-xl bg-accent/30 hover:bg-accent transition-colors border-l-4 border-l-chart-2 w-full box-border overflow-hidden"
+                  className="group relative p-3 rounded-lg border bg-accent/20 hover:bg-accent/40 transition-colors"
                 >
-                <button
-                  onClick={() => removeFromQueue(item.id)}
-                  className="absolute right-2 top-2 bg-destructive text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-md z-10"
-                >
-                  <Trash2 size={12} />
-                </button>
-                <div className="text-[10px] font-bold text-chart-2 uppercase truncate">
-                  {item.labelModel} • {item.mealType}
-                </div>
-                <div className="text-xs font-semibold truncate mt-1 pr-2">
-                  {item.sector}
-                </div>
-                <div className="flex justify-between items-center mt-2 text-[10px] text-muted-foreground gap-1">
-                  <span className="truncate">{item.dateRangeText}</span>
-                  <span className="font-bold bg-chart-2/10 text-chart-2 px-2 py-0.5 rounded-full shrink-0">
-                    {item.quantity} un
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        )}
+                  <button
+                    onClick={() => removeFromQueue(item.id)}
+                    className="absolute -top-1.5 -right-1.5 bg-destructive text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-md z-10"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 font-semibold text-chart-2 border-chart-2/30">
+                        {item.labelModel}
+                      </Badge>
+                      <p className="text-xs font-medium mt-1.5 truncate">
+                        {item.sector}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">
+                        {item.mealType} — {item.dateRangeText}
+                      </p>
+                    </div>
+                    <Badge className="shrink-0 text-xs font-mono">
+                      {item.quantity}
+                    </Badge>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          )}
         </div>
-
-        <motion.div
-          className="mt-4 pt-4 border-t"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Button
-            className="w-full bg-chart-4 text-foreground font-bold shadow-lg disabled:opacity-50"
-            disabled={printQueue.length === 0}
-            onClick={handleBatchPrint}
-          >
-            <Printer size={18} className="mr-2" />
-            Imprimir Fila
-          </Button>
-        </motion.div>
       </div>
 
       {/* IMPRESSOR DE LOTE OCULTO */}
@@ -521,8 +588,6 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
         >
           <div className="flex flex-col gap-0">
             {printQueue.map((item) => {
-              const BatchComponent =
-                item.labelModel === "Evento" ? LabelEvento : LabelRefeicao;
               return item.labelModel === "Evento" ? (
                 <LabelEvento
                   key={item.id}

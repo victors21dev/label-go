@@ -16,7 +16,12 @@ const Label = async () => {
 
   return (
     <main className="flex flex-col gap-8">
-      <TitleToPage title="Etiquetas" description="Gere aqui suas etiquetas" />
+      <TitleToPage
+        title="Etiquetas"
+        description="Gere aqui suas etiquetas"
+        iconName="Ticket"
+        iconBg="bg-chart-2/15 text-chart-2"
+      />
       <div>
         <LabelClient
           dataLabel={dataOptionLabelSelect}

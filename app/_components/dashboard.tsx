@@ -188,7 +188,8 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
     {
       title: "Total de Etiquetas",
       key: "totalLabels",
-      description: periodMode === "all" ? "Total geral" : "No período selecionado",
+      description:
+        periodMode === "all" ? "Total geral" : "No período selecionado",
       icon: Tag,
       gradient: "from-blue-500/20 to-blue-500/5",
       iconBg: "bg-blue-500/15 text-blue-600 dark:text-blue-400",
@@ -197,7 +198,8 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
     {
       title: "Etiquetas / Dia",
       key: "labelsPerDay",
-      description: periodMode === "all" ? "Média geral diária" : "Média diária no período",
+      description:
+        periodMode === "all" ? "Média geral diária" : "Média diária no período",
       icon: CalendarDays,
       gradient: "from-cyan-500/20 to-cyan-500/5",
       iconBg: "bg-cyan-500/15 text-cyan-600 dark:text-cyan-400",
@@ -250,6 +252,8 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
       <TitleToPage
         title="Dashboard"
         description="Acompanhe aqui seus relatórios"
+        icon={LayoutDashboard}
+        iconBg="bg-chart-2/15 text-chart-2"
       />
 
       {/* Filtros */}
@@ -268,14 +272,18 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
           <div className="flex items-center rounded-lg border p-0.5 bg-muted/50">
             <button
               onClick={() => setPeriodMode("period")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${MODE_CLASS(periodMode === "period")}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${MODE_CLASS(
+                periodMode === "period"
+              )}`}
             >
               <CalendarDays className="size-3.5" />
               Período
             </button>
             <button
               onClick={() => setPeriodMode("all")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${MODE_CLASS(periodMode === "all")}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${MODE_CLASS(
+                periodMode === "all"
+              )}`}
             >
               <Infinity className="size-3.5" />
               Todos
@@ -299,7 +307,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
                     label: s.name,
                   })),
                 ]}
-                className="w-[200px]"
+                className="w-50"
               />
               <SearchableSelect
                 value={labelModelId}
@@ -312,7 +320,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
                     label: m.name,
                   })),
                 ]}
-                className="w-[200px]"
+                className="w-50"
               />
               <SearchableSelect
                 value={printerId}
@@ -325,7 +333,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
                     label: `${p.brand} ${p.model}`,
                   })),
                 ]}
-                className="w-[200px]"
+                className="w-50"
               />
             </>
           )}
@@ -392,7 +400,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
                       className={`h-full rounded-full ${
                         card.key === "totalLabels"
                           ? "bg-blue-500"
-                          :                         card.key === "labelsPerDay"
+                          : card.key === "labelsPerDay"
                           ? "bg-cyan-500"
                           : card.key === "mostUsedModel"
                           ? "bg-amber-500"
@@ -445,7 +453,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="w-full h-[300px]">
+              <div className="w-full h-75">
                 {(data as any).formattedTimeline?.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
@@ -526,7 +534,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="w-full h-[300px]">
+              <div className="w-full h-75">
                 {(data as any).formattedModels?.length > 0 ? (
                   <div className="flex flex-col items-center justify-center h-full gap-3">
                     <ResponsiveContainer width="100%" height="68%">
@@ -614,7 +622,7 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="w-full h-[340px]">
+              <div className="w-full h-85">
                 {(data as any).formattedSectors?.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
@@ -701,8 +709,10 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="w-full h-[340px]">
-                {(data as any).hourlyDistribution?.some((h: any) => h.qtd > 0) ? (
+              <div className="w-full h-85">
+                {(data as any).hourlyDistribution?.some(
+                  (h: any) => h.qtd > 0
+                ) ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={(data as any).hourlyDistribution}
@@ -717,8 +727,16 @@ export default function DashboardLayout({ initialData }: DashboardProps) {
                           x2="0"
                           y2="1"
                         >
-                          <stop offset="0%" stopColor="#a855f7" stopOpacity={1} />
-                          <stop offset="100%" stopColor="#a855f7" stopOpacity={0.4} />
+                          <stop
+                            offset="0%"
+                            stopColor="#a855f7"
+                            stopOpacity={1}
+                          />
+                          <stop
+                            offset="100%"
+                            stopColor="#a855f7"
+                            stopOpacity={0.4}
+                          />
                         </linearGradient>
                       </defs>
                       <CartesianGrid

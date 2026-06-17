@@ -20,7 +20,7 @@ const SelectOption = ({
 }: SelectOptionProps) => {
   return (
     <div>
-      <label className="font-bold">{title}</label>
+      {title && <label className="font-bold">{title}</label>}
       <SearchableSelect
         onValueChange={onValueChange}
         placeholder="Escolha a opção..."

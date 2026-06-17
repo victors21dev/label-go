@@ -84,9 +84,9 @@ export function DataTable<TData, TValue>({
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="bg-gradient-to-r from-primary/5 via-primary/[0.08] to-transparent">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="text-foreground/80 font-semibold text-xs uppercase tracking-wider">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -144,6 +144,7 @@ export function DataTable<TData, TValue>({
               size="sm"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
+              className="border-primary/20 text-primary hover:bg-primary/10"
             >
               <ChevronLeft className="h-4 w-4 mr-1" />
               Anterior
@@ -155,6 +156,7 @@ export function DataTable<TData, TValue>({
               size="sm"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
+              className="border-primary/20 text-primary hover:bg-primary/10"
             >
               Próximo
               <ChevronRight className="h-4 w-4 ml-1" />

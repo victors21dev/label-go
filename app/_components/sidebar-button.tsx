@@ -14,30 +14,27 @@ const SidebarButton = ({ href, children }: SidebarButtonProps) => {
   const isActive = pathname === href;
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      className="relative w-full"
-    >
+    <Link href={href} className="relative block w-full">
       {isActive && (
         <motion.div
           layoutId="sidebar-active"
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-chart-2 rounded-r-full"
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
         />
       )}
-      <Link
-        href={href}
+      <motion.div
+        whileHover={{ x: 2 }}
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
         className={cn(
-          "flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 w-full",
+          "flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
           isActive
-            ? "bg-chart-2/10 text-chart-2 shadow-sm"
+            ? "bg-primary/10 text-primary"
             : "text-muted-foreground hover:bg-accent hover:text-foreground"
         )}
       >
         {children}
-      </Link>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 };
 

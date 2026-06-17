@@ -11,7 +11,7 @@ import {
 import { DataTable } from "./data-table";
 import { historyTableColumns } from "@/app/(home)/history/_components/table-columns";
 import { SearchableSelect } from "./ui/searchable-select";
-import { Loader2, Infinity, CalendarDays } from "lucide-react";
+import { Loader2, Infinity, CalendarDays, History } from "lucide-react";
 import { Badge } from "./ui/badge";
 import TitleToPage from "@/app/_components/title-page";
 
@@ -87,6 +87,8 @@ export default function HistoryClient({ initialData }: { initialData: any[] }) {
       <TitleToPage
         title="Histórico"
         description="Todas as etiquetas geradas no sistema"
+        icon={History}
+        iconBg="bg-orange-500/15 text-orange-600 dark:text-orange-400"
       />
 
       {/* Filtros */}

@@ -93,6 +93,8 @@ export default function ReportClient() {
       <TitleToPage
         title="Relatório por Setor"
         description="Volume de etiquetas geradas por departamento em um período"
+        icon={FileText}
+        iconBg="bg-blue-500/15 text-blue-600 dark:text-blue-400"
       />
 
       {/* Controls */}
