@@ -96,8 +96,10 @@ const LabelEvento = ({
               <div className="flex w-full flex-col ml-2">
                 <div className="flex flex-col mt-1 text-[10px]">
                   {eventLocation && <div>LOCAL: {eventLocation}</div>}
-                  {eventDate && <div>DATA: {eventDate}</div>}
-                  {eventTime && <div>HORÁRIO: {eventTime}</div>}
+                  <div className="flex gap-2">
+                    {eventDate && <div>DATA: {eventDate.split("-").reverse().join("/")}</div>}
+                    {eventTime && <div>HORÁRIO: {eventTime}</div>}
+                  </div>
                   {eventDescription && <div>{eventDescription}</div>}
                 </div>
               </div>

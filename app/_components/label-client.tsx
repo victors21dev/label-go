@@ -306,26 +306,20 @@ const LabelClient = ({ dataLabel, dataSelect }: SelectClientProps) => {
                 placeholder="Ex: AABB"
                 onValueChange={setEventLocation}
               />
-              <div className="flex flex-row gap-2">
-                <div className="flex-1">
-                  <InputComponet
-                    id="event-date"
-                    title="Data do Evento"
-                    type="date"
-                    placeholder="Selecione a data"
-                    onValueChange={setEventDate}
-                  />
-                </div>
-                <div className="flex-1">
-                  <InputComponet
-                    id="event-time"
-                    title="Horário"
-                    type="time"
-                    placeholder="Horário"
-                    onValueChange={setEventTime}
-                  />
-                </div>
-              </div>
+              <InputComponet
+                id="event-date"
+                title="Data do Evento"
+                type="date"
+                placeholder="Selecione a data"
+                onValueChange={setEventDate}
+              />
+              <InputComponet
+                id="event-time"
+                title="Horário"
+                type="time"
+                placeholder="Horário"
+                onValueChange={setEventTime}
+              />
             </div>
           )}
           {selectedLabel !== "Evento" && (
