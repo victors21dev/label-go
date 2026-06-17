@@ -68,7 +68,16 @@ const LabelEvento = ({
     };
 
     getLink();
-  }, [data, dateFormatted, mealType, eventLocation, eventTime, eventTitle, eventDescription, eventDate]);
+  }, [
+    data,
+    dateFormatted,
+    mealType,
+    eventLocation,
+    eventTime,
+    eventTitle,
+    eventDescription,
+    eventDate,
+  ]);
 
   if (!data || !qrCodeLink) return null;
 
@@ -77,7 +86,7 @@ const LabelEvento = ({
       {Array.from({ length: printQtd }).map((_, index) => (
         <div
           key={index}
-          className="flex flex-col w-full h-full border p-1 rounded-2xl"
+          className="flex flex-col w-full h-full border p-2 rounded-2xl"
           style={{
             width: `${width}cm`,
             height: `${height}cm`,
@@ -85,19 +94,23 @@ const LabelEvento = ({
         >
           <div className="flex flex-col h-full text-[8px] justify-center">
             <div className="justify-center text-center">
-              <span className="font-bold text-[10px]">
+              <span className="font-bold text-[8px]">
                 AUTORIZAÇÃO DE ACESSO
               </span>
-              <div className="flex w-full text-[10px] font-bold justify-center">
+              <div className="flex w-full text-[8px] font-bold justify-center">
                 {eventTitle || "ARRAIÁ DOS AMIGOS"}
               </div>
             </div>
             <div className="flex w-full h-full">
               <div className="flex w-full flex-col ml-2">
-                <div className="flex flex-col mt-1 text-[10px]">
+                <div className="flex flex-col mt-1 text-[8px]">
                   {eventLocation && <div>LOCAL: {eventLocation}</div>}
                   <div className="flex gap-2">
-                    {eventDate && <div>DATA: {eventDate.split("-").reverse().join("/")}</div>}
+                    {eventDate && (
+                      <div>
+                        DATA: {eventDate.split("-").reverse().join("/")}
+                      </div>
+                    )}
                     {eventTime && <div>HORÁRIO: {eventTime}</div>}
                   </div>
                   {eventDescription && <div>{eventDescription}</div>}
