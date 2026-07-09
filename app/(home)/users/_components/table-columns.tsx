@@ -2,6 +2,7 @@
 
 import { deleteUser } from "@/app/_actions/users-delete";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
+import { SortableHeader } from "@/app/_components/sortable-header";
 import { Badge } from "@/app/_components/ui/badge";
 import { User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
@@ -17,7 +18,7 @@ const roleTranslations: Record<string, string> = {
 export const userTableColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
-    header: "Nome",
+    header: ({ column }) => <SortableHeader column={column} label="Nome" />,
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
       const imageUrl = row.original.imageUrl;
@@ -37,7 +38,7 @@ export const userTableColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "username",
-    header: "Usuário",
+    header: ({ column }) => <SortableHeader column={column} label="Usuário" />,
     cell: ({ row }) => {
       const role = row.original.role;
       const username = row.getValue("username") as string;
@@ -61,7 +62,7 @@ export const userTableColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "role",
-    header: "Permissão",
+    header: ({ column }) => <SortableHeader column={column} label="Permissão" />,
     cell: ({ row }) => {
       const role = row.original.role;
 
@@ -83,11 +84,11 @@ export const userTableColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: ({ column }) => <SortableHeader column={column} label="Email" />,
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => <SortableHeader column={column} label="Status" />,
     cell: ({ row }) => {
       const status = row.original.status;
 
@@ -108,7 +109,7 @@ export const userTableColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Data de Criação",
+    header: ({ column }) => <SortableHeader column={column} label="Data de Criação" />,
     cell: ({ row }) => {
       const date = new Date(row.getValue("createdAt"));
       return new Intl.DateTimeFormat("pt-BR", {

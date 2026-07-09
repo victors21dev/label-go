@@ -42,7 +42,10 @@ export function SheetComponent({
     }
   }, [isUser, isOpen]);
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
     let type = "other";
     if (isUser) type = "user";
     else if (isSector) type = "sector";
@@ -62,7 +65,7 @@ export function SheetComponent({
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>{openButton}</SheetTrigger>
       <SheetContent className="sm:max-w-md overflow-y-auto">
-        <form action={handleSubmit} className="flex flex-col h-full gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full gap-4">
           <SheetHeader>
             <SheetTitle>
               Editar{" "}
@@ -205,7 +208,7 @@ export function SheetComponent({
               Salvar Informações
             </Button>
             <SheetClose asChild>
-              <Button variant="outline" className="w-full">
+              <Button type="button" variant="outline" className="w-full">
                 Cancelar
               </Button>
             </SheetClose>

@@ -2,6 +2,7 @@
 
 import { deleteHistory } from "@/app/_actions/history-delete";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
+import { SortableHeader } from "@/app/_components/sortable-header";
 import { Badge } from "@/app/_components/ui/badge";
 import { ColumnDef } from "@tanstack/react-table";
 import {
@@ -22,7 +23,7 @@ export const historyTableColumns: ColumnDef<any>[] = [
   {
     id: "modelo",
     accessorKey: "labelModel.name",
-    header: "Modelo",
+    header: ({ column }) => <SortableHeader column={column} label="Modelo" />,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <Tag className="h-4 w-4 text-chart-2" />
@@ -32,7 +33,7 @@ export const historyTableColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "sector.name",
-    header: "Setor",
+    header: ({ column }) => <SortableHeader column={column} label="Setor" />,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <Building2 className="h-4 w-4 text-muted-foreground" />
@@ -42,7 +43,7 @@ export const historyTableColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "printer.brand",
-    header: "Impressora",
+    header: ({ column }) => <SortableHeader column={column} label="Impressora" />,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <Printer className="h-4 w-4 text-muted-foreground" />
@@ -52,7 +53,7 @@ export const historyTableColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "quantity",
-    header: "Qtd",
+    header: ({ column }) => <SortableHeader column={column} label="Qtd" />,
     cell: ({ row }) => (
       <Badge variant="secondary" className="font-mono">
         <Hash className="h-3 w-3 mr-1" />
@@ -62,7 +63,7 @@ export const historyTableColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "user.name",
-    header: "Usuário",
+    header: ({ column }) => <SortableHeader column={column} label="Usuário" />,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <User className="h-4 w-4 text-muted-foreground" />
@@ -73,7 +74,7 @@ export const historyTableColumns: ColumnDef<any>[] = [
   {
     id: "justificativa",
     accessorKey: "justification",
-    header: "Justificativa",
+    header: ({ column }) => <SortableHeader column={column} label="Justificativa" />,
     cell: ({ row }) => {
       const text = row.original.justification;
       return (
@@ -89,7 +90,7 @@ export const historyTableColumns: ColumnDef<any>[] = [
   {
     id: "status",
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => <SortableHeader column={column} label="Status" />,
     cell: ({ row }) => {
       const status = row.original.status;
       const isGenerated = status === "GENERATED";
@@ -110,7 +111,7 @@ export const historyTableColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "date",
-    header: "Validade",
+    header: ({ column }) => <SortableHeader column={column} label="Validade" />,
     cell: ({ row }) => {
       const date = new Date(row.original.date);
       return (
@@ -125,7 +126,7 @@ export const historyTableColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Criação",
+    header: ({ column }) => <SortableHeader column={column} label="Criação" />,
     cell: ({ row }) => {
       const date = new Date(row.original.createdAt);
       return (

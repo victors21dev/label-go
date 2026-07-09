@@ -2,6 +2,7 @@
 
 import { deletePrinter } from "@/app/_actions/printers-delete";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
+import { SortableHeader } from "@/app/_components/sortable-header";
 import { Printer } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Info, PrinterIcon } from "lucide-react";
@@ -11,7 +12,7 @@ import { toast } from "sonner";
 export const printerTableColumns: ColumnDef<Printer>[] = [
   {
     accessorKey: "brand",
-    header: "Marca",
+    header: ({ column }) => <SortableHeader column={column} label="Marca" />,
     cell: ({ row }) => {
       const brand = row.getValue("brand") as string;
       return (
@@ -24,7 +25,7 @@ export const printerTableColumns: ColumnDef<Printer>[] = [
   },
   {
     accessorKey: "model",
-    header: "Modelo",
+    header: ({ column }) => <SortableHeader column={column} label="Modelo" />,
     cell: ({ row }) => {
       const model = row.getValue("model") as string;
       return (
@@ -37,7 +38,7 @@ export const printerTableColumns: ColumnDef<Printer>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Data de Criação",
+    header: ({ column }) => <SortableHeader column={column} label="Data de Criação" />,
     cell: ({ row }) => {
       const date = new Date(row.getValue("createdAt"));
       return new Intl.DateTimeFormat("pt-BR", {

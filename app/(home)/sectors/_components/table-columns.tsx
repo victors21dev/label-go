@@ -2,6 +2,7 @@
 
 import { deleteSector } from "@/app/_actions/sectors-delete";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
+import { SortableHeader } from "@/app/_components/sortable-header";
 import { Sector } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Building2, UserCog } from "lucide-react";
@@ -11,6 +12,7 @@ import { toast } from "sonner";
 export const sectorTableColumns: ColumnDef<Sector>[] = [
   {
     accessorKey: "name",
+    header: ({ column }) => <SortableHeader column={column} label="Nome" />,
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
       return (
@@ -23,7 +25,7 @@ export const sectorTableColumns: ColumnDef<Sector>[] = [
   },
   {
     accessorKey: "coordinatorName",
-    header: "Coordenador(a)",
+    header: ({ column }) => <SortableHeader column={column} label="Coordenador(a)" />,
     cell: ({ row }) => {
       const coordinator = row.getValue("coordinatorName") as string;
       return (
@@ -36,7 +38,7 @@ export const sectorTableColumns: ColumnDef<Sector>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Data de Criação",
+    header: ({ column }) => <SortableHeader column={column} label="Data de Criação" />,
     cell: ({ row }) => {
       const date = new Date(row.getValue("createdAt"));
       return new Intl.DateTimeFormat("pt-BR", {

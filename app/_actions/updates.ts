@@ -45,7 +45,10 @@ export async function updateDataAction(
     });
   }
 
-  revalidatePath("/"); // Atualiza a tabela automaticamente
+  if (type === "sector") revalidatePath("/sectors");
+  else if (type === "user") revalidatePath("/users");
+  else if (type === "printer" || type === "labelmodel") revalidatePath("/config");
+  revalidatePath("/");
   return { success: true };
 }
 

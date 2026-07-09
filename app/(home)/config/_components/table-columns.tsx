@@ -1,19 +1,18 @@
 "use client";
 
+import { SortableHeader } from "@/app/_components/sortable-header";
 import { LabelModel } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableRowActions } from "@/app/_components/data-table-row-actions";
-import { ArrowUpDown, RulerDimensionLine, Ticket, Trash2 } from "lucide-react";
-import { Button } from "@/app/_components/ui/button";
+import { RulerDimensionLine, Ticket } from "lucide-react";
 import { deleteLabelModel } from "@/app/_actions/label-model-delete";
 import { toast } from "sonner";
-import { ConfirmDialog } from "@/app/_components/confirmDialog";
 import { useRouter } from "next/navigation";
 
 export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
   {
     accessorKey: "name",
-    header: "Nome Modelo da Etiqueta",
+    header: ({ column }) => <SortableHeader column={column} label="Nome Modelo da Etiqueta" />,
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
 
@@ -27,7 +26,7 @@ export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
   },
   {
     accessorKey: "widthMm",
-    header: "Largura",
+    header: ({ column }) => <SortableHeader column={column} label="Largura" />,
     cell: ({ row }) => {
       const value = row.getValue("widthMm") as number;
       // Opcional: Se quiser converter mm para cm, divida por 10.
@@ -42,7 +41,7 @@ export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
   },
   {
     accessorKey: "heightMm",
-    header: "Altura",
+    header: ({ column }) => <SortableHeader column={column} label="Altura" />,
     cell: ({ row }) => {
       const value = row.getValue("heightMm") as number;
       return (
@@ -56,17 +55,7 @@ export const LabelModelTableColumns: ColumnDef<LabelModel>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Data de Criação
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => <SortableHeader column={column} label="Data de Criação" />,
     cell: ({ row }) => {
       const date = new Date(row.getValue("createdAt"));
       return new Intl.DateTimeFormat("pt-BR", {

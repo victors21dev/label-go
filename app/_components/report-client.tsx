@@ -126,6 +126,13 @@ export default function ReportClient() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
+          {/* Print button - top */}
+          <div className="flex justify-end mb-4">
+            <Button variant="outline" onClick={handlePrint} className="gap-2">
+              <Printer className="size-4" />
+              Imprimir
+            </Button>
+          </div>
           <div
             ref={printRef}
             className="bg-card border rounded-xl overflow-hidden"
@@ -165,13 +172,13 @@ export default function ReportClient() {
                         <User className="size-3.5" /> Coordenador
                       </span>
                     </th>
-                    <th className="text-right pb-3 font-medium">
-                      <span className="flex items-center justify-end gap-1.5">
+                    <th className="text-left pb-3 font-medium">
+                      <span className="flex items-center gap-1.5">
                         <Hash className="size-3.5" /> Etiquetas
                       </span>
                     </th>
-                    <th className="text-right pb-3 font-medium">
-                      <span className="flex items-center justify-end gap-1.5">
+                    <th className="text-left pb-3 font-medium">
+                      <span className="flex items-center gap-1.5">
                         <CalendarDays className="size-3.5" /> Pedidos
                       </span>
                     </th>
@@ -183,26 +190,18 @@ export default function ReportClient() {
                       <td className="py-3 text-muted-foreground text-xs">{i + 1}</td>
                       <td className="py-3 font-medium">{row.name}</td>
                       <td className="py-3 text-muted-foreground">{row.coordinator}</td>
-                      <td className="py-3 text-right font-semibold">{row.total.toLocaleString()}</td>
-                      <td className="py-3 text-right text-muted-foreground">{row.orders}</td>
+                      <td className="py-3 font-semibold">{row.total.toLocaleString()}</td>
+                      <td className="py-3 text-muted-foreground">{row.orders}</td>
                     </tr>
                   ))}
                   <tr className="border-t-2 font-bold">
                     <td colSpan={3} className="py-3 text-sm">Total</td>
-                    <td className="py-3 text-right">{data.grandTotal.toLocaleString()}</td>
-                    <td className="py-3 text-right">{data.totalOrders}</td>
+                    <td className="py-3">{data.grandTotal.toLocaleString()}</td>
+                    <td className="py-3">{data.totalOrders}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </div>
-
-          {/* Print button */}
-          <div className="flex justify-end mt-4">
-            <Button variant="outline" onClick={handlePrint} className="gap-2">
-              <Printer className="size-4" />
-              Imprimir
-            </Button>
           </div>
         </motion.div>
       )}
